@@ -36,6 +36,8 @@
 		let s:settings.plugin_groups = []
 		call add(s:settings.plugin_groups, 'core')
 		call add(s:settings.plugin_groups, 'web')
+		call add(s:settings.plugin_groups, 'language')
+		call add(s:settings.plugin_groups, 'c')
 		call add(s:settings.plugin_groups, 'javascript')
 		call add(s:settings.plugin_groups, 'ruby')
 		call add(s:settings.plugin_groups, 'python')
@@ -88,6 +90,7 @@
 	set rtp+=~/.vim/bundle/neobundle.vim
 	call neobundle#begin(expand('~/.vim/bundle/'))
 	NeoBundleFetch 'Shougo/neobundle.vim'
+	NeoBundleLocal ~/.vim/bundle_dev
 "}}}
 
 " functions {{{
@@ -145,7 +148,6 @@
 	set history=1000	"number of command lines to remember
 	set ttyfast	"assume fast terminal connection
 	set viewoptions=folds,options,cursor,unix,slash	"unix/windows compatibility
-	set encoding=utf-8	"set encoding for text
 	if exists('$TMUX')
 		set clipboard=
 	else
@@ -182,10 +184,8 @@
 	let &softtabstop=s:settings.default_indent	"number of spaces per tab in insert mode
 	let &shiftwidth=s:settings.default_indent	"number of spaces when indenting
 	set list	"highlight whitespace
-	set listchars=tab:│\ ,trail:•,extends:❯,precedes:❮
 	set shiftround
 	set linebreak
-	let &showbreak='↪ '
 
 	set scrolloff=1	"always show content after scroll
 	set scrolljump=5	"minimum number of lines to scroll
@@ -261,11 +261,6 @@
 		set cursorcolumn
 		autocmd WinLeave * setlocal nocursorcolumn
 		autocmd WinEnter * setlocal cursorcolumn
-	endif
-
-	if has('conceal')
-		set conceallevel=1
-		set listchars+=conceal:Δ
 	endif
 
 	if has('gui_running')
@@ -356,10 +351,22 @@
 			autocmd FileType html imap <buffer><expr><Tab> <SID>zen_html_tab()
 		"}}}
 	endif "}}}
+	if count(s:settings.plugin_groups, 'language') "{{{
+		" run `:UpdateTypesFile` to highlight ctags symbols
+		NeoBundle 'TagHighlight'
+		NeoBundle 'gtags.vim'
+		NeoBundle 'gdbmgr'
+	endif "}}}
+	if count(s:settings.plugin_groups, 'c') "{{{
+		NeoBundleLazy 'a.vim', {'autoload':{'filetypes':['c','cpp']}}
+		NeoBundleLazy 'c.vim', {'autoload':{'filetypes':['c','cpp']}}
+		NeoBundleLazy 'echofunc.vim', {'autoload':{'filetypes':['c','cpp']}}
+		NeoBundleLazy 'STL-improved', {'autoload':{'filetypes':['c','cpp']}}
+	endif "}}}
 	if count(s:settings.plugin_groups, 'javascript') "{{{
 		NeoBundleLazy 'marijnh/tern_for_vim', {
-			\ 'autoload': { 'filetypes': ['javascript'] },
-			\ 'build': {
+			\ 'autoload':{ 'filetypes': ['javascript'] },
+			\ 'build':{
 				\ 'mac': 'npm install',
 				\ 'unix': 'npm install',
 				\ 'cygwin': 'npm install',
@@ -394,7 +401,7 @@
 	endif "}}}
 	if count(s:settings.plugin_groups, 'go') "{{{
 		NeoBundleLazy 'jnwhiteh/vim-golang', {'autoload':{'filetypes':['go']}}
-		NeoBundleLazy 'nsf/gocode', {'autoload': {'filetypes':['go']}, 'rtp': 'vim'}
+		NeoBundleLazy 'nsf/gocode', {'autoload':{'filetypes':['go']},'rtp': 'vim'}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'scm') "{{{
 		NeoBundle 'mhinz/vim-signify' "{{{
@@ -414,7 +421,7 @@
 			nnoremap <silent> <Leader>gr :Gremove<CR>
 			autocmd BufReadPost fugitive://* set bufhidden=delete
 		"}}}
-		NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}} "{{{
+		NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'],'autoload':{'commands':'Gitv'}} "{{{
 			nnoremap <silent> <Leader>gv :Gitv<CR>
 			nnoremap <silent> <Leader>gV :Gitv!<CR>
 		"}}}
@@ -424,8 +431,8 @@
 		if s:settings.autocomplete_method == 'ycm' "{{{
 			NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
 				let g:ycm_complete_in_comments_and_strings=1
-				let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
-				let g:ycm_key_list_previous_completion=['<C-p>', '<Up>']
+				let g:ycm_key_list_select_completion=['<C-n>','<Down>']
+				let g:ycm_key_list_previous_completion=['<C-p>','<Up>']
 				let g:ycm_filetype_blacklist={'unite': 1}
 			"}}}
 			NeoBundle 'SirVer/ultisnips' "{{{
@@ -447,7 +454,7 @@
 			"}}}
 		endif "}}}
 		if s:settings.autocomplete_method == 'neocomplete' "{{{
-			NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'} "{{{
+			NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1},'vim_version':'7.3.885'} "{{{
 				let g:neocomplete#enable_at_startup=1
 				let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
 			"}}}
@@ -497,7 +504,7 @@
 		NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
 			let g:undotree_SplitLocation='botright'
 			let g:undotree_SetFocusWhenToggle=1
-			nnoremap <silent> <F5> :UndotreeToggle<CR>
+			nnoremap <silent> <Leader>u :UndotreeToggle<CR>
 		"}}}
 		NeoBundleLazy 'EasyGrep', {'autoload':{'commands':'GrepOptions'}} "{{{
 			let g:EasyGrepRecursive=1
@@ -505,7 +512,7 @@
 			let g:EasyGrepCommand=1
 			nnoremap <Leader>vo :GrepOptions<CR>
 		"}}}
-		NeoBundle 'kien/ctrlp.vim', { 'depends': 'tacahiroy/ctrlp-funky' } "{{{
+		NeoBundleLazy 'kien/ctrlp.vim', {'depends':'tacahiroy/ctrlp-funky','autoload':{'commands':'CtrlP'}} "{{{
 			let g:ctrlp_clear_cache_on_exit=1
 			let g:ctrlp_max_height=40
 			let g:ctrlp_show_hidden=0
@@ -532,7 +539,8 @@
 			nnoremap [ctrlp]o :CtrlPFunky<CR>
 			nnoremap [ctrlp]b :CtrlPBuffer<CR>
 		"}}}
-		NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+		"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+		NeoBundle 'scrooloose/nerdtree' "{{{
 			let NERDTreeShowHidden=1
 			let NERDTreeQuitOnOpen=0
 			let NERDTreeShowLineNumbers=1
@@ -540,11 +548,25 @@
 			let NERDTreeShowBookmarks=1
 			let NERDTreeIgnore=['\.git','\.hg']
 			let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
-			nnoremap <F2> :NERDTreeToggle<CR>
-			nnoremap <F3> :NERDTreeFind<CR>
+			nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
+			nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
 		"}}}
 		NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}} "{{{
-			nnoremap <silent> <F9> :TagbarToggle<CR>
+			nnoremap <silent> <Leader>ta :TagbarToggle<CR>
+		"}}}
+		NeoBundle 'jeetsukumaran/vim-buffergator' "{{{
+			"let g:buffergator_suppress_keymaps = 1
+			let g:buffergator_suppress_mru_switch_into_splits_keymaps = 1
+			let g:buffergator_viewport_split_policy = "B"
+			let g:buffergator_split_size = 10
+			let g:buffergator_sort_regime = "mru"
+			let g:buffergator_mru_cycle_loop = 0
+			"nnoremap <silent> <Leader>b :BuffergatorOpen<CR>
+			"nnoremap <silent> <Leader>B :BuffergatorClose<CR>
+			"nnoremap <silent> <M-b> :BuffergatorMruCyclePrev<CR>
+			"nnoremap <silent> <M-S-b> :BuffergatorMruCycleNext<CR>
+			"nnoremap <silent> [b :BuffergatorMruCyclePrev<CR>
+			"nnoremap <silent> ]b :BuffergatorMruCycleNext<CR>
 		"}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'unite') "{{{
@@ -554,6 +576,7 @@
 				call unite#filters#matcher_default#use(['matcher_fuzzy'])
 				call unite#filters#sorter_default#use(['sorter_rank'])
 				call unite#custom#source('line,outline','matchers','matcher_fuzzy')
+				call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '\.svn/\|\.tags$\|cscope\.\|\.taghl$')
 				call unite#custom#profile('default', 'context', {
 							\ 'start_insert': 1,
 							\ 'direction': 'botright',
@@ -585,17 +608,17 @@
 			nnoremap [unite] <Nop>
 
 			if s:is_windows
-				nnoremap <silent> [unite]<Space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec:! buffer file_mru bookmark<CR><C-u>
-				nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec:!<CR><C-u>
+				nnoremap <silent> [unite]<Space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed buffer file:! file_mru bookmark<CR><C-u>
+				nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file:!<CR><C-u>
 			else
-				nnoremap <silent> [unite]<Space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<CR><C-u>
-				nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<CR><C-u>
+				nnoremap <silent> [unite]<Space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed buffer file/async:! file_mru bookmark<CR><C-u>
+				nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file/async:!<CR><C-u>
 			endif
 			nnoremap <silent> [unite]e :<C-u>Unite -buffer-name=recent file_mru<CR>
 			nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<CR>
 			nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<CR>
 			nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<CR>
-			nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<CR>
+			nnoremap <silent> [unite]/ :<C-u>UniteWithCursorWord -no-quit -buffer-name=search grep:.<CR>
 			nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<CR>
 			nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<CR>
 		"}}}
@@ -643,14 +666,17 @@
 		NeoBundle 'lucapette/vim-textobj-underscore'
 	endif "}}}
 	if count(s:settings.plugin_groups, 'misc') "{{{
+		NeoBundle 'xolox/vim-misc'
+		NeoBundle 'xolox/vim-session'
+		NeoBundleLazy 'mbbill/fencview', {'autoload':{'commands':['FencView','FencAutoDetect']}}
 		if exists('$TMUX')
 			NeoBundle 'christoomey/vim-tmux-navigator'
 		endif
 		NeoBundle 'kana/vim-vspec'
 		NeoBundleLazy 'tpope/vim-scriptease', {'autoload':{'filetypes':['vim']}}
-		NeoBundleLazy 'tpope/vim-markdown', {'autoload':{'filetypes':['markdown']}}
+		NeoBundleLazy 'jtratner/vim-flavored-markdown', {'autoload':{'filetypes':['markdown','ghmarkdown']}}
 		if executable('redcarpet') && executable('instant-markdown-d')
-			NeoBundleLazy 'suan/vim-instant-markdown', {'autoload':{'filetypes':['markdown']}}
+			NeoBundleLazy 'suan/vim-instant-markdown', {'autoload':{'filetypes':['markdown','ghmarkdown']}}
 		endif
 		NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
 		NeoBundle 'chrisbra/vim_faq'
@@ -660,19 +686,15 @@
 			let g:startify_session_dir = s:get_cache_dir('sessions')
 			let g:startify_change_to_vcs_root = 1
 			let g:startify_show_sessions = 1
-			nnoremap <F1> :Startify<CR>
 		"}}}
 		NeoBundle 'scrooloose/syntastic' "{{{
-			let g:syntastic_error_symbol = '✗'
-			let g:syntastic_style_error_symbol = '✠'
-			let g:syntastic_warning_symbol = '∆'
-			let g:syntastic_style_warning_symbol = '≈'
+			" run `:SyntasticCheck` to check syntax
 		"}}}
-		NeoBundleLazy 'mattn/gist-vim', { 'depends': 'mattn/webapi-vim', 'autoload': { 'commands': 'Gist' } } "{{{
+		NeoBundleLazy 'mattn/gist-vim', {'depends':'mattn/webapi-vim','autoload':{'commands':'Gist'}} "{{{
 			let g:gist_post_private=1
 			let g:gist_show_privates=1
 		"}}}
-		NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}} "{{{
+		NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':['VimShell','VimShellInteractive']}} "{{{
 			if s:is_macvim
 				let g:vimshell_editor_command='mvim'
 			else
@@ -682,16 +704,24 @@
 			let g:vimshell_data_directory=s:get_cache_dir('vimshell')
 			let g:vimshell_vimshrc_path='~/.vim/vimshrc'
 
-			nnoremap <Leader>c :VimShell -split<CR>
-			nnoremap <Leader>cc :VimShell -split<CR>
-			nnoremap <Leader>cn :VimShellInteractive node<CR>
-			nnoremap <Leader>cl :VimShellInteractive lua<CR>
-			nnoremap <Leader>CR :VimShellInteractive irb<CR>
-			nnoremap <Leader>cp :VimShellInteractive python<CR>
+			"nnoremap <Leader>c :VimShell -split<CR>
+			"nnoremap <Leader>cc :VimShell -split<CR>
+			"nnoremap <Leader>cn :VimShellInteractive node<CR>
+			"nnoremap <Leader>cl :VimShellInteractive lua<CR>
+			"nnoremap <Leader>CR :VimShellInteractive irb<CR>
+			"nnoremap <Leader>cp :VimShellInteractive python<CR>
 		"}}}
 		NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGoldenViewAutoResize']}} "{{{
 			let g:goldenview__enable_default_mapping=0
-			nmap <F4> <Plug>ToggleGoldenViewAutoResize
+			nmap <silent> <Leader>z <Plug>ToggleGoldenViewAutoResize
+		"}}}
+		" do not use conque-shell together with conque-gdb
+		"NeoBundle 'oplatek/Conque-Shell' "{{{
+		"}}}
+		NeoBundleLazy 'vim-scripts/Conque-GDB', {'autoload':{'commands':['ConqueGdb','ConqueGdbTab','ConqueGdbVSplit','ConqueGdbSplit','ConqueTerm','ConqueTermTab','ConqueTermVSplit','ConqueTermSplit']}} "{{{
+			let g:ConqueGdb_Leader = '\'
+			"let g:ConqueGdb_GdbExe = '~/local/bin/gdb'
+			nnoremap <Leader>d :ConqueGdbVSplit<CR>
 		"}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'windows') "{{{
@@ -716,20 +746,18 @@
 
 	nnoremap <Leader>w :w<CR>
 
-	" toggle paste
-	map <F6> :set invpaste<CR>:set paste?<CR>
-
 	" remap arrow keys
 	nnoremap <Left> :bprev<CR>
 	nnoremap <Right> :bnext<CR>
-	nnoremap <Up> :tabnext<CR>
-	nnoremap <Down> :tabprev<CR>
+	"nnoremap <Up> :tabnext<CR>
+	"nnoremap <Down> :tabprev<CR>
 
 	" smash escape
 	inoremap jk <Esc>
 	inoremap kj <Esc>
 
 	" change cursor position in insert mode
+	" use S-BS instead of BS to delete in insert mode in some terminal
 	inoremap <C-h> <Left>
 	inoremap <C-l> <Right>
 
@@ -788,6 +816,9 @@
 	nnoremap <Leader>ff :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
 	" shortcuts for windows {{{
+		" <http://stackoverflow.com/questions/9092982/mapping-c-j-to-something-in-vim>
+		let g:C_Ctrl_j = 'off'
+		let g:BASH_Ctrl_j = 'off'
 		nnoremap <Leader>v <C-w>v<C-w>l
 		nnoremap <Leader>s <C-w>s
 		nnoremap <Leader>vsa :vert sba<CR>
@@ -817,14 +848,6 @@
 		nnoremap <Leader>tag :Dispatch ctags -R<CR>
 	endif
 
-	" general
-	nmap <Leader>l :set list! list?<CR>
-	nnoremap <BS> :set hlsearch! hlsearch?<CR>
-
-	map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-				\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-				\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
 	" helpers for profiling {{{
 		nnoremap <silent> <Leader>DD :exe ":profile start profile.log"<CR>:exe ":profile func *"<CR>:exe ":profile file *"<CR>
 		nnoremap <silent> <Leader>DP :exe ":profile pause"<CR>
@@ -849,13 +872,19 @@
 	autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 	autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
 	autocmd FileType css,scss nnoremap <silent> <Leader>S vi{:sort<CR>
+	autocmd FileType python autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 	autocmd FileType python setlocal foldmethod=indent
+	autocmd FileType php autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+	autocmd FileType coffee autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 	autocmd FileType markdown setlocal nolist
-	autocmd FileType vim setlocal fdm=indent keywordprg=:help
+	autocmd FileType vim setlocal foldmethod=indent keywordprg=:help
+
+	" quickfix window always on the bottom taking the whole horizontal space
+	autocmd FileType qf wincmd J
 "}}}
 
 " color schemes {{{
-	NeoBundle 'altercation/vim-colors-solarized' "{{{
+	NeoBundle 'taohex/vim-colors-solarized' "{{{
 		let g:solarized_termcolors=256
 		let g:solarized_termtrans=1
 	"}}}
@@ -873,14 +902,14 @@
 " finish loading {{{
 	if exists('g:dotvim_settings.disabled_plugins')
 		for plugin in g:dotvim_settings.disabled_plugins
-			exec 'NeoBundleDisable '.plugin
+			execute 'NeoBundleDisable '.plugin
 		endfor
 	endif
 
 	call neobundle#end()
 	filetype plugin indent on
 	syntax enable
-	exec 'colorscheme '.s:settings.colorscheme
+	execute 'colorscheme '.s:settings.colorscheme
 
 	NeoBundleCheck
 "}}}
