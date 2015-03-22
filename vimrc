@@ -307,8 +307,8 @@
 		NeoBundle 'matchit.zip'
 		NeoBundle 'bling/vim-airline' "{{{
 			let g:airline#extensions#tabline#enabled = 1
-			let g:airline#extensions#tabline#left_sep=' '
-			let g:airline#extensions#tabline#left_alt_sep='¦'
+			let g:airline#extensions#tabline#left_sep = ' '
+			let g:airline#extensions#tabline#left_alt_sep = '¦'
 		"}}}
 		NeoBundle 'tpope/vim-surround'
 		NeoBundle 'tpope/vim-repeat'
@@ -512,7 +512,7 @@
 			let g:EasyGrepCommand=1
 			nnoremap <Leader>vo :GrepOptions<CR>
 		"}}}
-		NeoBundleLazy 'kien/ctrlp.vim', {'depends':'tacahiroy/ctrlp-funky','autoload':{'commands':'CtrlP'}} "{{{
+		NeoBundleLazy 'ctrlpvim/ctrlp.vim', {'depends':'tacahiroy/ctrlp-funky','autoload':{'commands':'CtrlP'}} "{{{
 			let g:ctrlp_clear_cache_on_exit=1
 			let g:ctrlp_max_height=40
 			let g:ctrlp_show_hidden=0
@@ -575,11 +575,9 @@
 			function! bundle.hooks.on_source(bundle)
 				call unite#filters#matcher_default#use(['matcher_fuzzy'])
 				call unite#filters#sorter_default#use(['sorter_rank'])
-				call unite#custom#source('line,outline','matchers','matcher_fuzzy')
 				call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '\.svn/\|\.tags$\|cscope\.\|\.taghl$')
 				call unite#custom#profile('default', 'context', {
-							\ 'start_insert': 1,
-							\ 'direction': 'botright',
+							\ 'start_insert': 1
 							\ })
 			endfunction
 
@@ -617,7 +615,7 @@
 			nnoremap <silent> [unite]e :<C-u>Unite -buffer-name=recent file_mru<CR>
 			nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<CR>
 			nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<CR>
-			nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<CR>
+			nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer file_mru<CR>
 			nnoremap <silent> [unite]/ :<C-u>UniteWithCursorWord -no-quit -buffer-name=search grep:.<CR>
 			nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<CR>
 			nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<CR>
