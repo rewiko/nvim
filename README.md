@@ -1,4 +1,4 @@
-# bling.vim
+# dotvim
 
 A highly tuned vim distribution that will blow your socks off!
 
@@ -14,49 +14,142 @@ while it is very easy to install this and get up and running on a brand new mach
 1.  `git submodule init && git submodule update`
 1.  `mv ~/.vimrc ~/.vimrc.backup`
 1.  `ln -s ~/.vim/.vimrc ~/`
+1.  `ln -s ~/.vim/.vimrc ~/.nvimrc`
 1.  startup vim and neobundle will detect and ask you install any missing plugins.  you can also manually initiate this with `:NeoBundleInstall`
 1.  done!
 
-### versioning
+## keymap
 
-the `g:dotvim_settings.version` is a simple version number which is manually edited.  it is used to detect whether significant breaking changes have been introduced so that users of the distribution can be notified accordingly.
+`<Leader>` default set to `,`
 
-## customization
+### unite
 
-*  since the distribution is just one file, customization is straightforward.  any customizations can be added to the `g:dotvim_settings` variable, which will be used whilst sourcing the distribution's `vimrc` file.  here is an example:
+keybinding       | description
+-----------------|------------------------------------------------------------
+`<Space><Space>` | go to anything (files, buffers, MRU, bookmarks)
+`<Space>f`       | select from files under the current working directory
+`<Space>e`       | select from MRU
+`<Space>l`       | select line from current buffer
+`<Space>b`       | select from current buffers
+`<Space>o`       | select from outline of current file
+`<Space>s`       | quick switch buffer
+`<Space>/`       | recursively search all files for matching text (uses `ag` or `ack` if found)
+`<Space>m`       | select from key mappings
+`<Space>t`       | select from tags
+`<Space>y`       | select from previous yanks
+`<Space>j`       | select from junkfiles
 
-```
-" this is the bare minimum
-let g:dotvim_settings = {}
-let g:dotvim_settings.version = 1
+### panel
 
-" here are some basic customizations, please refer to the top of the vimrc file for all possible options
-let g:dotvim_settings.default_indent = 3
-let g:dotvim_settings.max_column = 80
-let g:dotvim_settings.colorscheme = 'my_awesome_colorscheme'
+keybinding       | mode | description
+-----------------|------|------------------------------------------------------------
+`<Leader>n`      |  n   | toggle the-nerd-tree
+`<Leader>nf`     |  n   | open the-nerd-tree to path of the current file
+`<Leader>a`      |  n   | toggle tagbar
+`<Leader>b`      |  n   | MRU buffers
+`<Leader>t`      |  n   | MRU tabs
+`<Leader>u`      |  n   | toggle undo tree
+`<Leader>q`      |  n   | toggle quickfix list
+`<Leader>l`      |  n   | toggle location list
 
-" change the default directory where all miscellaneous persistent files go
-let g:dotvim_settings.cache_dir = "/some/place/else"
+### edit
 
-" by default, language specific plugins are not loaded.  this can be changed with the following:
-let g:dotvim_settings.plugin_groups_exclude = ['ruby','python']
+keybinding       | mode | description
+-----------------|------|------------------------------------------------------------
+`<Leader>y`      |  n   | windows-like copy
+`<Leader>p`      |  n   | windows-like paste
+`<Leader>fef`    |  n   | format entire file
+`<C-h>`          |  i   | move the cursor left
+`<C-l>`          |  i   | move the cursor right
+`jk`, `kj`       |  i   | escape
+`gp`             |  n   | visually reselect the last paste
+`<Leader>w`      |  n   | write buffer to file
+`<Leader>s`      |  n   | sort selection
+`<Leader>f$`     |  n   | strip current line of trailing white space
 
-" if there are groups you want always loaded, you can use this:
-let g:dotvim_settings.plugin_groups_include = ['go']
+### window & buffer
 
-" alternatively, you can set this variable to load exactly what you want
-let g:dotvim_settings.plugin_groups = ['core','web']
+keybinding           | mode | description
+---------------------|------|------------------------------------------------------------
+`<Leader>v`          |  n   | vertical split
+`<Leader>s`          |  n   | horizontal split
+`<Leader>vsa`        |  n   | vertically split all buffers
+`<C-h>`, `<C-l>`     |  n   | move to window in the direction of hl 
+`<C-j>`, `<C-k>`     |  n   | move to window in the direction of jk
+`Q`                  |  n   | close windows and delete the buffer (if it is the last buffer window)
+`<Left>`, `<Right>`  |  n   | previous buffer, next buffer
+`gb`, `gB`           |  n   | previous MRU buffer, next MRU buffer
+`<Leader>bd`         |  n   | kill a buffer without changing the window layout
 
-" if there is a particular plugin you don't like, you can define this variable to disable them entirely
-let g:dotvim_settings.disabled_plugins=['vim-foo','vim-bar']
+### searching
 
-" finally, load the distribution
-source ~/.vim/vimrc
+keybinding           | mode | description
+---------------------|------|------------------------------------------------------------
+`<Leader>fd`         | n, v | find current word (or selected text) in current directory into the quickfix list
+`<Leader>ff`         |  n   | find current word in current file into the quickfix list
+`<Leader>fr`         | n, v | replace current word (or selected text) in current file
+`/`                  |  n   | replaced with `/\v` for sane regex searching
 
-" anything defined here are simply overrides
-set wildignore+=\*/node_modules/\*
-set guifont=Wingdings:h10
-```
+### view
+
+keybinding              | mode | description
+------------------------|------|------------------------------------------------------------
+`<Leader>j`             | n, v | toggle just text (for copy and paste)
+`<Leader>h`             |  n   | toggle highlight
+`<Leader>ig`            |  n   | toggle indent guides
+`<Leader>z`             |  n   | toggle goldenview
+`:XtermColorTable<CR>`  |  n   | show color table
+`:syntax<CR>`           |  n   | show syntax highlight
+
+### easygrep
+
+keybinding       | description
+-----------------|------------------------------------------------------------
+`<Leader>vo`     | select the files to search in and set grep options (must run this first)
+`<Leader>vv`     | grep for the word under the cursor, match all occurences, like |gstar|
+`<Leader>vV`     | grep for the word under the cursor, match whole word, like |star|
+`<Leader>va`     | like vv, but add to existing list
+`<Leader>vA`     | like vV, but add to existing list
+`<Leader>vr`     | perform a global search on the word under the cursor and prompt for a pattern with which to replace it
+`<Leader>vR`     | same as vr, but matches whole word
+
+## unimpaired
+
+keybinding       | description
+-----------------|------------------------------------------------------------
+`[a`             | :previous
+`]a`             | :next
+`[A`             | :first
+`]A`             | :last
+`[b`             | :bprevious
+`]b`             | :bnext
+`[B`             | :bfirst
+`]B`             | :blast
+`[l`             | :lprevious
+`]l`             | :lnext
+`[L`             | :lfirst
+`]L`             | :llast
+`[<C-L>`         | :lpfile
+`]<C-L>`         | :lnfile
+`[q`             | :cprevious
+`]q`             | :cnext
+`[Q`             | :cfirst
+`]Q`             | :clast
+`[<C-Q>`         | :cpfile (Note that <C-Q> only works in a terminal if you disable
+`]<C-Q>`         | :cnfile flow control: stty -ixon)
+`[t`             | :tprevious
+`]t`             | :tnext
+`[T`             | :tfirst
+`]T`             | :tlast
+
+### profiling
+
+keybinding       | mode | description
+-----------------|------|------------------------------------------------------------
+`<Leader>DD`     |  n   | starts profiling all functions and files into a file `profile.log`
+`<Leader>DP`     |  n   | pauses profiling
+`<Leader>DC`     |  n   | continues profiling
+`<Leader>DQ`     |  n   | finishes profiling and exits vim
 
 ## autocomplete
 
@@ -81,34 +174,42 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 *  `jk`, `kj` remapped for "smash escape"
 
 ### normal mode
-*  `<leader>fef` format entire file
-*  `<leader>f$` strip current line of trailing white space
+*  `<Leader>j` toggle just text (for copy and paste)
+*  `<Leader>h` toggle highlight
+*  `<Leader>q` toggle quickfix list
+*  `<Leader>l` toggle location list
+*  `<Leader>y` windows-like copy
+*  `<Leader>p` windows-like paste
+*  `<Leader>fef` format entire file
+*  `<Leader>f$` strip current line of trailing white space
 *  window shortcuts
-  *  `<leader>v` vertical split
-  *  `<leader>s` horizontal split
-  *  `<leader>vsa` vertically split all buffers
+  *  `<Leader>v` vertical split
+  *  `<Leader>s` horizontal split
+  *  `<Leader>vsa` vertically split all buffers
   *  `<C-h>` `<C-j>` `<C-k>` `<C-l>` move to window in the direction of hkjl
 *  window killer
   *  `Q` remapped to close windows and delete the buffer (if it is the last buffer window)
-* searching
-  *  `<leader>fw` find the word under cursor into the quickfix list
-  *  `<leader>ff` find the last search into the quickfix list
+*  searching
+  *  `<Leader>fd` find current word in current directory into the quickfix list
+  *  `<Leader>ff` find current word in current file into the quickfix list
+  *  `<Leader>fr` replace current word in current file
   *  `/` replaced with `/\v` for sane regex searching
-  *  `<cr>` toggles hlsearch
-*  `<Down>` `<Up>` maps to `:bprev` and `:bnext` respectively
-*  `<Left>` `<Right>` maps to `:tabprev` and `:tabnext` respectively
+  *  `<cr>` toggle hlsearch
+*  `<Left>` `<Right>` maps to `:bprev` and `:bnext` respectively
 *  `gp` remapped to visually reselect the last paste
-*  `gb` for quick going to buffer
-*  `<leader>l` toggles `list` and `nolist`
 *  profiling shortcuts
-   * `<leader>DD` starts profiling all functions and files into a file `profile.log`
-   * `<leader>DP` pauses profiling
-   * `<leader>DC` continues profiling
-   * `<leader>DQ` finishes profiling and exits vim
+  * `<Leader>DD` starts profiling all functions and files into a file `profile.log`
+  * `<Leader>DP` pauses profiling
+  * `<Leader>DC` continues profiling
+  * `<Leader>DQ` finishes profiling and exits vim
 
 ### visual mode
-*  `<leader>s` sort selection
+*  `<Leader>j` toggle just text (for copy and paste)
+*  `<Leader>s` sort selection
 *  `>` and `<` automatically reselects the visual selection
+*  searching
+  *  `<Leader>fd` find the selected text in current directory into the quickfix list
+  *  `<Leader>fr` replace the selected text in current file
 
 ## plugins
 
@@ -124,34 +225,34 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
   *  `<space>/` recursively search all files for matching text (uses `ag` or `ack` if found)
 
 ### [bufkill.vim](http://www.vim.org/scripts/script.php?script_id=1147)
-*  `<leader>bd` or `:BD` will kill a buffer without changing the window layout
+*  `<Leader>bd` or `:BD` will kill a buffer without changing the window layout
 
 ### [sneak.vim](https://github.com/justinmk/vim-sneak)
 *  motion on steriods
 
 ### [easygrep](http://www.vim.org/scripts/script.php?script_id=2438)
 *  makes search/replacing in your project a lot easier without relying on `find` and `sed`
-*  the loading time of this plugin is relatively heavy, so it is not loaded at startup.  to load it on-demand, use `<leader>vo`, which opens the options window.
-*  `<leader>vv` find word under the cursor
-*  `<leader>vV` find whole word under the cursor
-*  `<leader>vr` perform global search replace of word under cursor, with confirmation
-*  `<leader>vR` same as vr, but matches whole word
+*  the loading time of this plugin is relatively heavy, so it is not loaded at startup.  to load it on-demand, use `<Leader>vo`, which opens the options window.
+*  `<Leader>vv` find word under the cursor
+*  `<Leader>vV` find whole word under the cursor
+*  `<Leader>vr` perform global search replace of word under cursor, with confirmation
+*  `<Leader>vR` same as vr, but matches whole word
 
 ### [fugitive](https://github.com/tpope/vim-fugitive)
 *  git wrapper
-*  `<leader>gs` status
-*  `<leader>gd` diff
-*  `<leader>gc` commit
-*  `<leader>gb` blame
-*  `<leader>gl` log
-*  `<leader>gp` push
-*  `<leader>gw` stage
-*  `<leader>gr` rm
+*  `<Leader>gs` status
+*  `<Leader>gd` diff
+*  `<Leader>gc` commit
+*  `<Leader>gb` blame
+*  `<Leader>gl` log
+*  `<Leader>gp` push
+*  `<Leader>gw` stage
+*  `<Leader>gr` rm
 *  in addition to all the standard bindings when in the git status window, you can also use `U` to perform a `git checkout --` on the current file
 
 ### [gitv](https://github.com/gregsexton/gitv)
 *  nice log history viewer for git
-*  `<leader>gv`
+*  `<Leader>gv`
 
 ### [unimpaired](https://github.com/tpope/vim-unimpaired)
 *  many additional bracket `[]` maps
@@ -160,8 +261,8 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 
 ### [nerdtree](https://github.com/scrooloose/nerdtree)
 *  file browser
-*  `<F2>` toggle browser
-*  `<F3>` open tree to path of the current file
+*  `<Leader>n` toggle browser
+*  `<Leader>nf` open tree to path of the current file
 
 ### [tcomment](https://github.com/tomtom/tcomment_vim)
 *  very versatile commenting plugin that can do motions
@@ -177,11 +278,11 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 *  `\o` parses the current file for functions with [funky](https://github.com/tacahiroy/ctrlp-funky)
 
 ### [nrrwrgn](http://github.com/chrisbra/NrrwRgn)
-*  `<leader>nr` puts the current visual selection into a new scratch buffer, allowing you to perform global commands and merge changes to the original file automatically
+*  `<Leader>nr` puts the current visual selection into a new scratch buffer, allowing you to perform global commands and merge changes to the original file automatically
 
 ### [tabular](https://github.com/godlygeek/tabular)
 *  easily aligns code
-*  `<leader>a&`, `<leader>a=`, `<leader>a:`, `<leader>a,`, `<leader>a|`
+*  `<Leader>a&`, `<Leader>a=`, `<Leader>a:`, `<Leader>a,`, `<Leader>a|`
 
 ### [gist](https://github.com/mattn/gist-vim)
 *  automatically get or push changes for gists with `:Gist`
@@ -193,7 +294,7 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 
 ### [undotree](https://github.com/mbbill/undotree)
 *  visualize the undo tree
-*  `<F5>` to toggle
+*  `<Leader>u` to toggle
 
 ### [youcompleteme][ycm]/[ultisnips][us]
 *  amazingly fast fuzzy autocomplete engine combined with an excellent snippets library
@@ -204,11 +305,20 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 *  `<Tab>` to select the next match, or expand if the keyword is a snippet
 *  if you have lua installed, it will use [neocomplete][nc] instead
 
-### [vimshell](https://github.com/Shougo/vimshell)
-*  `<leader>c` splits a new window with an embedded shell
-
 ### [vim-multiple-cursors](https://github.com/terryma/vim-multiple-cursors)
 *  mapped to `<C-N>`, this will select all matching words and lets you concurrently change all matches at the same time
+
+### [conque-gdb](https://github.com/vim-scripts/Conque-GDB)
+*  `<Leader>d` gdb command line interface and terminal emulator
+
+### [tagbar](https://github.com/majutsushi/tagbar)
+*  `<Leader>ta` displays tags in a window
+
+### [vim-buffergator](https://github.com/jeetsukumaran/vim-buffergator)
+*  `<Leader>t` list, select and switch between buffers
+
+### [goldenview](https://github.com/zhaocai/GoldenView.Vim)
+*  `<Leader>z` always have a nice view for vim split windows
 
 # and some more plugins
 *  [surround](https://github.com/tpope/vim-surround) makes for quick work of surrounds

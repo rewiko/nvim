@@ -199,13 +199,13 @@
 	" wildignore
 	:set wildignore+=.git/**,.svn/**,core.*,cscope.*,*.tags,tags
 
-	" vimgrep the selected text
+	" vimgrep the selected text in current directory
 	vnoremap <silent> fd :call VisualSelection('d')<CR>
 
-	" vimgrep current word and put the cursor in the right position
+	" vimgrep current word in current directory and put the cursor in the right position
 	nnoremap <Leader>fd :vimgrep /\<<C-r>=expand("<cword>")<CR>\>/j **/*<Left><Left><Left><Left><Left><Left><Left><Left><Left>
 
-	" vimgrep current word in the current file
+	" vimgrep current word in current file
 	nnoremap <Leader>ff :vimgrep /\<<C-r>=expand("<cword>")<CR>\>/j <C-R>%
 
 	" search and replace the selected text
@@ -215,12 +215,8 @@
 	nnoremap <Leader>fr :%s/\<<C-r>=expand("<cword>")<CR>\>/
 
 	" toggle list
-	nnoremap <silent> <Leader>c :call ToggleList("Quickfix List", 'c')<CR>
+	nnoremap <silent> <Leader>q :call ToggleList("Quickfix List", 'c')<CR>
 	nnoremap <silent> <Leader>l :call ToggleList("Location List", 'l')<CR>
-
-	" refer to `:help copen`
-	noremap <Leader>cn :cn<CR>
-	noremap <Leader>cp :cp<CR>
 
 " }}}
 
@@ -229,7 +225,8 @@
 " Misc settings
 
 	" toggle just text
-	noremap <silent> <Leader>j :call JustTextToggle()<CR>
+	nnoremap <silent> <Leader>j :call JustTextToggle()<CR>
+	vnoremap <silent> <Leader>j :call JustTextToggle()<CR>
 
 	" auto highlight
 	if has("autocmd")

@@ -809,9 +809,9 @@
 	nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 	" find current word in quickfix
-	nnoremap <Leader>fw :execute "vimgrep ".expand("<cword>")." %"<CR>:copen<CR>
+	"nnoremap <Leader>fw :execute "vimgrep ".expand("<cword>")." %"<CR>:copen<CR>
 	" find last search in quickfix
-	nnoremap <Leader>ff :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
+	"nnoremap <Leader>ff :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
 	" shortcuts for windows {{{
 		" <http://stackoverflow.com/questions/9092982/mapping-c-j-to-something-in-vim>
@@ -838,9 +838,6 @@
 
 	" window killer
 	nnoremap <silent> Q :call CloseWindowOrKillBuffer()<CR>
-
-	" quick buffer open
-	nnoremap gb :ls<CR>:e #
 
 	if neobundle#is_sourced('vim-dispatch')
 		nnoremap <Leader>tag :Dispatch ctags -R<CR>
