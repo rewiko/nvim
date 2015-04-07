@@ -228,12 +228,6 @@
 	nnoremap <silent> <Leader>j :call JustTextToggle()<CR>
 	vnoremap <silent> <Leader>j :call JustTextToggle()<CR>
 
-	" auto highlight
-	if has("autocmd")
-		"nnoremap <Leader>h :if AutoHighlightToggle()<Bar>set hlsearch<Bar>endif<CR>
-		nnoremap <Leader>h :call AutoHighlightToggle()<CR>
-	endif
-
 	" repeatable copy and paste. fake the behavior in windows
 	nnoremap <Leader>y "zyiw
 	nnoremap <Leader>p viw"zp
@@ -295,7 +289,7 @@
 				autocmd! auto_highlight
 				augroup! auto_highlight
 				setlocal updatetime=4000
-				echo 'Highlight current word: off'
+				"echo 'Highlight current word: off'
 				return 0
 			else
 				augroup auto_highlight
@@ -304,10 +298,17 @@
 					autocmd CursorHold * silent! execute printf('2match WarningMsg /\<%s\>/', expand('<cword>'))
 				augroup end
 				setlocal updatetime=20
-				echo 'Highlight current word: on'
+				"echo 'Highlight current word: on'
 				return 1
 			endif
 		endfunction
+	endif
+
+	" auto highlight
+	if has("autocmd")
+		"nnoremap <Leader>h :if AutoHighlightToggle()<Bar>set hlsearch<Bar>endif<CR>
+		nnoremap <Leader>h :call AutoHighlightToggle()<CR>
+		call AutoHighlightToggle()
 	endif
 
 	function! CmdLine(str)
