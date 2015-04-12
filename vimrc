@@ -24,10 +24,10 @@
 	let s:settings.autocomplete_method = 'neocomplcache'
 	let s:settings.enable_cursorcolumn = 0
 	let s:settings.colorscheme = 'jellybeans'
-	if has('lua')
-		let s:settings.autocomplete_method = 'neocomplete'
-	elseif filereadable(expand("~/.vim/bundle/YouCompleteMe/python/ycm_core.*"))
+	if s:is_macvim && has('python') && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so")) && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so"))
 		let s:settings.autocomplete_method = 'ycm'
+	elseif has('lua')
+		let s:settings.autocomplete_method = 'neocomplete'
 	endif
 
 	if exists('g:dotvim_settings.plugin_groups')
@@ -192,7 +192,9 @@
 	set display+=lastline
 	set wildmenu	"show list for autocomplete
 	set wildmode=list:full
-	set wildignorecase
+	if (v:version >= 704)
+		set wildignorecase
+	endif
 
 	set splitbelow
 	set splitright
@@ -430,6 +432,7 @@
 		NeoBundle 'honza/vim-snippets'
 		if s:settings.autocomplete_method == 'ycm' "{{{
 			NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
+				"let g:ycm_path_to_python_interpreter='~/local/bin/python'
 				let g:ycm_complete_in_comments_and_strings=1
 				let g:ycm_key_list_select_completion=['<C-n>','<Down>']
 				let g:ycm_key_list_previous_completion=['<C-p>','<Up>']

@@ -14,9 +14,10 @@
 	call add(g:dotvim_settings.plugin_groups, 'language')
 	call add(g:dotvim_settings.plugin_groups, 'c')
 	call add(g:dotvim_settings.plugin_groups, 'scm')
+	call add(g:dotvim_settings.plugin_groups, 'indents')
 	call add(g:dotvim_settings.plugin_groups, 'navigation')
 	call add(g:dotvim_settings.plugin_groups, 'unite')
-	call add(g:dotvim_settings.plugin_groups, 'indents')
+	call add(g:dotvim_settings.plugin_groups, 'autocomplete')
 	call add(g:dotvim_settings.plugin_groups, 'misc')
 
 	let s:encoding = "utf-8"
