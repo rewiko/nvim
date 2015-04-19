@@ -13,7 +13,7 @@
 
 	" characters for displaying in list mode
 	if &termencoding ==# 'utf-8' || &encoding ==# 'utf-8'
-		set listchars=extends:>,precedes:<,tab:▸\ ,trail:~
+		set listchars=extends:>,precedes:<,tab:▶\ ,trail:~
 	else
 		set listchars=extends:>,precedes:<,tab:>\ ,trail:~
 	endif
