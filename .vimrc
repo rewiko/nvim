@@ -255,7 +255,7 @@
 			let b:just_text = 0
 		endif
 		if b:just_text == 0
-			setlocal nopaste
+			setlocal paste
 			setlocal nolist
 			setlocal nonumber
 			setlocal noautoindent
@@ -265,7 +265,7 @@
 			echo 'Just text: on'
 			return 0
 		else
-			setlocal paste
+			setlocal nopaste
 			setlocal list
 			setlocal number
 			setlocal autoindent
