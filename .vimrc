@@ -258,9 +258,6 @@
 			setlocal paste
 			setlocal nolist
 			setlocal nonumber
-			setlocal noautoindent
-			setlocal nocindent
-			setlocal nosmartindent
 			let b:just_text = 1
 			echo 'Just text: on'
 			return 0
@@ -268,9 +265,6 @@
 			setlocal nopaste
 			setlocal list
 			setlocal number
-			setlocal autoindent
-			setlocal cindent
-			setlocal smartindent
 			let b:just_text = 0
 			echo 'Just text: off'
 			return 1

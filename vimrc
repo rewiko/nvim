@@ -24,7 +24,7 @@
 	let s:settings.autocomplete_method = 'neocomplcache'
 	let s:settings.enable_cursorcolumn = 0
 	let s:settings.colorscheme = 'jellybeans'
-	if s:is_macvim && has('python') && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so")) && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so"))
+	if has('python') && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so")) && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so"))
 		let s:settings.autocomplete_method = 'ycm'
 	elseif has('lua')
 		let s:settings.autocomplete_method = 'neocomplete'
