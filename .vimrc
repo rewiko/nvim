@@ -260,6 +260,7 @@
 			setlocal nonumber
 			let b:just_text = 1
 			echo 'Just text: on'
+			sign unplace *
 			return 0
 		else
 			setlocal nopaste
@@ -270,9 +271,9 @@
 			return 1
 		endif
 		" vim-signify
-		if exists("*sy#toggle")
-			call sy#toggle()
-		endif
+		"if exists("*sy#toggle")
+		"	call sy#toggle()
+		"endif
 	endfunction
 
 	" highlight all instances of word under cursor, when idle.

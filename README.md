@@ -1,6 +1,6 @@
 # dotvim
 
-A highly tuned vim distribution that will blow your socks off!
+A full-blown NeoVim or Vim configuration.
 
 **Table of Contents**
 
@@ -14,18 +14,16 @@ A highly tuned vim distribution that will blow your socks off!
 - [Plugins](#plugins)
 - [Credits](#credits)
 - [License](#license)
-- [Changelog](#changelog)
 
 ## Introduction
 
-this is my **personal** vim distribution that i have tweaked over time and evolved from a simple vanilla vimrc configuration to a full-blown distribution that it is today.
-
-while it is very easy to install this and get up and running on a brand new machine (a use case i have), i recommend that you do not install this unless you fully understand everything that's going on inside.  scan it for tips and tricks, or fork and customize it for *your* needs.
+This is my **personal** vim distribution that i have tweaked over time and evolved from a simple vanilla vimrc configuration to a full-blown distribution that it is today.
 
 ## Basic Installation
 
 ```sh
 mv ~/.vimrc ~/.vimrc.backup
+mv ~/.nvimrc ~/.nvimrc.backup
 cd
 git clone https://github.com/taohex/dotvim .vim
 cd .vim/
@@ -34,7 +32,7 @@ ln -s ~/.vim/.vimrc ~/
 ln -s ~/.vim/.vimrc ~/.nvimrc
 ```
 
-startup vim and neobundle will detect and ask you install any missing plugins.  you can also manually initiate this with `:NeoBundleInstall`
+Startup vim and neobundle will detect and ask you install any missing plugins. You can also manually initiate this with `:NeoBundleInstall`.
 
 ## Keymap
 
@@ -42,7 +40,7 @@ startup vim and neobundle will detect and ask you install any missing plugins.  
 
 ### Unite
 
-keybinding       | description
+Keybinding       | Description
 -----------------|------------------------------------------------------------
 `<Space><Space>` | go to anything (files, buffers, MRU, bookmarks)
 `<Space>f`       | select from files under the current working directory
@@ -59,7 +57,7 @@ keybinding       | description
 
 ### Panel
 
-keybinding       | mode | description
+Keybinding       | Mode | Description
 -----------------|------|------------------------------------------------------------
 `<Leader>n`      |  n   | toggle the-nerd-tree
 `<Leader>nf`     |  n   | open the-nerd-tree to path of the current file
@@ -72,7 +70,7 @@ keybinding       | mode | description
 
 ### Edit
 
-keybinding       | mode | description
+Keybinding       | Mode | Description
 -----------------|------|------------------------------------------------------------
 `<Leader>y`      |  n   | windows-like copy
 `<Leader>p`      |  n   | windows-like paste
@@ -87,7 +85,7 @@ keybinding       | mode | description
 
 ### Window & Buffer
 
-keybinding           | mode | description
+Keybinding           | Mode | Description
 ---------------------|------|------------------------------------------------------------
 `<Leader>v`          |  n   | vertical split
 `<Leader>s`          |  n   | horizontal split
@@ -101,7 +99,7 @@ keybinding           | mode | description
 
 ### Searching
 
-keybinding           | mode | description
+Keybinding           | Mode | Description
 ---------------------|------|------------------------------------------------------------
 `<Leader>fd`         | n, v | find current word (or selected text) in current directory into the quickfix list
 `<Leader>ff`         |  n   | find current word in current file into the quickfix list
@@ -110,7 +108,7 @@ keybinding           | mode | description
 
 ### View
 
-keybinding              | mode | description
+Keybinding              | Mode | Description
 ------------------------|------|------------------------------------------------------------
 `<Leader>j`             | n, v | toggle just text (for copy and paste)
 `<Leader>h`             |  n   | toggle highlight
@@ -121,7 +119,7 @@ keybinding              | mode | description
 
 ### EasyGrep
 
-keybinding       | description
+Keybinding       | Description
 -----------------|------------------------------------------------------------
 `<Leader>vo`     | select the files to search in and set grep options (must run this first)
 `<Leader>vv`     | grep for the word under the cursor, match all occurences, like |gstar|
@@ -133,7 +131,7 @@ keybinding       | description
 
 ## unimpaired
 
-keybinding       | description
+Keybinding       | Description
 -----------------|------------------------------------------------------------
 `[a`             | :previous
 `]a`             | :next
@@ -143,6 +141,8 @@ keybinding       | description
 `]b`             | :bnext
 `[B`             | :bfirst
 `]B`             | :blast
+`[c`             | signify previous hunk
+`]c`             | signify next hunk
 `[l`             | :lprevious
 `]l`             | :lnext
 `[L`             | :lfirst
@@ -162,7 +162,7 @@ keybinding       | description
 
 ### Profiling
 
-keybinding       | mode | description
+Keybinding       | Mode | Description
 -----------------|------|------------------------------------------------------------
 `<Leader>DD`     |  n   | starts profiling all functions and files into a file `profile.log`
 `<Leader>DP`     |  n   | pauses profiling
@@ -173,9 +173,25 @@ keybinding       | mode | description
 
 ### OS X
 
-#### Install MacVim
+YouComplete **only** support NeoVim or MacVim.
 
-YouComplete **only** support MacVim.
+#### Install NeoVim (Recommended)
+
+```sh
+pip install neovim
+brew update
+brew reinstall --HEAD neovim
+```
+
+Make alias
+
+```sh
+alias vi='nvim'
+alias vim="nvim"
+alias vimdiff="nvim -d"
+```
+
+#### Install MacVim
 
 ```sh
 brew install macvim --with-luajit --override-system-vim
@@ -186,6 +202,7 @@ Make alias
 ```sh
 alias vi="mvim -v"
 alias vim="mvim -v"
+alias vimdiff="mvim -d -v"
 ```
 
 #### Quick Compile YouCompleteMe
@@ -195,11 +212,11 @@ cd ~/.vim/bundle/YouCompleteMe
 ./install.sh --clang-completer --omnisharp-completer
 ```
 
-check for `~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so` and `~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so`, done
+Check for `~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so` and `~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so`, done
 
 #### Full Compile YouCompleteMe
 
-try this if quick compile does not work
+Try this if quick compile does not work
 
 ```sh
 cd ~/.vim/bundle/
@@ -208,7 +225,7 @@ cd YouCompleteMe/
 git submodule update --init --recursive
 ```
 
-download clang from <http://llvm.org/releases/download.html> to `~/src/` and compile ycm_support_libs
+Download clang from <http://llvm.org/releases/download.html> to `~/src/` and compile ycm_support_libs
 
 ```sh
 mkdir -p ~/src/
@@ -220,15 +237,15 @@ cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=~/src/clang+llvm-3.6.0-x86_64-appl
 make ycm_support_libs
 ```
 
-check for `~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so` and `~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so`, done
+Check for `~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so` and `~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so`, done
 
 #### Project Configuration
 
-download <https://raw.githubusercontent.com/Valloric/ycmd/master/cpp/ycm/.ycm_extra_conf.py> to your project directory
+Download <https://raw.githubusercontent.com/Valloric/ycmd/master/cpp/ycm/.ycm_extra_conf.py> to your project directory
 
 ## Autocomplete
 
-this distribution will pick one of three combinations, in the following priority:
+This distribution will pick one of three combinations, in the following priority:
 
 1.	[youcompleteme][ycm] + [ultisnips][us] if you have compiled YCM.
 1.	[neocomplete][nc] + [neosnippet][ns] if you have `lua` enabled.
@@ -410,11 +427,11 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 *	[startify](https://github.com/mhinz/vim-startify) gives you a better start screen
 
 ### And Even More Plugins...
-*	i think i've listed about half of the plugins contained in this distribution, so please have a look at the vimrc directly to see all plugins in use
+*	I think i've listed about half of the plugins contained in this distribution, so please have a look at the vimrc directly to see all plugins in use
 
 ## Credits
 
-i wanted to give special thanks to all of the people who worked on the following projects, or people simply posted their vim distributions, because i learned a lot and took many ideas and incorporated them into my configuration.
+I wanted to give special thanks to all of the people who worked on the following projects, or people simply posted their vim distributions, because i learned a lot and took many ideas and incorporated them into my configuration.
 
 *	[janus](https://github.com/carlhuda/janus)
 *	[spf13](https://github.com/spf13/spf13-vim)
@@ -429,17 +446,3 @@ i wanted to give special thanks to all of the people who worked on the following
 
 ## License
 [WTFPL](http://sam.zoy.org/wtfpl/)
-
-## Changelog
-
-*	v1
-	*	requires `g:dotvim_settings.version` to be defined
-	*	disable all langauge-specific plugins by default
-	*	add support for `g:dotvim_settings.plugin_groups_include`
-
-
-[ycm]: https://github.com/Valloric/YouCompleteMe
-[us]: https://github.com/SirVer/ultisnips
-[nc]: https://github.com/Shougo/neocomplete.vim
-[ncl]: https://github.com/Shougo/neocomplcache.vim
-[ns]: https://github.com/Shougo/neosnippet.vim

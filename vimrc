@@ -874,7 +874,6 @@
 	autocmd FileType python setlocal foldmethod=indent
 	autocmd FileType php autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 	autocmd FileType coffee autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-	autocmd FileType markdown setlocal nolist
 	autocmd FileType vim setlocal foldmethod=indent keywordprg=:help
 
 	" quickfix window always on the bottom taking the whole horizontal space
