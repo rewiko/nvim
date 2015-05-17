@@ -2,6 +2,8 @@
 
 A full-blown NeoVim or Vim configuration.
 
+!<http://taohex.github.io/images/vim.gif>
+
 **Table of Contents**
 
 - [Introduction](#introduction)
@@ -308,13 +310,13 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 ### [unite.vim](https://github.com/Shougo/unite.vim)
 *	this is an extremely powerful plugin that lets you build up lists from arbitrary sources
 *	mappings
-	*	`<space><space>` go to anything (files, buffers, MRU, bookmarks)
-	*	`<space>y` select from previous yanks
-	*	`<space>l` select line from current buffer
-	*	`<space>b` select from current buffers
-	*	`<space>o` select from outline of current file
-	*	`<space>s` quick switch buffer
-	*	`<space>/` recursively search all files for matching text (uses `ag` or `ack` if found)
+	*	`<Space><Space>` go to anything (files, buffers, MRU, bookmarks)
+	*	`<Space>y` select from previous yanks
+	*	`<Space>l` select line from current buffer
+	*	`<Space>b` select from current buffers
+	*	`<Space>o` select from outline of current file
+	*	`<Space>s` quick switch buffer
+	*	`<Space>/` recursively search all files for matching text (uses `ag` or `ack` if found)
 
 ### [bufkill.vim](http://www.vim.org/scripts/script.php?script_id=1147)
 *	`<Leader>bd` or `:BD` will kill a buffer without changing the window layout

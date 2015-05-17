@@ -505,7 +505,7 @@
 			endif
 		"}}}
 		NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
-			let g:undotree_SplitLocation='botright'
+			let g:undotree_WindowLayout=2
 			let g:undotree_SetFocusWhenToggle=1
 			nnoremap <silent> <Leader>u :UndotreeToggle<CR>
 		"}}}
@@ -555,7 +555,7 @@
 			nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
 		"}}}
 		NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}} "{{{
-			nnoremap <silent> <Leader>ta :TagbarToggle<CR>
+			nnoremap <silent> <Leader>a :TagbarToggle<CR>
 		"}}}
 		NeoBundle 'jeetsukumaran/vim-buffergator' "{{{
 			"let g:buffergator_suppress_keymaps = 1
