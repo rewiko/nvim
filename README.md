@@ -2,7 +2,7 @@
 
 A full-blown NeoVim or Vim configuration.
 
-!<http://taohex.github.io/images/vim.gif>
+![](http://taohex.github.io/images/vim.gif)
 
 **Table of Contents**
 
