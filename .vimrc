@@ -26,8 +26,8 @@
 	let s:theme = "solarized"
 	let s:force256 = 0
 	let s:termtrans = 0
-	"let s:cscopeprg="gtags-cscope"
-	let s:cscopeprg="cscope"
+	let s:cscopeprg="gtags-cscope"
+	"let s:cscopeprg="cscope"
 
 	source ~/.vim/vimrc
 
@@ -114,7 +114,7 @@
 	" mouse
 	"set mouse&
 	set mouse=a
-	set ttymouse=xterm2
+	"set ttymouse=xterm2
 
 	" don't use spaces instead of tabs
 	set noexpandtab
@@ -146,48 +146,60 @@
 		endif
 	endif
 
-	if s:cscopeprg == "gtags-cscope"
-		" global
-		" locate symbols which are not defined in `GTAGS'
-		nnoremap <C-]>s :Gtags -s <C-R>=expand("<cword>")<CR><CR>
-		"nnoremap <C-\>s :tab split<CR>:execute "Gtags -s " . expand("<cword>")<CR>
-		" locate strings
-		nnoremap <C-]>g :Gtags -g <C-R>=expand("<cword>")<CR><CR>
-		"nnoremap <C-\>g :tab split<CR>:execute "Gtags -g " . expand("<cword>")<CR>
-		" find reference
-		nnoremap <C-]>r :Gtags -r <C-R>=expand("<cword>")<CR><CR>
-		"nnoremap <C-\>r :tab split<CR>:execute "Gtags -r " . expand("<cword>")<CR>
-	elseif s:cscopeprg == "cscope"
-		" cscope
-		if has("cscope")
-			nmap ; [cscope]
-			nnoremap [cscope] <nop>
+	" cscope
+	if has("cscope")
+		nmap ; [cscope]
+		nnoremap [cscope] <nop>
+		if s:cscopeprg == "gtags-cscope"
+			" global
+			" go to definition or reference
+			nnoremap [cscope]g :GtagsCursor
+			" go to definition
+			nnoremap [cscope]d :Gtags -d <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>d <Esc>:execute 'Gtags ' . GetVisualSelection()
+			" find reference
+			nnoremap [cscope]r :Gtags -r <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>r <Esc>:execute 'Gtags -r ' . GetVisualSelection()
+			" locate symbols which are not defined in `GTAGS`
+			nnoremap [cscope]s :Gtags -s <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>s <Esc>:execute 'Gtags -s ' . GetVisualSelection()
+			" locate strings
+			nnoremap [cscope]e :Gtags -g <C-r>=expand("<cword>")<CR>
+			"nnoremap [cscope]e :execute 'Gtags -g ' . expand('<cword>')
+			"vnoremap <C-\>e <Esc>:execute 'Gtags -g ' . GetVisualSelection()
+			" get a list of tags in specified files
+			nnoremap [cscope]f :Gtags -f %
+			"vnoremap <C-\>f <Esc>:execute 'Gtags -f ' . GetVisualSelection()
+		elseif s:cscopeprg == "cscope"
+			" cscope
 			" 's' symbol: find all references to the token under cursor
-			nnoremap [cscope]s :cs find s <C-R>=expand("<cword>")<CR><CR>
-			"nnoremap <C-\>s :tab split<CR>:execute "cs find s " . expand("<cword>")<CR>
+			nnoremap [cscope]s :cscope find s <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>s <Esc>:execute 'cscope find s ' . GetVisualSelection()
 			" 'g' global: find global definition(s) of the token under cursor
-			nnoremap [cscope]g :cs find g <C-R>=expand("<cword>")<CR><CR>
-			"nnoremap <C-\>g :tab split<CR>:execute "cs find g " . expand("<cword>")<CR>
-			" 'c' calls:  find all calls to the function name under cursor
-			nnoremap [cscope]c :cs find c <C-R>=expand("<cword>")<CR><CR>
-			"nnoremap <C-\>c :tab split<CR>:execute "cs find c " . expand("<cword>")<CR>
-			" 't' text:   find all instances of the text under cursor
-			nnoremap [cscope]t :cs find t <C-R>=expand("<cword>")<CR><CR>
-			"nnoremap <C-\>t :tab split<CR>:execute "cs find t " . expand("<cword>")<CR>
+			nnoremap [cscope]g :cscope find g <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>g <Esc>:execute 'cscope find g ' . GetVisualSelection()
+			" 'c' calls: find all calls to the function name under cursor
+			nnoremap [cscope]c :cscope find c <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>c <Esc>:execute 'cscope find c ' . GetVisualSelection()
+			" 't' text: find all instances of the text under cursor
+			nnoremap [cscope]t :cscope find t <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>t <Esc>:execute 'cscope find t ' . GetVisualSelection()
 			" 'e' egrep:  egrep search for the word under cursor
-			nnoremap [cscope]e :cs find e <C-R>=expand("<cword>")<CR><CR>
-			"nnoremap <C-\>e :tab split<CR>:execute "cs find e " . expand("<cword>")<CR>
-			" 'f' file:   open the filename under cursor
-			nnoremap [cscope]f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-			"nnoremap <C-\>f :tab split<CR>:execute "cs find f " . expand("<cword>")<CR>
-			" 'i' includes: find files that include the filename under cursor
-			"nnoremap [cscope]i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-			"nnoremap <C-\>i :tab split<CR>:execute "cs find i ^" . expand("<cword>") . "$"<CR>
-			nnoremap [cscope]i :cs find i <C-R>=expand("<cfile>")<CR><CR>
-			"nnoremap <C-\>i :tab split<CR>:execute "cs find i " . expand("<cword>")<CR>
+			nnoremap [cscope]e :cscope find e <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>e <Esc>:execute 'cscope find e ' . GetVisualSelection()
+			" 'f' file: open the filename under cursor
+			nnoremap [cscope]f :cscope find f <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>f <Esc>:execute 'cscope find f ' . GetVisualSelection()
 			" 'd' called: find functions that function under cursor calls
-			nnoremap [cscope]d :cs find d <C-R>=expand("<cword>")<CR><CR>
-			"nnoremap <C-\>d :tab split<CR>:execute "cs find d " . expand("<cword>")<CR>
+			nnoremap [cscope]d :cscope find d <C-r>=expand("<cword>")<CR>
+			"vnoremap <C-\>d <Esc>:execute 'cscope find d ' . GetVisualSelection()
+			" 'i' includes: find files that include the filename under cursor
+			nnoremap [cscope]i :cscope find i <C-r>=expand("<cfile>")<CR>
+			"vnoremap <C-\>i <Esc>:execute 'cscope find i ' . GetVisualSelection()
+			"nnoremap [cscope]i :execute 'cscope find i ' . expand('<cword>')
+			"nnoremap [cscope]i :cscope find i ^<C-r>=expand("<cfile>")<CR>$
+			"nnoremap [cscope]i :tab split<CR>:execute "cscope find i " . expand("<cword>")
+			"nnoremap [cscope]i :tab split<CR>:execute "cscope find i ^" . expand("<cword>") . "$"
 		endif
 	endif
 
@@ -213,7 +225,7 @@
 	vnoremap <Leader>fr :call VisualSelection('r')<CR>
 
 	" search and replace current word
-	nnoremap <Leader>fr :%s/\<<C-r>=expand("<cword>")<CR>\>/
+	nnoremap <Leader>fr :%s/\<<C-r>=expand("<cword>")<CR>\>/<C-r>=expand("<cword>")<CR>
 
 	" toggle list
 	nnoremap <silent> <Leader>q :call ToggleList("Quickfix List", 'c')<CR>
@@ -227,7 +239,6 @@
 
 	" toggle just text
 	nnoremap <silent> <Leader>j :call JustTextToggle()<CR>
-	vnoremap <silent> <Leader>j :call JustTextToggle()<CR>
 
 	" repeatable copy and paste. fake the behavior in windows
 	nnoremap <Leader>y "zyiw
@@ -237,11 +248,6 @@
 
 	" remove the Windows ^M - when the encodings gets messed up
 	noremap <Leader>m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
-
-	" session
-	"command! S mksession!
-	command! S :SaveSession!
-	command! O :OpenSession!
 
 " }}}
 
@@ -311,6 +317,15 @@
 		execute "menu Foo.Bar :" . a:str
 		emenu Foo.Bar
 		unmenu Foo
+	endfunction
+
+	function! GetVisualSelection()
+		let [s:lnum1, s:col1] = getpos("'<")[1:2]
+		let [s:lnum2, s:col2] = getpos("'>")[1:2]
+		let s:lines = getline(s:lnum1, s:lnum2)
+		let s:lines[-1] = s:lines[-1][: s:col2 - (&selection == 'inclusive' ? 1 : 2)]
+		let s:lines[0] = s:lines[0][s:col1 - 1:]
+		return join(s:lines, ' ')
 	endfunction
 
 	function! VisualSelection(direction) range

@@ -1,8 +1,8 @@
 # dotvim
 
-A full-blown NeoVim or Vim configuration.
+Turn NeoVim or Vim into a full-blown IDE.
 
-<img src="http://taohex.github.io/images/vim.gif" width="800"/>
+<img src="http://taohex.github.io/images/vim.gif" width="100%"/>
 
 **Table of Contents**
 
@@ -12,14 +12,13 @@ A full-blown NeoVim or Vim configuration.
 - [Advanced Installation](#advanced-installation)
 - [Autocomplete](#autocomplete)
 - [Standard Modifications](#standard-modification)
-- [Mappings](#mapping)
 - [Plugins](#plugins)
 - [Credits](#credits)
 - [License](#license)
 
 ## Introduction
 
-This is my **personal** vim distribution that i have tweaked over time and evolved from a simple vanilla vimrc configuration to a full-blown distribution that it is today.
+A full-blown NeoVim or Vim configuration with gdb and ctags support.
 
 ## Basic Installation
 
@@ -56,6 +55,12 @@ Keybinding       | Description
 `<Space>t`       | select from tags
 `<Space>y`       | select from previous yanks
 `<Space>j`       | select from junkfiles
+`<Space>gg`      | lists the references or definitions of a word
+`<Space>gd`      | lists definitions of a word
+`<Space>gr`      | lists references of a word
+`<Space>ge`      | lists grep result of a word
+`<Space>ga`      | lists all tokens in GTAGS
+`<Space>gf`      | lists current file's tokens in GTAGS
 
 ### Panel
 
@@ -64,11 +69,12 @@ Keybinding       | Mode | Description
 `<Leader>n`      |  n   | toggle the-nerd-tree
 `<Leader>nf`     |  n   | open the-nerd-tree to path of the current file
 `<Leader>a`      |  n   | toggle tagbar
-`<Leader>b`      |  n   | MRU buffers
-`<Leader>t`      |  n   | MRU tabs
+`<Leader>b`      |  n   | preview MRU buffers
+`<Leader>t`      |  n   | preview MRU tabs
 `<Leader>u`      |  n   | toggle undo tree
 `<Leader>q`      |  n   | toggle quickfix list
 `<Leader>l`      |  n   | toggle location list
+`<Leader>d`      |  n   | Conque-GDB
 
 ### Edit
 
@@ -76,26 +82,30 @@ Keybinding       | Mode | Description
 -----------------|------|------------------------------------------------------------
 `<Leader>y`      |  n   | windows-like copy
 `<Leader>p`      |  n   | windows-like paste
-`<Leader>fef`    |  n   | format entire file
 `<C-h>`          |  i   | move the cursor left
 `<C-l>`          |  i   | move the cursor right
+`<Leader>w`      |  n   | write buffer to file
+`<Leader>s`      |  v   | sort selection
+`<Leader>fef`    |  n   | format entire file
+`<Leader>f$`     |  n   | strip current line of trailing white space
 `jk`, `kj`       |  i   | escape
 `gp`             |  n   | visually reselect the last paste
-`<Leader>w`      |  n   | write buffer to file
-`<Leader>s`      |  n   | sort selection
-`<Leader>f$`     |  n   | strip current line of trailing white space
+`:O`             |  n   | load default session
+`:S`             |  n   | save default session
+`:OpenSession`   |  n   | load a session
+`:SaveSession`   |  n   | save a session
 
 ### Window & Buffer
 
 Keybinding           | Mode | Description
 ---------------------|------|------------------------------------------------------------
+`<Left>`, `<Right>`  |  n   | previous buffer, next buffer
 `<Leader>v`          |  n   | vertical split
 `<Leader>s`          |  n   | horizontal split
 `<Leader>vsa`        |  n   | vertically split all buffers
 `<C-h>`, `<C-l>`     |  n   | move to window in the direction of hl 
 `<C-j>`, `<C-k>`     |  n   | move to window in the direction of jk
 `Q`                  |  n   | close windows and delete the buffer (if it is the last buffer window)
-`<Left>`, `<Right>`  |  n   | previous buffer, next buffer
 `gb`, `gB`           |  n   | previous MRU buffer, next MRU buffer
 `<Leader>bd`         |  n   | kill a buffer without changing the window layout
 
@@ -131,7 +141,7 @@ Keybinding       | Description
 `<Leader>vr`     | perform a global search on the word under the cursor and prompt for a pattern with which to replace it
 `<Leader>vR`     | same as vr, but matches whole word
 
-## unimpaired
+### unimpaired
 
 Keybinding       | Description
 -----------------|------------------------------------------------------------
@@ -161,6 +171,30 @@ Keybinding       | Description
 `]t`             | :tnext
 `[T`             | :tfirst
 `]T`             | :tlast
+
+### GLOBAL
+
+Keybinding       | Mode | Description
+-----------------|------|------------------------------------------------------------
+`;g`             |  n   | go to definition or reference
+`;d`             |  n   | go to definition
+`;r`             |  n   | find reference
+`;s`             |  n   | locate symbols which are not defined in `GTAGS`
+`;e`             |  n   | locate strings
+`;f`             |  n   | get a list of tags in specified files
+
+### Cscope (Default Off)
+
+Keybinding       | Mode | Description
+-----------------|------|------------------------------------------------------------
+`;s`             |  n   | find all references to the token under cursor
+`;g`             |  n   | find global definition(s) of the token under cursor
+`;c`             |  n   | find all calls to the function name under cursor
+`;t`             |  n   | find all instances of the text under cursor
+`;e`             |  n   | egrep search for the word under cursor
+`;f`             |  n   | open the filename under cursor
+`;i`             |  n   | find files that include the filename under cursor
+`;d`             |  n   | find functions that function under cursor calls
 
 ### Profiling
 
@@ -205,6 +239,12 @@ Make alias
 alias vi="mvim -v"
 alias vim="mvim -v"
 alias vimdiff="mvim -d -v"
+```
+
+#### Install GLOBAL
+
+```sh
+brew install global
 ```
 
 #### Quick Compile YouCompleteMe
@@ -259,51 +299,6 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 
 *	if you have either [ack](http://betterthangrep.com/) or [ag](https://github.com/ggreer/the_silver_searcher) installed, they will be used for `grepprg`
 *	all temporary files are stored in `~/.vim/.cache`, such as backup files and persistent undo
-
-## Mappings
-
-### Insert Mode
-*	`<C-h>` move the cursor left
-*	`<C-l>` move the cursor right
-*	`jk`, `kj` remapped for "smash escape"
-
-### Normal Mode
-*	`<Leader>j` toggle just text (for copy and paste)
-*	`<Leader>h` toggle highlight
-*	`<Leader>q` toggle quickfix list
-*	`<Leader>l` toggle location list
-*	`<Leader>y` windows-like copy
-*	`<Leader>p` windows-like paste
-*	`<Leader>fef` format entire file
-*	`<Leader>f$` strip current line of trailing white space
-*	window shortcuts
-	*	`<Leader>v` vertical split
-	*	`<Leader>s` horizontal split
-	*	`<Leader>vsa` vertically split all buffers
-	*	`<C-h>` `<C-j>` `<C-k>` `<C-l>` move to window in the direction of hkjl
-*	window killer
-	*	`Q` remapped to close windows and delete the buffer (if it is the last buffer window)
-*	searching
-	*	`<Leader>fd` find current word in current directory into the quickfix list
-	*	`<Leader>ff` find current word in current file into the quickfix list
-	*	`<Leader>fr` replace current word in current file
-	*	`/` replaced with `/\v` for sane regex searching
-	*	`<cr>` toggle hlsearch
-*	`<Left>` `<Right>` maps to `:bprev` and `:bnext` respectively
-*	`gp` remapped to visually reselect the last paste
-*	profiling shortcuts
-	*	`<Leader>DD` starts profiling all functions and files into a file `profile.log`
-	*	`<Leader>DP` pauses profiling
-	*	`<Leader>DC` continues profiling
-	*	`<Leader>DQ` finishes profiling and exits vim
-
-### Visual Mode
-*	`<Leader>j` toggle just text (for copy and paste)
-*	`<Leader>s` sort selection
-*	`>` and `<` automatically reselects the visual selection
-*	searching
-	*	`<Leader>fd` find the selected text in current directory into the quickfix list
-	*	`<Leader>fr` replace the selected text in current file
 
 ## Plugins
 
@@ -429,11 +424,11 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 *	[startify](https://github.com/mhinz/vim-startify) gives you a better start screen
 
 ### And Even More Plugins...
-*	I think i've listed about half of the plugins contained in this distribution, so please have a look at the vimrc directly to see all plugins in use
+*	I think I've listed about half of the plugins contained in this distribution, so please have a look at the vimrc directly to see all plugins in use
 
 ## Credits
 
-I wanted to give special thanks to all of the people who worked on the following projects, or people simply posted their vim distributions, because i learned a lot and took many ideas and incorporated them into my configuration.
+I wanted to give special thanks to all of the people who worked on the following projects, or people simply posted their vim distributions, because I learned a lot and took many ideas and incorporated them into my configuration.
 
 *	[janus](https://github.com/carlhuda/janus)
 *	[spf13](https://github.com/spf13/spf13-vim)

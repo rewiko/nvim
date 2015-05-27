@@ -633,6 +633,29 @@
 		NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}} "{{{
 			nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<CR>
 		"}}}
+		NeoBundleLazy 'hewes/unite-gtags', {'autoload':{'unite_sources':['gtags/context','gtags/def','gtags/ref','gtags/grep','gtags/completion','gtags/file']}} "{{{
+			" lists the references or definitions of a word
+			" `global --from-here=<location of cursor> -qe <word on cursor>`
+			nnoremap <silent> [unite]gg :execute 'Unite gtags/context'<CR>
+			" lists definitions of a word
+			" `global -qd -e <pattern>`
+			nnoremap <silent> [unite]gd :execute 'Unite gtags/def:'.expand('<cword>')<CR>
+			vnoremap <silent> [unite]gd <ESC>:execute 'Unite gtags/def:'.GetVisualSelection()<CR>
+			" lists references of a word
+			" `global -qrs -e <pattern>`
+			nnoremap <silent> [unite]gr :execute 'Unite gtags/ref:'.expand('<cword>')<CR>
+			vnoremap <silent> [unite]gr <ESC>:execute 'Unite gtags/ref:'.GetVisualSelection()<CR>
+			" lists grep result of a word
+			" `global -qg -e <pattern>`
+			nnoremap <silent> [unite]ge :execute 'Unite gtags/grep:'.expand('<cword>')<CR>
+			vnoremap <silent> [unite]ge <ESC>:execute 'Unite gtags/grep:'.GetVisualSelection()<CR>
+			" lists all tokens in GTAGS
+			" `global -c`
+			nnoremap <silent> [unite]ga :execute 'Unite gtags/completion'<CR>
+			" lists current file's tokens in GTAGS
+			" `global -f`
+			nnoremap <silent> [unite]gf :execute 'Unite gtags/file'<CR>
+		"}}}
 		NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}} "{{{
 			nnoremap <silent> [unite]o :<C-u>Unite -auto-resize -buffer-name=outline outline<CR>
 		"}}}
@@ -669,6 +692,9 @@
 	if count(s:settings.plugin_groups, 'misc') "{{{
 		NeoBundle 'xolox/vim-misc'
 		NeoBundle 'xolox/vim-session'
+		let g:session_directory = s:get_cache_dir('sessions')
+		command! S :SaveSession!
+		command! O :OpenSession!
 		NeoBundleLazy 'mbbill/fencview', {'autoload':{'commands':['FencView','FencAutoDetect']}}
 		if exists('$TMUX')
 			NeoBundle 'christoomey/vim-tmux-navigator'
@@ -687,6 +713,31 @@
 			let g:startify_session_dir = s:get_cache_dir('sessions')
 			let g:startify_change_to_vcs_root = 1
 			let g:startify_show_sessions = 1
+
+			let g:startify_custom_header = [
+						\ '	dotvim by taohe',
+						\ '',
+						\ '	<Space><Space>	go to anything (files, buffers, MRU, bookmarks)',
+						\ '	<Space>gg		lists the references or definitions of a word',
+						\ '	,n				toggle the-nerd-tree',
+						\ '	,a				toggle tagbar',
+						\ '	,b				preview MRU buffers',
+						\ '	,u				toggle undo tree',
+						\ '	,q				toggle quickfix list',
+						\ '	,d				Conque-GDB',
+						\ '',
+						\ ]
+
+			let g:startify_list_order = [
+						\ ['   Sessions:'],
+						\ 'sessions',
+						\ ['   Bookmarks:'],
+						\ 'bookmarks',
+						\ ['   MRU:'],
+						\ 'files',
+						\ ['   MRU within this dir:'],
+						\ 'dir',
+						\ ]
 		"}}}
 		NeoBundle 'scrooloose/syntastic' "{{{
 			" run `:SyntasticCheck` to check syntax
