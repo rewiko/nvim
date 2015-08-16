@@ -33,7 +33,7 @@
 	endif
 
 	" airline
-	if !empty(glob("vim-airline"))
+	"if !empty(glob("vim-airline"))
 		if s:powerline_fonts == 1
 			let g:airline_left_sep = ''
 			let g:airline_right_sep = ''
@@ -41,10 +41,10 @@
 			let g:airline_left_sep = '►'
 			let g:airline_right_sep = '◄'
 		endif
-	endif
+	"endif
 
 	" lightline
-	if !empty(glob("lightline.vim"))
+	"if !empty(glob("lightline.vim"))
 		" <https://github.com/itchyny/lightline.vim/issues/36>
 		let g:lightline = {
 				\ 'colorscheme': 'solarized',
@@ -70,7 +70,7 @@
 				\ 'separator': { 'left': '', 'right': '' },
 				\ 'subseparator': { 'left': '', 'right': '' }
 		\ }
-	endif
+	"endif
 
 	" syntastic
 	let g:syntastic_error_symbol = '✗'
