@@ -14,6 +14,7 @@
 	call add(g:dotvim_settings.plugin_groups, 'language')
 	call add(g:dotvim_settings.plugin_groups, 'c')
 	call add(g:dotvim_settings.plugin_groups, 'scm')
+	call add(g:dotvim_settings.plugin_groups, 'editing')
 	call add(g:dotvim_settings.plugin_groups, 'indents')
 	call add(g:dotvim_settings.plugin_groups, 'navigation')
 	call add(g:dotvim_settings.plugin_groups, 'unite')
@@ -114,7 +115,9 @@
 	" mouse
 	"set mouse&
 	set mouse=a
-	"set ttymouse=xterm2
+	if !has('nvim')
+		set ttymouse=xterm2
+	endif
 
 	" don't use spaces instead of tabs
 	set noexpandtab
@@ -228,14 +231,24 @@
 	nnoremap <Leader>fr :%s/\<<C-r>=expand("<cword>")<CR>\>/<C-r>=expand("<cword>")<CR>
 
 	" toggle list
-	nnoremap <silent> <Leader>q :call ToggleList("Quickfix List", 'c')<CR>
-	nnoremap <silent> <Leader>l :call ToggleList("Location List", 'l')<CR>
+	nnoremap <silent> <Leader>q :call ListToggle("Quickfix List", 'c')<CR>
+	nnoremap <silent> <Leader>l :call ListToggle("Location List", 'l')<CR>
 
 " }}}
 
 " Misc "{{{
 " ---------------------------------------------------------------------
 " Misc settings
+
+	" maximize or restore current window in split structure
+	noremap <C-w>O :call MaximizeToggle()<CR>
+	noremap <C-w>o :call MaximizeToggle()<CR>
+	noremap <C-w><C-o> :call MaximizeToggle()<CR>
+
+	" increase the window size by a factor
+	nnoremap <silent> <Leader>= :exe "vertical resize " . (winwidth(0) * 5/4)<CR>
+	" decrease the window size by a factor
+	nnoremap <silent> <Leader>- :exe "vertical resize " . (winwidth(0) * 3/4)<CR>
 
 	" toggle just text
 	nnoremap <silent> <Leader>j :call JustTextToggle()<CR>
@@ -254,6 +267,24 @@
 " Helper functions "{{{
 " ---------------------------------------------------------------------
 " Helper functions settings
+
+	" maximize or restore current window in split structure
+	" <http://vim.wikia.com/wiki/Maximize_window_and_return_to_previous_split_structure>
+	function! MaximizeToggle()
+		if exists("s:maximize_session")
+			exec "source " . s:maximize_session
+			call delete(s:maximize_session)
+			unlet s:maximize_session
+			let &hidden = s:maximize_hidden_save
+			unlet s:maximize_hidden_save
+		else
+			let s:maximize_hidden_save = &hidden
+			let s:maximize_session = tempname()
+			set hidden
+			exec "mksession! " . s:maximize_session
+			only
+		endif
+	endfunction
 
 	" toggle just text
 	function! JustTextToggle()
@@ -277,6 +308,7 @@
 			return 1
 		endif
 		" vim-signify
+		"if !empty(glob("vim-signify"))
 		"if exists("*sy#toggle")
 		"	call sy#toggle()
 		"endif
@@ -342,7 +374,7 @@
 		elseif a:direction == 'd'
 			call CmdLine("vimgrep " . '/' . l:pattern . '/j' . ' **/*.')
 		elseif a:direction == 'r'
-			call CmdLine("%s" . '/' . l:pattern . '/')
+			call CmdLine("%s" . '/' . l:pattern . '/' . l:pattern)
 		endif
 
 		let @/ = l:pattern
@@ -357,7 +389,7 @@
 		return buflist
 	endfunction
 
-	function! ToggleList(bufname, pfx)
+	function! ListToggle(bufname, pfx)
 		let buflist = GetBufferList()
 		for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "' . a:bufname . '"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
 			if bufwinnr(bufnum) != -1

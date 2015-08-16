@@ -13,7 +13,11 @@
 
 	" characters for displaying in list mode
 	if &termencoding ==# 'utf-8' || &encoding ==# 'utf-8'
-		set listchars=extends:>,precedes:<,tab:▶\ ,trail:~
+		if s:powerline_fonts == 1
+			set listchars=extends:>,precedes:<,tab:▶\ ,trail:•
+		else
+			set listchars=extends:>,precedes:<,tab:►\ ,trail:•
+		endif
 	else
 		set listchars=extends:>,precedes:<,tab:>\ ,trail:~
 	endif
@@ -29,12 +33,43 @@
 	endif
 
 	" airline
-	if s:powerline_fonts == 1
-		let g:airline_left_sep = ''
-		let g:airline_right_sep = ''
-	else
-		let g:airline_left_sep = '►'
-		let g:airline_right_sep = '◄'
+	if !empty(glob("vim-airline"))
+		if s:powerline_fonts == 1
+			let g:airline_left_sep = ''
+			let g:airline_right_sep = ''
+		else
+			let g:airline_left_sep = '►'
+			let g:airline_right_sep = '◄'
+		endif
+	endif
+
+	" lightline
+	if !empty(glob("lightline.vim"))
+		" <https://github.com/itchyny/lightline.vim/issues/36>
+		let g:lightline = {
+				\ 'colorscheme': 'solarized',
+				\ 'active': {
+					\ 'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+				\ },
+				\ 'tabline': {
+					\ 'left': [ [ 'bufferline' ] ],
+					\ 'right': [ [ 'close' ] ] },
+				\ 'component_function': {
+					\ 'bufferline': 'LightLineBufferline'
+				\ },
+				\ 'component': {
+					\ 'readonly': '%{&readonly?"":""}',
+					\ 'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
+					\ 'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
+				\ },
+				\ 'component_visible_condition': {
+					\ 'readonly': '(&filetype!="help"&& &readonly)',
+					\ 'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
+					\ 'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
+				\ },
+				\ 'separator': { 'left': '', 'right': '' },
+				\ 'subseparator': { 'left': '', 'right': '' }
+		\ }
 	endif
 
 	" syntastic

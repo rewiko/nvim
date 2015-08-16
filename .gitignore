@@ -1,6 +1,6 @@
-bundle
+bundle/
 !bundle/neobundle.vim
 bundle_dev/blade/
 bundle_dev/qqmail/
-.cache
-sessions
+.cache/
+tags/

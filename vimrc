@@ -22,8 +22,12 @@
 	let s:settings.default_indent = 2
 	let s:settings.max_column = 120
 	let s:settings.autocomplete_method = 'neocomplcache'
+	let s:settings.explorer_method = 'nerdtree'
+	"let s:settings.explorer_method = 'vimfiler'
+	let s:settings.statusline_method = 'airline'
 	let s:settings.enable_cursorcolumn = 0
-	let s:settings.colorscheme = 'jellybeans'
+	"let s:settings.colorscheme = 'jellybeans'
+	let s:settings.colorscheme = "solarized"
 	if has('python') && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so")) && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so"))
 		let s:settings.autocomplete_method = 'ycm'
 	elseif has('lua')
@@ -307,11 +311,30 @@
 " plugin/mapping configuration {{{
 	if count(s:settings.plugin_groups, 'core') "{{{
 		NeoBundle 'matchit.zip'
-		NeoBundle 'bling/vim-airline' "{{{
-			let g:airline#extensions#tabline#enabled = 1
-			let g:airline#extensions#tabline#left_sep = ' '
-			let g:airline#extensions#tabline#left_alt_sep = '¦'
-		"}}}
+		"if s:settings.statusline_method == 'airline' "{{{
+			NeoBundle 'bling/vim-airline' "{{{
+				let g:airline#extensions#tabline#enabled = 1
+				let g:airline#extensions#tabline#left_sep = ''
+				let g:airline#extensions#tabline#left_alt_sep = '¦'
+				let g:airline_section_b = ''
+				let g:airline_section_warning = ''
+			"}}}
+		"else
+		"	NeoBundle 'bling/vim-bufferline' "{{{
+		"		function! LightLineBufferline()
+		"			"if !empty(glob("lightline.vim"))
+		"			if exists('*bufferline#refresh_status')
+		"				call bufferline#refresh_status()
+		"			endif
+		"			let b = g:bufferline_status_info.before
+		"			let c = g:bufferline_status_info.current
+		"			let a = g:bufferline_status_info.after
+		"			return b . c . a
+		"		endfunction
+		"	"}}}
+		"	NeoBundle 'itchyny/lightline.vim' "{{{
+		"	"}}}
+		"endif "}}}
 		NeoBundle 'tpope/vim-surround'
 		NeoBundle 'tpope/vim-repeat'
 		NeoBundle 'tpope/vim-dispatch'
@@ -469,31 +492,37 @@
 				let g:neocomplcache_enable_fuzzy_completion=1
 			"}}}
 		endif "}}}
+		if s:settings.autocomplete_method == 'neocomplete' || s:settings.autocomplete_method == 'neocomplcache' "{{{
+			NeoBundleLazy 'osyo-manga/vim-marching', {'autoload':{'insert':1}} "{{{
+				" path to clang command
+				let g:marching_clang_command = "/usr/bin/clang"
+			"}}}
+		endif "}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'editing') "{{{
 		NeoBundleLazy 'editorconfig/editorconfig-vim', {'autoload':{'insert':1}}
-		NeoBundle 'tpope/vim-endwise'
+		"NeoBundle 'tpope/vim-endwise'
 		NeoBundle 'tpope/vim-speeddating'
 		NeoBundle 'thinca/vim-visualstar'
-		NeoBundle 'tomtom/tcomment_vim'
+		"NeoBundle 'tomtom/tcomment_vim'
 		NeoBundle 'terryma/vim-expand-region'
 		NeoBundle 'terryma/vim-multiple-cursors'
-		NeoBundle 'chrisbra/NrrwRgn'
-		NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}} "{{{
-			nmap <Leader>a& :Tabularize /&<CR>
-			vmap <Leader>a& :Tabularize /&<CR>
-			nmap <Leader>a= :Tabularize /=<CR>
-			vmap <Leader>a= :Tabularize /=<CR>
-			nmap <Leader>a: :Tabularize /:<CR>
-			vmap <Leader>a: :Tabularize /:<CR>
-			nmap <Leader>a:: :Tabularize /:\zs<CR>
-			vmap <Leader>a:: :Tabularize /:\zs<CR>
-			nmap <Leader>a, :Tabularize /,<CR>
-			vmap <Leader>a, :Tabularize /,<CR>
-			nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-			vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-		"}}}
-		NeoBundle 'jiangmiao/auto-pairs'
+		"NeoBundle 'chrisbra/NrrwRgn'
+		"NeoBundleLazy 'godlygeek/tabular', {'autoload':{'commands':'Tabularize'}} "{{{
+		"	nmap <Leader>a& :Tabularize /&<CR>
+		"	vmap <Leader>a& :Tabularize /&<CR>
+		"	nmap <Leader>a= :Tabularize /=<CR>
+		"	vmap <Leader>a= :Tabularize /=<CR>
+		"	nmap <Leader>a: :Tabularize /:<CR>
+		"	vmap <Leader>a: :Tabularize /:<CR>
+		"	nmap <Leader>a:: :Tabularize /:\zs<CR>
+		"	vmap <Leader>a:: :Tabularize /:\zs<CR>
+		"	nmap <Leader>a, :Tabularize /,<CR>
+		"	vmap <Leader>a, :Tabularize /,<CR>
+		"	nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+		"	vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+		""}}}
+		"NeoBundle 'jiangmiao/auto-pairs'
 		NeoBundle 'justinmk/vim-sneak' "{{{
 			let g:sneak#streak = 1
 		"}}}
@@ -542,18 +571,37 @@
 			nnoremap [ctrlp]o :CtrlPFunky<CR>
 			nnoremap [ctrlp]b :CtrlPBuffer<CR>
 		"}}}
-		"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
-		NeoBundle 'scrooloose/nerdtree' "{{{
-			let NERDTreeShowHidden=1
-			let NERDTreeQuitOnOpen=0
-			let NERDTreeShowLineNumbers=1
-			let NERDTreeChDirMode=0
-			let NERDTreeShowBookmarks=1
-			let NERDTreeIgnore=['\.git','\.hg']
-			let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
-			nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
-			nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
-		"}}}
+		if s:settings.explorer_method == 'nerdtree' "{{{
+			"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+			NeoBundle 'scrooloose/nerdtree' "{{{
+				let NERDTreeShowHidden=1
+				let NERDTreeQuitOnOpen=0
+				let NERDTreeShowLineNumbers=1
+				let NERDTreeChDirMode=0
+				let NERDTreeShowBookmarks=1
+				let NERDTreeIgnore=['\.git','\.hg']
+				let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
+				nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
+				nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
+			"}}}
+		endif "}}}
+		if s:settings.explorer_method == 'vimfiler' "{{{
+			NeoBundle 'Shougo/vimfiler.vim' "{{{
+				let g:vimfiler_as_default_explorer = 1
+
+				" Like Textmate icons.
+				let g:vimfiler_tree_leaf_icon = ' '
+				let g:vimfiler_tree_opened_icon = '▾'
+				let g:vimfiler_tree_closed_icon = '▸'
+				let g:vimfiler_file_icon = '-'
+				let g:vimfiler_marked_file_icon = '*'
+
+				"let g:vimfiler_ignore_pattern = '^\%(\.git\|\.DS_Store\)$'
+
+				nnoremap <silent> <Leader>n :VimFilerExplorer<CR>
+				nnoremap <silent> <Leader>nf :VimFilerExplorer -find<CR>
+			"}}}
+		endif "}}}
 		NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}} "{{{
 			nnoremap <silent> <Leader>a :TagbarToggle<CR>
 		"}}}
@@ -775,6 +823,8 @@
 			"let g:ConqueGdb_GdbExe = '~/local/bin/gdb'
 			nnoremap <Leader>d :ConqueGdbVSplit<CR>
 		"}}}
+		"NeoBundle 'edkolev/tmuxline.vim' "{{{
+		"}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'windows') "{{{
 		NeoBundleLazy 'PProvost/vim-ps1', {'autoload':{'filetypes':['ps1']}} "{{{
@@ -936,15 +986,15 @@
 		let g:solarized_termcolors=256
 		let g:solarized_termtrans=1
 	"}}}
-	NeoBundle 'nanotech/jellybeans.vim'
+	"NeoBundle 'nanotech/jellybeans.vim'
 	NeoBundle 'tomasr/molokai'
-	NeoBundle 'chriskempson/vim-tomorrow-theme'
-	NeoBundle 'chriskempson/base16-vim'
-	NeoBundle 'w0ng/vim-hybrid'
-	NeoBundle 'sjl/badwolf'
-	NeoBundle 'zeis/vim-kolor' "{{{
-		let g:kolor_underlined=1
-	"}}}
+	"NeoBundle 'chriskempson/vim-tomorrow-theme'
+	"NeoBundle 'chriskempson/base16-vim'
+	"NeoBundle 'w0ng/vim-hybrid'
+	"NeoBundle 'sjl/badwolf'
+	"NeoBundle 'zeis/vim-kolor' "{{{
+	"	let g:kolor_underlined=1
+	""}}}
 "}}}
 
 " finish loading {{{

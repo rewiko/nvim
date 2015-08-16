@@ -1,4 +1,13 @@
-# dotvim
+# ideal.vim
+
+```
+     _      _                _             _
+    /_/ __ / / ___   ____   / /    _   _  /_/_   _
+   / // __` // __ \ / __ \ / /    | | / // // | / |
+  / // (_/ //  ___// (_/ // /  _  | |/ // //  |/  |
+ /_/ \___,_\\_____\\___,_\\_\ (_) |___//_//_/|_/|_|
+
+```
 
 Turn NeoVim or Vim into a full-blown IDE.
 
@@ -105,6 +114,10 @@ Keybinding           | Mode | Description
 `<Leader>vsa`        |  n   | vertically split all buffers
 `<C-h>`, `<C-l>`     |  n   | move to window in the direction of hl 
 `<C-j>`, `<C-k>`     |  n   | move to window in the direction of jk
+`<C-w>o`, `<C-w>O`   |  n   | maximize or restore current window in split structure
+`<C-w><C-o>`         |  n   | same as above
+`<Leader>=`          |  n   | increase the window size by a factor
+`<Leader>-`          |  n   | decrease the window size by a factor
 `Q`                  |  n   | close windows and delete the buffer (if it is the last buffer window)
 `gb`, `gB`           |  n   | previous MRU buffer, next MRU buffer
 `<Leader>bd`         |  n   | kill a buffer without changing the window layout
@@ -225,6 +238,13 @@ Make alias
 alias vi='nvim'
 alias vim="nvim"
 alias vimdiff="nvim -d"
+```
+
+If `<C-h>` does not work in neovim, add these line to `~/.zshrc`
+
+```sh
+infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
+tic $TERM.ti
 ```
 
 #### Install MacVim
@@ -410,6 +430,7 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 *	`<Leader>z` always have a nice view for vim split windows
 
 ### And Some More Plugins
+
 *	[surround](https://github.com/tpope/vim-surround) makes for quick work of surrounds
 *	[repeat](https://github.com/tpope/vim-repeat) repeat plugin commands
 *	[speeddating](https://github.com/tpope/vim-speeddating) `Ctrl+A` and `Ctrl+X` for dates
@@ -424,6 +445,7 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 *	[startify](https://github.com/mhinz/vim-startify) gives you a better start screen
 
 ### And Even More Plugins...
+
 *	I think I've listed about half of the plugins contained in this distribution, so please have a look at the vimrc directly to see all plugins in use
 
 ## Credits
@@ -441,5 +463,16 @@ I wanted to give special thanks to all of the people who worked on the following
 *	[sjl](https://github.com/sjl)
 *	[terryma](https://github.com/terryma)
 
+## Inspired by
+
+*	Bailey Ling's [vim-airline](https://github.com/bling/vim-airline)
+
 ## License
+
 [WTFPL](http://sam.zoy.org/wtfpl/)
+
+[ycm]: https://github.com/Valloric/YouCompleteMe
+[us]: https://github.com/SirVer/ultisnips
+[nc]: https://github.com/Shougo/neocomplete.vim
+[ncl]: https://github.com/Shougo/neocomplcache.vim
+[ns]: https://github.com/Shougo/neosnippet.vim
