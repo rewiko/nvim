@@ -34,13 +34,22 @@
 
 	" airline
 	"if !empty(glob("vim-airline"))
-		if s:powerline_fonts == 1
-			let g:airline_left_sep = ''
-			let g:airline_right_sep = ''
-		else
-			let g:airline_left_sep = '►'
-			let g:airline_right_sep = '◄'
-		endif
+	if s:powerline_fonts == 1
+		let g:airline_left_sep = ''
+		let g:airline_right_sep = ''
+	else
+		let g:airline_left_sep = '►'
+		let g:airline_right_sep = '◄'
+	endif
+	"endif
+
+	" vimfiler
+	"if !empty(glob("vimfiler"))
+	let g:vimfiler_tree_leaf_icon = ' '
+	let g:vimfiler_tree_opened_icon = '▾'
+	let g:vimfiler_tree_closed_icon = '▸'
+	let g:vimfiler_file_icon = '-'
+	let g:vimfiler_marked_file_icon = '★'
 	"endif
 
 	" lightline

@@ -251,7 +251,11 @@
 	nnoremap <silent> <Leader>- :exe "vertical resize " . (winwidth(0) * 3/4)<CR>
 
 	" toggle just text
-	nnoremap <silent> <Leader>j :call JustTextToggle()<CR>
+	"echo exists(":SignifyToggle")
+	"echo !empty(glob("vim-signify"))
+	"echo exists("*sy#toggle")
+	" <http://superuser.com/questions/552323/how-can-i-test-for-plugins-and-only-include-them-if-they-exist-in-vimrc>
+	nnoremap <silent> <Leader>j :call JustTextToggle()<CR>:silent! SignifyToggle<CR>
 
 	" repeatable copy and paste. fake the behavior in windows
 	nnoremap <Leader>y "zyiw
@@ -307,11 +311,6 @@
 			echo 'Just text: off'
 			return 1
 		endif
-		" vim-signify
-		"if !empty(glob("vim-signify"))
-		"if exists("*sy#toggle")
-		"	call sy#toggle()
-		"endif
 	endfunction
 
 	" highlight all instances of word under cursor, when idle.

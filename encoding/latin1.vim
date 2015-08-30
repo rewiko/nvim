@@ -20,8 +20,19 @@
 	endif
 
 	" airline
+	"if !empty(glob("vim-airline"))
 	let g:airline_left_sep = '>'
 	let g:airline_right_sep = '<'
+	"endif
+
+	" vimfiler
+	"if !empty(glob("vimfiler"))
+	let g:vimfiler_tree_leaf_icon = ' '
+	let g:vimfiler_tree_opened_icon = 'v'
+	let g:vimfiler_tree_closed_icon = '>'
+	let g:vimfiler_file_icon = '-'
+	let g:vimfiler_marked_file_icon = '*'
+	"endif
 
 	" syntastic
 	let g:syntastic_error_symbol = '*'

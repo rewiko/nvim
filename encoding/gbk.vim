@@ -16,23 +16,34 @@
 
 	if has('conceal')
 		set conceallevel=1
-		set listchars+=conceal:‚ñ≥
+		set listchars+=conceal:°˜
 	endif
 
 	" airline
-	let g:airline_left_sep = '‚ó£'
-	let g:airline_right_sep = '‚ó¢'
+	"if !empty(glob("vim-airline"))
+	let g:airline_left_sep = '®é'
+	let g:airline_right_sep = '®ç'
+	"endif
+
+	" vimfiler
+	"if !empty(glob("vimfiler"))
+	let g:vimfiler_tree_leaf_icon = ' '
+	let g:vimfiler_tree_opened_icon = '®ã'
+	let g:vimfiler_tree_closed_icon = '®ç'
+	let g:vimfiler_file_icon = '-'
+	let g:vimfiler_marked_file_icon = '°Ô'
+	"endif
 
 	" syntastic
-	let g:syntastic_error_symbol = '–•'
-	let g:syntastic_style_error_symbol = '¬§'
-	let g:syntastic_warning_symbol = '‚ñ≥'
-	let g:syntastic_style_warning_symbol = '‚âà'
+	let g:syntastic_error_symbol = '©C'
+	let g:syntastic_style_error_symbol = '°Ë'
+	let g:syntastic_warning_symbol = '°˜'
+	let g:syntastic_style_warning_symbol = '°÷'
 
 	" signify
 	let g:signify_sign_add               = '+'
 	let g:signify_sign_delete            = '_'
-	let g:signify_sign_delete_first_line = '_'
+	let g:signify_sign_delete_first_line = '®â'
 	let g:signify_sign_change            = '!'
 	let g:signify_sign_changedelete      = g:signify_sign_change
 
