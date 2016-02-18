@@ -4,21 +4,22 @@
 	let s:is_macvim = has('gui_macvim')
 "}}}
 
-" dotvim settings {{{
-	if !exists('g:dotvim_settings') || !exists('g:dotvim_settings.version')
-		echom 'The g:dotvim_settings and g:dotvim_settings.version variables must be defined.  Please consult the README.'
+" nvim settings {{{
+	if !exists('g:nvim_settings') || !exists('g:nvim_settings.version')
+		echom 'The g:nvim_settings and g:nvim_settings.version variables must be defined.  Please consult the README.'
 		finish
 	endif
 
-	let s:cache_dir = get(g:dotvim_settings, 'cache_dir', '~/.vim/.cache')
+	let s:cache_dir = get(g:nvim_settings, 'cache_dir', '~/.config/nvim/.cache')
 
-	if g:dotvim_settings.version != 1
+	if g:nvim_settings.version != 1
 		echom 'The version number in your shim does not match the distribution version.  Please consult the README changelog section.'
 		finish
 	endif
 
 	" initialize default settings
 	let s:settings = {}
+	let s:settings.encoding = 'utf-8'
 	let s:settings.default_indent = 2
 	let s:settings.max_column = 120
 	let s:settings.autocomplete_method = 'neocomplcache'
@@ -27,15 +28,15 @@
 	let s:settings.statusline_method = 'airline'
 	let s:settings.enable_cursorcolumn = 0
 	"let s:settings.colorscheme = 'jellybeans'
-	let s:settings.colorscheme = "solarized"
-	if has('python') && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so")) && filereadable(expand("~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so"))
+	let s:settings.colorscheme = 'solarized'
+	if has('python') && filereadable(expand("~/.config/nvim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so")) && filereadable(expand("~/.config/nvim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so"))
 		let s:settings.autocomplete_method = 'ycm'
 	elseif has('lua')
 		let s:settings.autocomplete_method = 'neocomplete'
 	endif
 
-	if exists('g:dotvim_settings.plugin_groups')
-		let s:settings.plugin_groups = g:dotvim_settings.plugin_groups
+	if exists('g:nvim_settings.plugin_groups')
+		let s:settings.plugin_groups = g:nvim_settings.plugin_groups
 	else
 		let s:settings.plugin_groups = []
 		call add(s:settings.plugin_groups, 'core')
@@ -60,27 +61,27 @@
 		endif
 
 		" exclude all language-specific plugins by default
-		if !exists('g:dotvim_settings.plugin_groups_exclude')
-			let g:dotvim_settings.plugin_groups_exclude = ['web','javascript','ruby','python','go','scala']
+		if !exists('g:nvim_settings.plugin_groups_exclude')
+			let g:nvim_settings.plugin_groups_exclude = ['web','javascript','ruby','python','go','scala']
 		endif
-		for group in g:dotvim_settings.plugin_groups_exclude
+		for group in g:nvim_settings.plugin_groups_exclude
 			let i = index(s:settings.plugin_groups, group)
 			if i != -1
 				call remove(s:settings.plugin_groups, i)
 			endif
 		endfor
 
-		if exists('g:dotvim_settings.plugin_groups_include')
-			for group in g:dotvim_settings.plugin_groups_include
+		if exists('g:nvim_settings.plugin_groups_include')
+			for group in g:nvim_settings.plugin_groups_include
 				call add(s:settings.plugin_groups, group)
 			endfor
 		endif
 	endif
 
-	" override defaults with the ones specified in g:dotvim_settings
+	" override defaults with the ones specified in g:nvim_settings
 	for key in keys(s:settings)
-		if has_key(g:dotvim_settings, key)
-			let s:settings[key] = g:dotvim_settings[key]
+		if has_key(g:nvim_settings, key)
+			let s:settings[key] = g:nvim_settings[key]
 		endif
 	endfor
 "}}}
@@ -89,12 +90,12 @@
 	set nocompatible
 	set all& "reset everything to their defaults
 	if s:is_windows
-		set rtp+=~/.vim
+		set rtp+=~/.config/nvim
 	endif
-	set rtp+=~/.vim/bundle/neobundle.vim
-	call neobundle#begin(expand('~/.vim/bundle/'))
+	set rtp+=~/.config/nvim/bundle/neobundle.vim
+	call neobundle#begin(expand('~/.config/nvim/bundle/'))
 	NeoBundleFetch 'Shougo/neobundle.vim'
-	NeoBundleLocal ~/.vim/bundle_dev
+	NeoBundleLocal ~/.config/nvim/bundle_dev
 "}}}
 
 " functions {{{
@@ -184,9 +185,9 @@
 	set autoindent	"automatically indent to match adjacent lines
 	set expandtab	"spaces instead of tabs
 	set smarttab	"use shiftwidth to enter tabs
-	let &tabstop=s:settings.default_indent	"number of spaces per tab for display
-	let &softtabstop=s:settings.default_indent	"number of spaces per tab in insert mode
-	let &shiftwidth=s:settings.default_indent	"number of spaces when indenting
+	let &tabstop = s:settings.default_indent	"number of spaces per tab for display
+	let &softtabstop = s:settings.default_indent	"number of spaces per tab in insert mode
+	let &shiftwidth = s:settings.default_indent	"number of spaces when indenting
 	set list	"highlight whitespace
 	set shiftround
 	set linebreak
@@ -257,12 +258,12 @@
 	set foldenable	"enable folds by default
 	set foldmethod=syntax	"fold via syntax of files
 	set foldlevelstart=99	"open all folds by default
-	let g:xml_syntax_folding=1	"enable xml folding
+	let g:xml_syntax_folding = 1	"enable xml folding
 
 	set cursorline
 	autocmd WinLeave * setlocal nocursorline
 	autocmd WinEnter * setlocal cursorline
-	let &colorcolumn=s:settings.max_column
+	let &colorcolumn = s:settings.max_column
 	if s:settings.enable_cursorcolumn
 		set cursorcolumn
 		autocmd WinLeave * setlocal nocursorcolumn
@@ -293,7 +294,7 @@
 		endif
 	else
 		if $COLORTERM == 'gnome-terminal'
-			set t_Co=256 "why you no tell me correct colors?!?!
+			set t_Co=256	"why you no tell me correct colors?!?!
 		endif
 		if $TERM_PROGRAM == 'iTerm.app'
 			" different cursors for insert vs normal mode
@@ -311,30 +312,175 @@
 " plugin/mapping configuration {{{
 	if count(s:settings.plugin_groups, 'core') "{{{
 		NeoBundle 'matchit.zip'
-		"if s:settings.statusline_method == 'airline' "{{{
-			NeoBundle 'bling/vim-airline' "{{{
-				let g:airline#extensions#tabline#enabled = 1
-				let g:airline#extensions#tabline#left_sep = ''
-				let g:airline#extensions#tabline#left_alt_sep = '¦'
-				let g:airline_section_b = ''
-				let g:airline_section_warning = ''
+		if s:settings.statusline_method == 'airline' "{{{
+			if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
+			\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
+				NeoBundle 'bling/vim-airline' "{{{
+					let g:airline#extensions#bufferline#enabled = 0
+					let g:airline#extensions#bufferline#overwrite_variables = 1
+					let g:airline#extensions#tabline#enabled = 1
+					let g:airline#extensions#tabline#buffer_nr_show = 1
+					let g:airline#extensions#tabline#left_sep = ''
+					let g:airline#extensions#tabline#left_alt_sep = '¦'
+					let g:airline#extensions#syntastic#enabled = 1
+					let g:airline_section_b = ''
+					let g:airline_section_warning = ''
+					let g:airline_mode_map = {
+						\ '__' : '-',
+						\ 'n'  : 'N',
+						\ 'i'  : 'I',
+						\ 'R'  : 'R',
+						\ 'c'  : 'C',
+						\ 'v'  : 'V',
+						\ 'V'  : 'V',
+						\ '^V' : 'V',
+						\ 's'  : 'S',
+						\ 'S'  : 'S',
+						\ '^S' : 'S',
+						\ }
+				"}}}
+			endif "}}}
+		"}}}
+		elseif s:settings.statusline_method == 'lightline' "{{{
+			"NeoBundle 'zefei/vim-wintabs' "{{{
 			"}}}
-		"else
-		"	NeoBundle 'bling/vim-bufferline' "{{{
-		"		function! LightLineBufferline()
-		"			"if !empty(glob("lightline.vim"))
-		"			if exists('*bufferline#refresh_status')
-		"				call bufferline#refresh_status()
-		"			endif
-		"			let b = g:bufferline_status_info.before
-		"			let c = g:bufferline_status_info.current
-		"			let a = g:bufferline_status_info.after
-		"			return b . c . a
-		"		endfunction
-		"	"}}}
-		"	NeoBundle 'itchyny/lightline.vim' "{{{
-		"	"}}}
-		"endif "}}}
+			"NeoBundle 'bling/vim-bufferline' "{{{
+			"	function! LightLineBufferline()
+			"		"if !empty(glob("lightline.vim"))
+			"		if exists('*bufferline#refresh_status')
+			"			call bufferline#refresh_status()
+			"		endif
+			"		let b = g:lightline_buffer_status_info.before
+			"		let c = g:lightline_buffer_status_info.current
+			"		let a = g:lightline_buffer_status_info.after
+			"		return b . c . a
+			"	endfunction
+			""}}}
+			NeoBundle 'itchyny/lightline.vim' "{{{
+				set showtabline=2	" always show tabline
+
+				function! LightlineTag()
+					" :help tagbar-statusline
+					let line = tagbar#currenttag('%s', '')
+					return line
+				endfunction
+
+				function! LightlineSyntastic()
+					return SyntasticStatuslineFlag()
+				endfunction
+
+				function! LightlineModified()
+					return &ft =~ 'help' ? '' : &modified ? g:lightline_buffer_modified_icon : &modifiable ? '' : '-'
+				endfunction
+
+				function! LightlineReadonly()
+					return &ft !~? 'help' && &readonly ? g:lightline_buffer_readonly_icon : ''
+				endfunction
+
+				function! LightlineFugitive()
+					if exists('*fugitive#head')
+						let _ = fugitive#head()
+						return strlen(_) ? g:lightline_buffer_git_icon . _ : ''
+					endif
+					return ''
+				endfunction
+
+				function! LightlineFileinfo()
+					return LightlineFileencoding() . ' ' . LightlineFileformat()
+				endfunction
+
+				function! LightlineFilename()
+					let fname = expand('%:.')
+					return fname == 'ControlP' ? g:lightline.ctrlp_item :
+								\ fname == '__Tagbar__' ? g:lightline.fname :
+								\ fname =~ '__Gundo\|NERD_tree' ? '' :
+								\ &ft == 'vimfiler' ? vimfiler#get_status_string() :
+								\ &ft == 'unite' ? unite#get_status_string() :
+								\ &ft == 'vimshell' ? vimshell#get_status_string() :
+								\ ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+								\ ('' != fname ? fname : '[No Name]') .
+								\ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+				endfunction
+
+				function! LightlineFileformat()
+					return winwidth(0) > 70 ? &fileformat : ''
+				endfunction
+
+				function! LightlineFiletype()
+					return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+				endfunction
+
+				function! LightlineFileencoding()
+					return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+				endfunction
+
+				function! LightlineMode()
+					let fname = expand('%:t')
+					return fname == '__Tagbar__' ? 'Tagbar' :
+								\ fname == 'ControlP' ? 'CtrlP' :
+								\ fname == '__Gundo__' ? 'Gundo' :
+								\ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
+								\ fname =~ 'NERD_tree' ? 'NERDTree' :
+								\ &ft == 'unite' ? 'Unite' :
+								\ &ft == 'vimfiler' ? 'VimFiler' :
+								\ &ft == 'vimshell' ? 'VimShell' :
+								\ winwidth(0) > 60 ? lightline#mode() : ''
+				endfunction
+
+				function! CtrlPMark()
+					if expand('%:t') =~ 'ControlP'
+						call lightline#link('iR'[g:lightline.ctrlp_regex])
+						return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
+							\ , g:lightline.ctrlp_next], 0)
+					else
+						return ''
+					endif
+				endfunction
+
+				let g:ctrlp_status_func = {
+					\ 'main': 'CtrlPStatusFunc_1',
+					\ 'prog': 'CtrlPStatusFunc_2',
+				\ }
+
+				function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
+					let g:lightline.ctrlp_regex = a:regex
+					let g:lightline.ctrlp_prev = a:prev
+					let g:lightline.ctrlp_item = a:item
+					let g:lightline.ctrlp_next = a:next
+					return lightline#statusline(0)
+				endfunction
+
+				function! CtrlPStatusFunc_2(str)
+					return lightline#statusline(0)
+				endfunction
+
+				let g:tagbar_status_func = 'TagbarStatusFunc'
+
+				function! TagbarStatusFunc(current, sort, fname, ...) abort
+					let g:lightline.fname = a:fname
+					return lightline#statusline(0)
+				endfunction
+
+				augroup AutoSyntastic
+					autocmd!
+					autocmd BufWritePost *.c,*.cpp call s:syntastic()
+				augroup END
+				function! s:syntastic()
+					SyntasticCheck
+					call lightline#update()
+				endfunction
+
+				" disable overwriting the statusline forcibly by other plugins
+				let g:unite_force_overwrite_statusline = 0
+				let g:vimfiler_force_overwrite_statusline = 0
+				let g:vimshell_force_overwrite_statusline = 0
+
+			"}}}
+			NeoBundle 'taohex/lightline-buffer' "{{{
+			"}}}
+			NeoBundle 'taohex/lightline-solarized' "{{{
+			""}}}
+		endif "}}}
 		NeoBundle 'tpope/vim-surround'
 		NeoBundle 'tpope/vim-repeat'
 		NeoBundle 'tpope/vim-dispatch'
@@ -350,7 +496,7 @@
 				\ 'mac': 'make -f make_mac.mak',
 				\ 'unix': 'make -f make_unix.mak',
 				\ 'cygwin': 'make -f make_cygwin.mak',
-				\ 'windows': '"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\nmake.exe" make_msvc32.mak',
+				\ 'windows': '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\nmake.exe" make_msvc32.mak',
 			\ },
 		\ }
 	endif "}}}
@@ -362,15 +508,14 @@
 		NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
 		NeoBundleLazy 'wavded/vim-stylus', {'autoload':{'filetypes':['styl']}}
 		NeoBundleLazy 'digitaltoad/vim-jade', {'autoload':{'filetypes':['jade']}}
-		NeoBundleLazy 'juvenn/mustache.vim', {'autoload':{'filetypes':['mustache']}}
+		NeoBundleLazy 'mustache/vim-mustache-handlebars', {'autoload':{'filetypes':['mustache','handlebars']}}
 		NeoBundleLazy 'gregsexton/MatchTag', {'autoload':{'filetypes':['html','xml']}}
-		NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}} "{{{
+		NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache','handlebars']}} "{{{
 			function! s:zen_html_tab()
-				let line = getline('.')
-				if match(line, '<.*>') < 0
-					return "\<C-y>,"
+				if !emmet#isExpandable()
+					return "\<plug>(emmet-move-next)"
 				endif
-				return "\<C-y>n"
+				return "\<plug>(emmet-expand-abbr)"
 			endfunction
 			autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><Tab> <C-y>,
 			autocmd FileType html imap <buffer><expr><Tab> <SID>zen_html_tab()
@@ -387,6 +532,7 @@
 		NeoBundleLazy 'c.vim', {'autoload':{'filetypes':['c','cpp']}}
 		NeoBundleLazy 'echofunc.vim', {'autoload':{'filetypes':['c','cpp']}}
 		NeoBundleLazy 'STL-improved', {'autoload':{'filetypes':['c','cpp']}}
+		NeoBundleLazy 'octol/vim-cpp-enhanced-highlight', {'autoload':{'filetypes':['c','cpp']}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'javascript') "{{{
 		NeoBundleLazy 'marijnh/tern_for_vim', {
@@ -399,6 +545,10 @@
 			\ },
 		\ }
 		NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
+		NeoBundleLazy 'mxw/vim-jsx', {'autoload':{'filetypes':['javascript']}} "{{{
+			let g:jsx_ext_required = 0
+			"let g:jsx_pragma_required = 1
+		"}}}
 		NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}} "{{{
 			nnoremap <Leader>fjs :call JsBeautify()<CR>
 		"}}}
@@ -429,9 +579,12 @@
 		NeoBundleLazy 'nsf/gocode', {'autoload':{'filetypes':['go']},'rtp': 'vim'}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'scm') "{{{
-		NeoBundle 'mhinz/vim-signify' "{{{
-			let g:signify_update_on_bufenter=0
-		"}}}
+		if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
+		\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
+			NeoBundle 'mhinz/vim-signify' "{{{
+				let g:signify_update_on_bufenter = 0
+			"}}}
+		endif "}}}
 		if executable('hg')
 			NeoBundle 'bitbucket:ludovicchabant/vim-lawrencium'
 		endif
@@ -456,22 +609,22 @@
 		if s:settings.autocomplete_method == 'ycm' "{{{
 			NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
 				"let g:ycm_path_to_python_interpreter='~/local/bin/python'
-				let g:ycm_complete_in_comments_and_strings=1
-				let g:ycm_key_list_select_completion=['<C-n>','<Down>']
-				let g:ycm_key_list_previous_completion=['<C-p>','<Up>']
-				let g:ycm_filetype_blacklist={'unite': 1}
+				let g:ycm_complete_in_comments_and_strings = 1
+				let g:ycm_key_list_select_completion = ['<C-n>','<Down>']
+				let g:ycm_key_list_previous_completion = ['<C-p>','<Up>']
+				let g:ycm_filetype_blacklist = {'unite': 1}
 			"}}}
 			NeoBundle 'SirVer/ultisnips' "{{{
-				let g:UltiSnipsExpandTrigger="<Tab>"
-				let g:UltiSnipsJumpForwardTrigger="<Tab>"
-				let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
-				let g:UltiSnipsSnippetsDir='~/.vim/snippets'
+				let g:UltiSnipsExpandTrigger = "<Tab>"
+				let g:UltiSnipsJumpForwardTrigger = "<Tab>"
+				let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+				let g:UltiSnipsSnippetsDir = '~/.vim/snippets'
 			"}}}
 		else
 			NeoBundle 'Shougo/neosnippet-snippets'
 			NeoBundle 'Shougo/neosnippet.vim' "{{{
-				let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets,~/.vim/snippets'
-				let g:neosnippet#enable_snipmate_compatibility=1
+				let g:neosnippet#snippets_directory = '~/.config/nvim/bundle/vim-snippets/snippets,~/.config/nvim/snippets'
+				let g:neosnippet#enable_snipmate_compatibility = 1
 
 				imap <expr><Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ? "\<C-n>" : "\<Tab>")
 				smap <expr><Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
@@ -481,15 +634,15 @@
 		endif "}}}
 		if s:settings.autocomplete_method == 'neocomplete' "{{{
 			NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1},'vim_version':'7.3.885'} "{{{
-				let g:neocomplete#enable_at_startup=1
-				let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
+				let g:neocomplete#enable_at_startup = 1
+				let g:neocomplete#data_directory = s:get_cache_dir('neocomplete')
 			"}}}
 		endif "}}}
 		if s:settings.autocomplete_method == 'neocomplcache' "{{{
 			NeoBundleLazy 'Shougo/neocomplcache.vim', {'autoload':{'insert':1}} "{{{
-				let g:neocomplcache_enable_at_startup=1
-				let g:neocomplcache_temporary_dir=s:get_cache_dir('neocomplcache')
-				let g:neocomplcache_enable_fuzzy_completion=1
+				let g:neocomplcache_enable_at_startup = 1
+				let g:neocomplcache_temporary_dir = s:get_cache_dir('neocomplcache')
+				let g:neocomplcache_enable_fuzzy_completion = 1
 			"}}}
 		endif "}}}
 		if s:settings.autocomplete_method == 'neocomplete' || s:settings.autocomplete_method == 'neocomplcache' "{{{
@@ -528,38 +681,40 @@
 		"}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'navigation') "{{{
+		NeoBundle 'yonchu/accelerated-smooth-scroll' "{{{
+		"}}}
 		NeoBundle 'mileszs/ack.vim' "{{{
 			if executable('ag')
 				let g:ackprg = "ag --nogroup --column --smart-case --follow"
 			endif
 		"}}}
 		NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
-			let g:undotree_WindowLayout=2
-			let g:undotree_SetFocusWhenToggle=1
+			let g:undotree_WindowLayout = 2
+			let g:undotree_SetFocusWhenToggle = 1
 			nnoremap <silent> <Leader>u :UndotreeToggle<CR>
 		"}}}
 		NeoBundleLazy 'EasyGrep', {'autoload':{'commands':'GrepOptions'}} "{{{
-			let g:EasyGrepRecursive=1
-			let g:EasyGrepAllOptionsInExplorer=1
-			let g:EasyGrepCommand=1
+			let g:EasyGrepRecursive = 1
+			let g:EasyGrepAllOptionsInExplorer = 1
+			let g:EasyGrepCommand = 1
 			nnoremap <Leader>vo :GrepOptions<CR>
 		"}}}
 		NeoBundleLazy 'ctrlpvim/ctrlp.vim', {'depends':'tacahiroy/ctrlp-funky','autoload':{'commands':'CtrlP'}} "{{{
-			let g:ctrlp_clear_cache_on_exit=1
-			let g:ctrlp_max_height=40
-			let g:ctrlp_show_hidden=0
-			let g:ctrlp_follow_symlinks=1
-			let g:ctrlp_max_files=20000
-			let g:ctrlp_cache_dir=s:get_cache_dir('ctrlp')
-			let g:ctrlp_reuse_window='startify'
-			let g:ctrlp_extensions=['funky']
+			let g:ctrlp_clear_cache_on_exit = 1
+			let g:ctrlp_max_height = 40
+			let g:ctrlp_show_hidden = 0
+			let g:ctrlp_follow_symlinks = 1
+			let g:ctrlp_max_files = 20000
+			let g:ctrlp_cache_dir = s:get_cache_dir('ctrlp')
+			let g:ctrlp_reuse_window = 'startify'
+			let g:ctrlp_extensions = ['funky']
 			let g:ctrlp_custom_ignore = {
 						\ 'dir': '\v[\/]\.(git|hg|svn|idea)$',
 						\ 'file': '\v\.DS_Store$'
 						\ }
 
 			if executable('ag')
-				let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
+				let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 			endif
 
 			nmap \ [ctrlp]
@@ -572,70 +727,271 @@
 			nnoremap [ctrlp]b :CtrlPBuffer<CR>
 		"}}}
 		if s:settings.explorer_method == 'nerdtree' "{{{
-			"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
-			NeoBundle 'scrooloose/nerdtree' "{{{
-				let NERDTreeShowHidden=1
-				let NERDTreeQuitOnOpen=0
-				let NERDTreeShowLineNumbers=1
-				let NERDTreeChDirMode=0
-				let NERDTreeShowBookmarks=1
-				let NERDTreeIgnore=['\.git','\.hg']
-				let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
-				nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
-				nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
-			"}}}
+			if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
+			\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
+				"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+				NeoBundle 'scrooloose/nerdtree' "{{{
+					let g:NERDTreeShowHidden = 1
+					let g:NERDTreeQuitOnOpen = 0
+					let g:NERDTreeShowLineNumbers = 0
+					let g:NERDTreeChDirMode = 0
+					let g:NERDTreeShowBookmarks = 1
+					let g:NERDTreeIgnore = ['\.git','\.hg','\.svn','\.DS_Store']
+					let g:NERDTreeWinPos = 'right'
+					let g:NERDTreeWinSize = 40
+					let g:NERDTreeBookmarksFile = s:get_cache_dir('NERDTreeBookmarks')
+					nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
+					nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
+					" close vim if the only window left open is a nerdtree
+					autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+				"}}}
+				NeoBundle 'Xuyuanp/nerdtree-git-plugin' "{{{
+				"}}}
+			endif "}}}
 		endif "}}}
 		if s:settings.explorer_method == 'vimfiler' "{{{
 			NeoBundle 'Shougo/vimfiler.vim' "{{{
 				let g:vimfiler_as_default_explorer = 1
-				"let g:vimfiler_ignore_pattern = '^\%(\.git\|\.DS_Store\)$'
+				let g:vimfiler_ignore_pattern = '^\%(\.git\|\.hg\|\.svn\|\.DS_Store\)$'
+				let g:vimfiler_no_default_key_mappings = 1
 
-				nnoremap <silent> <Leader>n :VimFilerExplorer<CR>
-				nnoremap <silent> <Leader>nf :VimFilerExplorer -find<CR>
+				nnoremap <silent> <Leader>n :VimFilerExplorer -direction=botright<CR>
+				nnoremap <silent> <Leader>nf :VimFilerExplorer -find -direction=botright<CR>
+
+				function! s:vimfiler_settings() "{{{
+					set nonumber
+
+					execute s:nowait_nmap() 'j'
+								\ '<Plug>(vimfiler_loop_cursor_down)'
+					execute s:nowait_nmap() 'k'
+								\ '<Plug>(vimfiler_loop_cursor_up)'
+
+					" Toggle mark.
+					execute s:nowait_nmap() '<Space>'
+								\ '<Plug>(vimfiler_toggle_mark_current_line)'
+					execute s:nowait_nmap() '<S-LeftMouse>'
+								\ '<Plug>(vimfiler_toggle_mark_current_line)'
+					execute s:nowait_nmap() '<S-Space>'
+								\ '<Plug>(vimfiler_toggle_mark_current_line_up)'
+					vmap <buffer> <Space>
+								\ <Plug>(vimfiler_toggle_mark_selected_lines)
+
+					" Toggle marks in all lines.
+					execute s:nowait_nmap() '*'
+								\ '<Plug>(vimfiler_toggle_mark_all_lines)'
+					execute s:nowait_nmap() '#'
+								\ '<Plug>(vimfiler_mark_similar_lines)'
+					" Clear marks in all lines.
+					execute s:nowait_nmap() 'U'
+								\ '<Plug>(vimfiler_clear_mark_all_lines)'
+
+					" Copy files.
+					execute s:nowait_nmap() 'c'
+								\ '<Plug>(vimfiler_copy_file)'
+					execute s:nowait_nmap() 'Cc'
+								\ '<Plug>(vimfiler_clipboard_copy_file)'
+
+					" Move files.
+					execute s:nowait_nmap() 'm'
+								\ '<Plug>(vimfiler_move_file)'
+					execute s:nowait_nmap() 'Cm'
+								\ '<Plug>(vimfiler_clipboard_move_file)'
+
+					" Delete files.
+					execute s:nowait_nmap() 'd'
+								\ '<Plug>(vimfiler_delete_file)'
+
+					" Rename.
+					execute s:nowait_nmap() 'r'
+								\ '<Plug>(vimfiler_rename_file)'
+
+					" Make directory.
+					execute s:nowait_nmap() 'K'
+								\ '<Plug>(vimfiler_make_directory)'
+
+					" New file.
+					execute s:nowait_nmap() 'N'
+								\ '<Plug>(vimfiler_new_file)'
+
+					" Paste.
+					execute s:nowait_nmap() 'Cp'
+								\ '<Plug>(vimfiler_clipboard_paste)'
+
+					" Execute or change directory.
+					execute s:nowait_nmap() '<Enter>'
+								\ '<Plug>(vimfiler_cd_or_edit)'
+					execute s:nowait_nmap() 'o'
+								\ '<Plug>(vimfiler_expand_or_edit)'
+					execute s:nowait_nmap() 'l'
+								\ '<Plug>(vimfiler_smart_l)'
+
+					execute s:nowait_nmap() 'x'
+								\ '<Plug>(vimfiler_execute_system_associated)'
+
+					" Move to directory.
+					execute s:nowait_nmap() 'h'
+								\ '<Plug>(vimfiler_smart_h)'
+					execute s:nowait_nmap() 'L'
+								\ '<Plug>(vimfiler_switch_to_drive)'
+					execute s:nowait_nmap() '~'
+								\ '<Plug>(vimfiler_switch_to_home_directory)'
+					execute s:nowait_nmap() '\'
+								\ '<Plug>(vimfiler_switch_to_root_directory)'
+					execute s:nowait_nmap() '&'
+								\ '<Plug>(vimfiler_switch_to_project_directory)'
+					execute s:nowait_nmap() '<C-j>'
+								\ '<Plug>(vimfiler_switch_to_history_directory)'
+					execute s:nowait_nmap() '<BS>'
+								\ '<Plug>(vimfiler_switch_to_parent_directory)'
+
+					execute s:nowait_nmap() 'gv'
+								\ '<Plug>(vimfiler_execute_new_gvim)'
+					execute s:nowait_nmap() '.'
+								\ '<Plug>(vimfiler_toggle_visible_ignore_files)'
+					execute s:nowait_nmap() 'H'
+								\ '<Plug>(vimfiler_popup_shell)'
+
+					" Edit file.
+					execute s:nowait_nmap() 'e'
+								\ '<Plug>(vimfiler_edit_file)'
+					execute s:nowait_nmap() 'E'
+								\ '<Plug>(vimfiler_split_edit_file)'
+					execute s:nowait_nmap() 'B'
+								\ '<Plug>(vimfiler_edit_binary_file)'
+
+					" Choose action.
+					execute s:nowait_nmap() 'a'
+								\ '<Plug>(vimfiler_choose_action)'
+
+					" Hide vimfiler.
+					execute s:nowait_nmap() 'q'
+								\ '<Plug>(vimfiler_hide)'
+					" Exit vimfiler.
+					execute s:nowait_nmap() 'Q'
+								\ '<Plug>(vimfiler_exit)'
+					" Close vimfiler.
+					execute s:nowait_nmap() '-'
+								\ '<Plug>(vimfiler_close)'
+
+					execute s:nowait_nmap() 'ge'
+								\ '<Plug>(vimfiler_execute_external_filer)'
+					execute s:nowait_nmap() '<RightMouse>'
+								\ '<Plug>(vimfiler_execute_external_filer)'
+
+					execute s:nowait_nmap() '!'
+								\ '<Plug>(vimfiler_execute_shell_command)'
+					execute s:nowait_nmap() 'g?'
+								\ '<Plug>(vimfiler_help)'
+					execute s:nowait_nmap() 'v'
+								\ '<Plug>(vimfiler_preview_file)'
+					execute s:nowait_nmap() 'O'
+								\ '<Plug>(vimfiler_sync_with_current_vimfiler)'
+					execute s:nowait_nmap() 'go'
+								\ '<Plug>(vimfiler_open_file_in_another_vimfiler)'
+					execute s:nowait_nmap() '<C-g>'
+								\ '<Plug>(vimfiler_print_filename)'
+					execute s:nowait_nmap() 'g<C-g>'
+								\ '<Plug>(vimfiler_toggle_maximize_window)'
+					execute s:nowait_nmap() 'yy'
+								\ '<Plug>(vimfiler_yank_full_path)'
+					execute s:nowait_nmap() 'M'
+								\ '<Plug>(vimfiler_set_current_mask)'
+					execute s:nowait_nmap() 'gr'
+								\ '<Plug>(vimfiler_grep)'
+					execute s:nowait_nmap() 'gf'
+								\ '<Plug>(vimfiler_find)'
+					execute s:nowait_nmap() 'S'
+								\ '<Plug>(vimfiler_select_sort_type)'
+					execute s:nowait_nmap() '<C-v>'
+								\ '<Plug>(vimfiler_switch_vim_buffer_mode)'
+					execute s:nowait_nmap() 'gc'
+								\ '<Plug>(vimfiler_cd_vim_current_dir)'
+					execute s:nowait_nmap() 'gs'
+								\ '<Plug>(vimfiler_toggle_safe_mode)'
+					execute s:nowait_nmap() 'gS'
+								\ '<Plug>(vimfiler_toggle_simple_mode)'
+					execute s:nowait_nmap() 'gg'
+								\ '<Plug>(vimfiler_cursor_top)'
+					execute s:nowait_nmap() 'G'
+								\ '<Plug>(vimfiler_cursor_bottom)'
+					execute s:nowait_nmap() 't'
+								\ '<Plug>(vimfiler_expand_tree)'
+					execute s:nowait_nmap() 'T'
+								\ '<Plug>(vimfiler_expand_tree_recursive)'
+					execute s:nowait_nmap() 'I'
+								\ '<Plug>(vimfiler_cd_input_directory)'
+					execute s:nowait_nmap() '<2-LeftMouse>'
+								\ '<Plug>(vimfiler_double_click)'
+
+					" pushd/popd
+					execute s:nowait_nmap() 'Y'
+								\ '<Plug>(vimfiler_pushd)'
+					execute s:nowait_nmap() 'P'
+								\ '<Plug>(vimfiler_popd)'
+
+					execute s:nowait_nmap() 'gj'
+								\ '<Plug>(vimfiler_jump_last_child)'
+					execute s:nowait_nmap() 'gk'
+								\ '<Plug>(vimfiler_jump_first_child)'
+
+				endfunction "}}}
+
+				function! s:nowait_nmap() "{{{
+					return 'nmap <buffer>'
+								\ . ((v:version > 703 || (v:version == 703 && has('patch1261'))) ?
+								\ '<nowait>' : '')
+				endfunction "}}}
+
+				autocmd FileType vimfiler call s:vimfiler_settings()
 			"}}}
 		endif "}}}
 		NeoBundleLazy 'majutsushi/tagbar', {'autoload':{'commands':'TagbarToggle'}} "{{{
-			nnoremap <silent> <Leader>a :TagbarToggle<CR>
+			let g:tagbar_left = 1
+			let g:tagbar_width = 30
+			let g:tagbar_autoclose = 0
+			nnoremap <silent> <Leader>t :TagbarToggle<CR>
 		"}}}
-		NeoBundle 'jeetsukumaran/vim-buffergator' "{{{
-			"let g:buffergator_suppress_keymaps = 1
-			let g:buffergator_suppress_mru_switch_into_splits_keymaps = 1
-			let g:buffergator_viewport_split_policy = "B"
-			let g:buffergator_split_size = 10
-			let g:buffergator_sort_regime = "mru"
-			let g:buffergator_mru_cycle_loop = 0
-			"nnoremap <silent> <Leader>b :BuffergatorOpen<CR>
-			"nnoremap <silent> <Leader>B :BuffergatorClose<CR>
-			"nnoremap <silent> <M-b> :BuffergatorMruCyclePrev<CR>
-			"nnoremap <silent> <M-S-b> :BuffergatorMruCycleNext<CR>
-			"nnoremap <silent> [b :BuffergatorMruCyclePrev<CR>
-			"nnoremap <silent> ]b :BuffergatorMruCycleNext<CR>
-		"}}}
+		"NeoBundle 'jeetsukumaran/vim-buffergator' "{{{
+		"	"let g:buffergator_suppress_keymaps = 1
+		"	let g:buffergator_suppress_mru_switch_into_splits_keymaps = 1
+		"	let g:buffergator_viewport_split_policy = "B"
+		"	let g:buffergator_split_size = 10
+		"	let g:buffergator_sort_regime = "mru"
+		"	let g:buffergator_mru_cycle_loop = 0
+		"	"nnoremap <silent> <Leader>b :BuffergatorOpen<CR>
+		"	"nnoremap <silent> <Leader>B :BuffergatorClose<CR>
+		"	"nnoremap <silent> <M-b> :BuffergatorMruCyclePrev<CR>
+		"	"nnoremap <silent> <M-S-b> :BuffergatorMruCycleNext<CR>
+		"	"nnoremap <silent> [b :BuffergatorMruCyclePrev<CR>
+		"	"nnoremap <silent> ]b :BuffergatorMruCycleNext<CR>
+		""}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'unite') "{{{
-		NeoBundle 'Shougo/unite.vim' "{{{
+		NeoBundleLazy 'Shougo/unite.vim', {'autoload':{'commands':['Unite','UniteWithCurrentDir','UniteWithBufferDir',
+					\ 'UniteWithProjectDir','UniteWithInput','UniteWithInputDirectory','UniteWithCursorWord']}} "{{{
 			let bundle = neobundle#get('unite.vim')
 			function! bundle.hooks.on_source(bundle)
 				call unite#filters#matcher_default#use(['matcher_fuzzy'])
 				call unite#filters#sorter_default#use(['sorter_rank'])
-				call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '\.svn/\|\.tags$\|cscope\.\|\.taghl$')
+				call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern',
+							\ '\.git/\|\.hg/\|\.svn/\|\.tags$\|cscope\.\|\.taghl$\|\.DS_Store$')
 				call unite#custom#profile('default', 'context', {
 							\ 'start_insert': 1
 							\ })
 			endfunction
 
-			let g:unite_data_directory=s:get_cache_dir('unite')
-			let g:unite_source_history_yank_enable=1
-			let g:unite_source_rec_max_cache_files=5000
+			let g:unite_data_directory = s:get_cache_dir('unite')
+			let g:unite_source_history_yank_enable = 1
+			let g:unite_source_rec_max_cache_files = 5000
 
 			if executable('ag')
-				let g:unite_source_grep_command='ag'
-				let g:unite_source_grep_default_opts='--nocolor --line-numbers --nogroup -S -C4'
-				let g:unite_source_grep_recursive_opt=''
+				let g:unite_source_grep_command = 'ag'
+				let g:unite_source_grep_default_opts = '--nocolor --line-numbers --nogroup -S -C4'
+				let g:unite_source_grep_recursive_opt = ''
 			elseif executable('ack')
-				let g:unite_source_grep_command='ack'
-				let g:unite_source_grep_default_opts='--no-heading --no-color -C4'
-				let g:unite_source_grep_recursive_opt=''
+				let g:unite_source_grep_command = 'ack'
+				let g:unite_source_grep_default_opts = '--no-heading --no-color -C4'
+				let g:unite_source_grep_recursive_opt = ''
 			endif
 
 			function! s:unite_settings()
@@ -652,6 +1008,7 @@
 				nnoremap <silent> [unite]<Space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed buffer file:! file_mru bookmark<CR><C-u>
 				nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file:!<CR><C-u>
 			else
+				" -auto-preview
 				nnoremap <silent> [unite]<Space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed buffer file/async:! file_mru bookmark<CR><C-u>
 				nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file/async:!<CR><C-u>
 			endif
@@ -663,17 +1020,17 @@
 			nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<CR>
 			nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<CR>
 		"}}}
-		NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources':'file_mru'}}
-		NeoBundleLazy 'osyo-manga/unite-airline_themes', {'autoload':{'unite_sources':'airline_themes'}} "{{{
-			nnoremap <silent> [unite]a :<C-u>Unite -winheight=10 -auto-preview -buffer-name=airline_themes airline_themes<CR>
+		NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'on_source':'unite.vim'}}
+		"NeoBundleLazy 'osyo-manga/unite-airline_themes', {'autoload':{'on_source':'unite.vim'}} "{{{
+		"	nnoremap <silent> [unite]a :<C-u>Unite -winheight=10 -auto-preview -buffer-name=airline_themes airline_themes<CR>
 		"}}}
-		NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'unite_sources':'colorscheme'}} "{{{
+		NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'on_source':'unite.vim'}} "{{{
 			nnoremap <silent> [unite]c :<C-u>Unite -winheight=10 -auto-preview -buffer-name=colorschemes colorscheme<CR>
 		"}}}
-		NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'unite_sources':['tag','tag/file']}} "{{{
+		NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'on_source':'unite.vim'}} "{{{
 			nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<CR>
 		"}}}
-		NeoBundleLazy 'hewes/unite-gtags', {'autoload':{'unite_sources':['gtags/context','gtags/def','gtags/ref','gtags/grep','gtags/completion','gtags/file']}} "{{{
+		NeoBundleLazy 'hewes/unite-gtags', {'autoload':{'on_source':'unite.vim'}} "{{{
 			" lists the references or definitions of a word
 			" `global --from-here=<location of cursor> -qe <word on cursor>`
 			nnoremap <silent> [unite]gg :execute 'Unite gtags/context'<CR>
@@ -696,13 +1053,13 @@
 			" `global -f`
 			nnoremap <silent> [unite]gf :execute 'Unite gtags/file'<CR>
 		"}}}
-		NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'unite_sources':'outline'}} "{{{
+		NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'on_source':'unite.vim'}} "{{{
 			nnoremap <silent> [unite]o :<C-u>Unite -auto-resize -buffer-name=outline outline<CR>
 		"}}}
-		NeoBundleLazy 'Shougo/unite-help', {'autoload':{'unite_sources':'help'}} "{{{
+		NeoBundleLazy 'Shougo/unite-help', {'autoload':{'on_source':'unite.vim'}} "{{{
 			nnoremap <silent> [unite]h :<C-u>Unite -auto-resize -buffer-name=help help<CR>
 		"}}}
-		NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','unite_sources':['junkfile','junkfile/new']}} "{{{
+		NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','on_source':'unite.vim'}} "{{{
 			let g:junkfile#directory=s:get_cache_dir('junk')
 			nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<CR>
 		"}}}
@@ -731,11 +1088,18 @@
 	endif "}}}
 	if count(s:settings.plugin_groups, 'misc') "{{{
 		NeoBundle 'xolox/vim-misc'
-		NeoBundle 'xolox/vim-session'
-		let g:session_directory = s:get_cache_dir('sessions')
-		command! S :SaveSession!
-		command! O :OpenSession!
-		NeoBundleLazy 'mbbill/fencview', {'autoload':{'commands':['FencView','FencAutoDetect']}}
+		NeoBundle 'xolox/vim-session' "{{{
+			let g:session_directory = s:get_cache_dir('sessions')
+			let g:session_autoload = 'no'
+			let g:session_autosave = 'no'
+			command! S :SaveSession!
+			command! O :OpenSession!
+		"}}}
+		NeoBundleLazy 'mbbill/fencview', {'autoload':{'commands':['FencView','FencAutoDetect']}} "{{{
+			let g:fencview_autodetect = 0
+			let g:fencview_checklines = 100
+			let g:fencview_auto_patterns = '*'
+		"}}}
 		if exists('$TMUX')
 			NeoBundle 'christoomey/vim-tmux-navigator'
 		endif
@@ -746,8 +1110,8 @@
 			NeoBundleLazy 'suan/vim-instant-markdown', {'autoload':{'filetypes':['markdown','ghmarkdown']}}
 		endif
 		NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
-		NeoBundle 'chrisbra/vim_faq'
-		NeoBundle 'vimwiki'
+		"NeoBundle 'chrisbra/vim_faq'
+		"NeoBundle 'vimwiki'
 		NeoBundle 'bufkill.vim'
 		NeoBundle 'mhinz/vim-startify' "{{{
 			let g:startify_session_dir = s:get_cache_dir('sessions')
@@ -755,12 +1119,12 @@
 			let g:startify_show_sessions = 1
 
 			let g:startify_custom_header = [
-						\ '	dotvim by taohe',
+						\ '	nvim by taohe',
 						\ '',
 						\ '	<Space><Space>	go to anything (files, buffers, MRU, bookmarks)',
 						\ '	<Space>gg		lists the references or definitions of a word',
 						\ '	,n				toggle the-nerd-tree',
-						\ '	,a				toggle tagbar',
+						\ '	,r				toggle tagbar',
 						\ '	,b				preview MRU buffers',
 						\ '	,u				toggle undo tree',
 						\ '	,q				toggle quickfix list',
@@ -783,18 +1147,18 @@
 			" run `:SyntasticCheck` to check syntax
 		"}}}
 		NeoBundleLazy 'mattn/gist-vim', {'depends':'mattn/webapi-vim','autoload':{'commands':'Gist'}} "{{{
-			let g:gist_post_private=1
-			let g:gist_show_privates=1
+			let g:gist_post_private = 1
+			let g:gist_show_privates = 1
 		"}}}
 		NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':['VimShell','VimShellInteractive']}} "{{{
 			if s:is_macvim
-				let g:vimshell_editor_command='mvim'
+				let g:vimshell_editor_command = 'mvim'
 			else
-				let g:vimshell_editor_command='vim'
+				let g:vimshell_editor_command = 'vim'
 			endif
-			let g:vimshell_right_prompt='getcwd()'
-			let g:vimshell_data_directory=s:get_cache_dir('vimshell')
-			let g:vimshell_vimshrc_path='~/.vim/vimshrc'
+			let g:vimshell_right_prompt = 'getcwd()'
+			let g:vimshell_data_directory = s:get_cache_dir('vimshell')
+			let g:vimshell_vimshrc_path = '~/.config/nvim/vimshrc'
 
 			"nnoremap <Leader>c :VimShell -split<CR>
 			"nnoremap <Leader>cc :VimShell -split<CR>
@@ -804,15 +1168,16 @@
 			"nnoremap <Leader>cp :VimShellInteractive python<CR>
 		"}}}
 		NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGoldenViewAutoResize']}} "{{{
-			let g:goldenview__enable_default_mapping=0
+			let g:goldenview__enable_default_mapping = 0
 			nmap <silent> <Leader>z <Plug>ToggleGoldenViewAutoResize
 		"}}}
 		" do not use conque-shell together with conque-gdb
 		"NeoBundle 'oplatek/Conque-Shell' "{{{
 		"}}}
-		NeoBundleLazy 'vim-scripts/Conque-GDB', {'autoload':{'commands':['ConqueGdb','ConqueGdbTab','ConqueGdbVSplit','ConqueGdbSplit','ConqueTerm','ConqueTermTab','ConqueTermVSplit','ConqueTermSplit']}} "{{{
+		NeoBundleLazy 'vim-scripts/Conque-GDB', {'autoload':{'commands':['ConqueGdb','ConqueGdbTab',
+					\ 'ConqueGdbVSplit','ConqueGdbSplit','ConqueTerm','ConqueTermTab',
+					\ 'ConqueTermVSplit','ConqueTermSplit']}} "{{{
 			let g:ConqueGdb_Leader = '\'
-			"let g:ConqueGdb_GdbExe = '~/local/bin/gdb'
 			nnoremap <Leader>d :ConqueGdbVSplit<CR>
 		"}}}
 		"NeoBundle 'edkolev/tmuxline.vim' "{{{
@@ -839,10 +1204,16 @@
 	vmap <silent> <Leader>e :call Source(line('v'), line('.'))<CR>
 
 	nnoremap <Leader>w :w<CR>
+	vnoremap <Leader>w <Esc>:w<CR>
+	inoremap <Leader>w <Esc>:w<CR>
+
+	nnoremap <Leader>a :A<CR>
 
 	" remap arrow keys
 	nnoremap <Left> :bprev<CR>
+	" :call LightLineBufferline()<CR>:call lightline#update()<CR>
 	nnoremap <Right> :bnext<CR>
+	" :call LightLineBufferline()<CR>:call lightline#update()<CR>
 	"nnoremap <Up> :tabnext<CR>
 	"nnoremap <Down> :tabprev<CR>
 
@@ -923,8 +1294,8 @@
 	"}}}
 
 	" tab shortcuts
-	map <Leader>tn :tabnew<CR>
-	map <Leader>tc :tabclose<CR>
+	"map <Leader>tn :tabnew<CR>
+	"map <Leader>tc :tabclose<CR>
 
 	" make Y consistent with C and D. See :help Y.
 	nnoremap Y y$
@@ -975,8 +1346,8 @@
 
 " color schemes {{{
 	NeoBundle 'taohex/vim-colors-solarized' "{{{
-		let g:solarized_termcolors=256
-		let g:solarized_termtrans=1
+		let g:solarized_termcolors = 256
+		let g:solarized_termtrans = 1
 	"}}}
 	"NeoBundle 'nanotech/jellybeans.vim'
 	NeoBundle 'tomasr/molokai'
@@ -990,8 +1361,8 @@
 "}}}
 
 " finish loading {{{
-	if exists('g:dotvim_settings.disabled_plugins')
-		for plugin in g:dotvim_settings.disabled_plugins
+	if exists('g:nvim_settings.disabled_plugins')
+		for plugin in g:nvim_settings.disabled_plugins
 			execute 'NeoBundleDisable '.plugin
 		endfor
 	endif

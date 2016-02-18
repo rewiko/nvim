@@ -1,15 +1,15 @@
-# ideal.vim
+# nvim
 
 ```
-     _      _                _             _
-    /_/ __ / / ___   ____   / /    _   _  /_/_   _
-   / // __` // __ \ / __ \ / /    | | / // // | / |
-  / // (_/ //  ___// (_/ // /  _  | |/ // //  |/  |
- /_/ \___,_\\_____\\___,_\\_\ (_) |___//_//_/|_/|_|
+                  _
+   _  _  _   _  /_/_   _
+  / |/ /| | / // // | / |
+ /    / | |/ // //  |/  |
+/_/|_/  |___//_//_/|_/|_|
 
 ```
 
-Turn NeoVim or Vim into a full-blown IDE.
+A full-blown IDE based on Neovim (or Vim).
 
 <img src="http://taohex.github.io/images/vim.gif" width="100%"/>
 
@@ -27,19 +27,20 @@ Turn NeoVim or Vim into a full-blown IDE.
 
 ## Introduction
 
-A full-blown NeoVim or Vim configuration with gdb and ctags support.
+A full-blown IDE based on Neovim (or Vim) with gdb and ctags support.
 
 ## Basic Installation
 
 ```sh
-mv ~/.vimrc ~/.vimrc.backup
-mv ~/.nvimrc ~/.nvimrc.backup
-cd
-git clone https://github.com/taohex/dotvim .vim
-cd .vim/
+mkdir ~/.config/
+cd ~/.config/
+git clone https://github.com/taohex/nvim
+cd ~/.config/nvim/
 git submodule init && git submodule update
-ln -s ~/.vim/.vimrc ~/
-ln -s ~/.vim/.vimrc ~/.nvimrc
+mv ~/.vim ~/.vim.backup
+mv ~/.vimrc ~/.vimrc.backup
+ln -s ~/.config/nvim ~/.vim
+ln -s ~/.config/nvim/init.vim ~/.vimrc
 ```
 
 Startup vim and neobundle will detect and ask you install any missing plugins. You can also manually initiate this with `:NeoBundleInstall`.
@@ -77,9 +78,8 @@ Keybinding       | Mode | Description
 -----------------|------|------------------------------------------------------------
 `<Leader>n`      |  n   | toggle the-nerd-tree
 `<Leader>nf`     |  n   | open the-nerd-tree to path of the current file
-`<Leader>a`      |  n   | toggle tagbar
+`<Leader>t`      |  n   | toggle tagbar
 `<Leader>b`      |  n   | preview MRU buffers
-`<Leader>t`      |  n   | preview MRU tabs
 `<Leader>u`      |  n   | toggle undo tree
 `<Leader>q`      |  n   | toggle quickfix list
 `<Leader>l`      |  n   | toggle location list
@@ -93,7 +93,8 @@ Keybinding       | Mode | Description
 `<Leader>p`      |  n   | windows-like paste
 `<C-h>`          |  i   | move the cursor left
 `<C-l>`          |  i   | move the cursor right
-`<Leader>w`      |  n   | write buffer to file
+`<Leader>a`      |  n   | alternate files (.c -> .h etc)
+`<Leader>w`      | n, i | write buffer to file
 `<Leader>s`      |  v   | sort selection
 `<Leader>fef`    |  n   | format entire file
 `<Leader>f$`     |  n   | strip current line of trailing white space
@@ -222,9 +223,9 @@ Keybinding       | Mode | Description
 
 ### OS X
 
-YouComplete **only** support NeoVim or MacVim.
+YouComplete **only** support Neovim or MacVim.
 
-#### Install NeoVim (Recommended)
+#### Install Neovim (Recommended)
 
 ```sh
 pip install neovim
@@ -313,7 +314,7 @@ This distribution will pick one of three combinations, in the following priority
 1.	[neocomplete][nc] + [neosnippet][ns] if you have `lua` enabled.
 1.	[neocomplcache][ncl] + [neosnippet][ns] if you only have vimscript available
 
-this can be overridden with `g:dotvim_settings.autocomplete_method`
+this can be overridden with `g:nvim_settings.autocomplete_method`
 
 ## Standard Modifications
 
@@ -452,6 +453,7 @@ this can be overridden with `g:dotvim_settings.autocomplete_method`
 
 I wanted to give special thanks to all of the people who worked on the following projects, or people simply posted their vim distributions, because I learned a lot and took many ideas and incorporated them into my configuration.
 
+*	[bling](https://github.com/bling/dotvim)
 *	[janus](https://github.com/carlhuda/janus)
 *	[spf13](https://github.com/spf13/spf13-vim)
 *	[yadr](http://skwp.github.com/dotfiles/)
@@ -462,10 +464,6 @@ I wanted to give special thanks to all of the people who worked on the following
 *	[lokaltog](https://github.com/Lokaltog)
 *	[sjl](https://github.com/sjl)
 *	[terryma](https://github.com/terryma)
-
-## Inspired by
-
-*	Bailey Ling's [vim-airline](https://github.com/bling/vim-airline)
 
 ## License
 
