@@ -1,5 +1,3 @@
-# nvim
-
 ```
                  _
    _  _ _   _  /_/_   _
@@ -11,7 +9,7 @@
 
 A full-blown IDE based on Neovim (or Vim).
 
-<img src="http://taohex.github.io/images/vim.gif" width="100%"/>
+<img src="http://taohex.github.io/images/vim.gif" width="75%"/>
 
 **Table of Contents**
 
