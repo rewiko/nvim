@@ -9,7 +9,7 @@
 
 A full-blown IDE based on Neovim (or Vim).
 
-<img src="http://taohex.github.io/images/vim.gif" width="75%"/>
+<img src="http://taohex.github.io/images/vim.gif" width="60%"/>
 
 **Table of Contents**
 
