@@ -754,6 +754,7 @@
 				let g:vimfiler_as_default_explorer = 1
 				let g:vimfiler_ignore_pattern = '^\%(\.git\|\.hg\|\.svn\|\.DS_Store\)$'
 				let g:vimfiler_no_default_key_mappings = 1
+				let g:vimfiler_data_directory = s:get_cache_dir('vimfiler')
 
 				nnoremap <silent> <Leader>n :VimFilerExplorer -direction=botright<CR>
 				nnoremap <silent> <Leader>nf :VimFilerExplorer -find -direction=botright<CR>
