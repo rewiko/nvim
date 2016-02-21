@@ -28,9 +28,7 @@
 	" lightline
 	let g:lightline_buffer_active_buffer_left = ''
 	let g:lightline_buffer_active_buffer_right = ''
-	let g:lightline_buffer_separator = ' '
-	" ' ¦ '
-	"
+	let g:lightline_buffer_separator = ' '	" ' | '
 	let g:lightline_buffer_modified = ' *'
 	let g:lightline_buffer_show_bufnr = 1
 	" :help filename-modifiers

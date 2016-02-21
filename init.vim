@@ -3,6 +3,7 @@
 " General settings
 
 	if (v:version < 702)
+		echoerr "nvim requires vim >= 7.2. INSTALL IT! You'll thank me later!"
 		finish
 	endif
 
@@ -34,7 +35,7 @@
 
 	" plugins
 	let g:nvim_settings.autocomplete_method = 'neocomplcache'
-	let g:nvim_settings.explorer_method = 'nerdtree'	" utf-8 only
+	let g:nvim_settings.explorer_method = 'nerdtree'
 	"let g:nvim_settings.explorer_method = 'vimfiler'
 	"let g:nvim_settings.statusline_method = 'airline'	" utf-8 only
 	let g:nvim_settings.statusline_method = 'lightline'

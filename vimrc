@@ -128,13 +128,13 @@
 		endif
 	endfunction "}}}
 	function! CloseWindowOrKillBuffer() "{{{
-		let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
-
 		" never bdelete a nerd tree
 		if matchstr(expand("%"), 'NERD') == 'NERD'
 			wincmd c
 			return
 		endif
+
+		let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
 
 		if number_of_windows_to_this_buffer > 1
 			wincmd c
@@ -727,27 +727,27 @@
 			nnoremap [ctrlp]b :CtrlPBuffer<CR>
 		"}}}
 		if s:settings.explorer_method == 'nerdtree' "{{{
-			if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
-			\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
-				"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
-				NeoBundle 'scrooloose/nerdtree' "{{{
-					let g:NERDTreeShowHidden = 1
-					let g:NERDTreeQuitOnOpen = 0
-					let g:NERDTreeShowLineNumbers = 0
-					let g:NERDTreeChDirMode = 0
-					let g:NERDTreeShowBookmarks = 1
-					let g:NERDTreeIgnore = ['\.git','\.hg','\.svn','\.DS_Store']
-					let g:NERDTreeWinPos = 'right'
-					let g:NERDTreeWinSize = 40
-					let g:NERDTreeBookmarksFile = s:get_cache_dir('NERDTreeBookmarks')
-					nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
-					nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
-					" close vim if the only window left open is a nerdtree
-					autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-				"}}}
-				NeoBundle 'Xuyuanp/nerdtree-git-plugin' "{{{
-				"}}}
-			endif "}}}
+			"if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
+			"			\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
+			"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+			NeoBundle 'scrooloose/nerdtree' "{{{
+				let g:NERDTreeShowHidden = 1
+				let g:NERDTreeQuitOnOpen = 0
+				let g:NERDTreeShowLineNumbers = 0
+				let g:NERDTreeChDirMode = 0
+				let g:NERDTreeShowBookmarks = 1
+				let g:NERDTreeIgnore = ['\.git','\.hg','\.svn','\.DS_Store']
+				let g:NERDTreeWinPos = 'right'
+				let g:NERDTreeWinSize = 40
+				let g:NERDTreeBookmarksFile = s:get_cache_dir('nerdtreebookmarks')
+				nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
+				nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
+				" close vim if the only window left open is a nerdtree
+				autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+			"}}}
+			NeoBundle 'Xuyuanp/nerdtree-git-plugin' "{{{
+			"}}}
+			"endif "}}}
 		endif "}}}
 		if s:settings.explorer_method == 'vimfiler' "{{{
 			NeoBundle 'Shougo/vimfiler.vim' "{{{
@@ -967,8 +967,9 @@
 		""}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'unite') "{{{
-		NeoBundleLazy 'Shougo/unite.vim', {'autoload':{'commands':['Unite','UniteWithCurrentDir','UniteWithBufferDir',
-					\ 'UniteWithProjectDir','UniteWithInput','UniteWithInputDirectory','UniteWithCursorWord']}} "{{{
+		"NeoBundleLazy 'Shougo/unite.vim', {'autoload':{'commands':['Unite','UniteWithCurrentDir','UniteWithBufferDir',
+		"			\ 'UniteWithProjectDir','UniteWithInput','UniteWithInputDirectory','UniteWithCursorWord']}} "{{{
+		NeoBundle 'Shougo/unite.vim' "{{{
 			let bundle = neobundle#get('unite.vim')
 			function! bundle.hooks.on_source(bundle)
 				call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -1020,17 +1021,20 @@
 			nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<CR>
 			nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<CR>
 		"}}}
-		NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'on_source':'unite.vim'}}
+		"NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'on_source':'unite.vim'}}
+		NeoBundle 'Shougo/neomru.vim'
 		"NeoBundleLazy 'osyo-manga/unite-airline_themes', {'autoload':{'on_source':'unite.vim'}} "{{{
 		"	nnoremap <silent> [unite]a :<C-u>Unite -winheight=10 -auto-preview -buffer-name=airline_themes airline_themes<CR>
-		"}}}
-		NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'on_source':'unite.vim'}} "{{{
-			nnoremap <silent> [unite]c :<C-u>Unite -winheight=10 -auto-preview -buffer-name=colorschemes colorscheme<CR>
-		"}}}
-		NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'on_source':'unite.vim'}} "{{{
+		""}}}
+		"NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'on_source':'unite.vim'}} "{{{
+		"	nnoremap <silent> [unite]c :<C-u>Unite -winheight=10 -auto-preview -buffer-name=colorschemes colorscheme<CR>
+		""}}}
+		"NeoBundleLazy 'tsukkee/unite-tag', {'autoload':{'on_source':'unite.vim'}} "{{{
+		NeoBundle 'tsukkee/unite-tag' "{{{
 			nnoremap <silent> [unite]t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<CR>
 		"}}}
-		NeoBundleLazy 'hewes/unite-gtags', {'autoload':{'on_source':'unite.vim'}} "{{{
+		"NeoBundleLazy 'hewes/unite-gtags', {'autoload':{'on_source':'unite.vim'}} "{{{
+		NeoBundle 'hewes/unite-gtags' "{{{
 			" lists the references or definitions of a word
 			" `global --from-here=<location of cursor> -qe <word on cursor>`
 			nnoremap <silent> [unite]gg :execute 'Unite gtags/context'<CR>
@@ -1053,16 +1057,20 @@
 			" `global -f`
 			nnoremap <silent> [unite]gf :execute 'Unite gtags/file'<CR>
 		"}}}
-		NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'on_source':'unite.vim'}} "{{{
+		"NeoBundleLazy 'Shougo/unite-outline', {'autoload':{'on_source':'unite.vim'}} "{{{
+		NeoBundle 'Shougo/unite-outline' "{{{
 			nnoremap <silent> [unite]o :<C-u>Unite -auto-resize -buffer-name=outline outline<CR>
 		"}}}
-		NeoBundleLazy 'Shougo/unite-help', {'autoload':{'on_source':'unite.vim'}} "{{{
-			nnoremap <silent> [unite]h :<C-u>Unite -auto-resize -buffer-name=help help<CR>
-		"}}}
-		NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','on_source':'unite.vim'}} "{{{
-			let g:junkfile#directory=s:get_cache_dir('junk')
-			nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<CR>
-		"}}}
+		"NeoBundleLazy 'Shougo/unite-help', {'autoload':{'on_source':'unite.vim'}} "{{{
+		"	nnoremap <silent> [unite]h :<C-u>Unite -auto-resize -buffer-name=help help<CR>
+		""}}}
+		"NeoBundleLazy 'Shougo/junkfile.vim', {'autoload':{'commands':'JunkfileOpen','on_source':'unite.vim'}} "{{{
+		"	let g:junkfile#directory=s:get_cache_dir('junk')
+		"	nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<CR>
+		""}}}
+	elseif s:settings.explorer_method == 'vimfiler'
+		" vimfiler require unite
+		NeoBundle 'Shougo/unite.vim'
 	endif "}}}
 	if count(s:settings.plugin_groups, 'indents') "{{{
 		NeoBundle 'nathanaelkane/vim-indent-guides' "{{{
