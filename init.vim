@@ -34,11 +34,11 @@
 	"let g:nvim_settings.cscopeprg = 'cscope'
 
 	" plugins
-	let g:nvim_settings.autocomplete_method = 'neocomplcache'
-	let g:nvim_settings.explorer_method = 'nerdtree'
-	"let g:nvim_settings.explorer_method = 'vimfiler'
-	"let g:nvim_settings.statusline_method = 'airline'	" utf-8 only
-	let g:nvim_settings.statusline_method = 'lightline'
+	let g:nvim_settings.autocomplete_plugin = 'neocomplcache'
+	let g:nvim_settings.explorer_plugin = 'nerdtree'
+	"let g:nvim_settings.explorer_plugin = 'vimfiler'
+	"let g:nvim_settings.statusline_plugin = 'airline'	" utf-8 only
+	let g:nvim_settings.statusline_plugin = 'lightline'
 
 	" user interface
 	"let g:nvim_settings.colorscheme = 'molokai'
@@ -119,7 +119,9 @@
 				"exe "highlight! SignifySignChange" . g:solarized_vars['fmt_none'] . g:solarized_vars['fg_yellow'] . g:solarized_vars['bg_base02']
 
 				" indent guides
-				exe "autocmd VimEnter,Colorscheme * :highlight! IndentGuidesOdd" . g:solarized_vars['fmt_none'] . g:solarized_vars['fg_base03'] . g:solarized_vars['bg_cyan']
+				let g:indent_guides_auto_colors=0
+				" bg_cyan
+				exe "autocmd VimEnter,Colorscheme * :highlight! IndentGuidesOdd" . g:solarized_vars['fmt_none'] . g:solarized_vars['fg_base03'] . g:solarized_vars['bg_base02']
 				exe "autocmd VimEnter,Colorscheme * :highlight! IndentGuidesEven" . g:solarized_vars['fmt_none'] . g:solarized_vars['fg_base03'] . g:solarized_vars['bg_base02']
 			endif
 		endif

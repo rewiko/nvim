@@ -22,17 +22,17 @@
 	let s:settings.encoding = 'utf-8'
 	let s:settings.default_indent = 2
 	let s:settings.max_column = 120
-	let s:settings.autocomplete_method = 'neocomplcache'
-	let s:settings.explorer_method = 'nerdtree'
-	"let s:settings.explorer_method = 'vimfiler'
-	let s:settings.statusline_method = 'airline'
+	let s:settings.autocomplete_plugin = 'neocomplcache'
+	let s:settings.explorer_plugin = 'nerdtree'
+	"let s:settings.explorer_plugin = 'vimfiler'
+	let s:settings.statusline_plugin = 'airline'
 	let s:settings.enable_cursorcolumn = 0
 	"let s:settings.colorscheme = 'jellybeans'
 	let s:settings.colorscheme = 'solarized'
 	if has('python') && filereadable(expand("~/.config/nvim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so")) && filereadable(expand("~/.config/nvim/bundle/YouCompleteMe/third_party/ycmd/ycm_client_support.so"))
-		let s:settings.autocomplete_method = 'ycm'
+		let s:settings.autocomplete_plugin = 'ycm'
 	elseif has('lua')
-		let s:settings.autocomplete_method = 'neocomplete'
+		let s:settings.autocomplete_plugin = 'neocomplete'
 	endif
 
 	if exists('g:nvim_settings.plugin_groups')
@@ -312,7 +312,7 @@
 " plugin/mapping configuration {{{
 	if count(s:settings.plugin_groups, 'core') "{{{
 		NeoBundle 'matchit.zip'
-		if s:settings.statusline_method == 'airline' "{{{
+		if s:settings.statusline_plugin == 'airline' "{{{
 			if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
 			\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
 				NeoBundle 'bling/vim-airline' "{{{
@@ -341,7 +341,7 @@
 				"}}}
 			endif "}}}
 		"}}}
-		elseif s:settings.statusline_method == 'lightline' "{{{
+		elseif s:settings.statusline_plugin == 'lightline' "{{{
 			"NeoBundle 'zefei/vim-wintabs' "{{{
 			"}}}
 			"NeoBundle 'bling/vim-bufferline' "{{{
@@ -606,7 +606,7 @@
 	endif "}}}
 	if count(s:settings.plugin_groups, 'autocomplete') "{{{
 		NeoBundle 'honza/vim-snippets'
-		if s:settings.autocomplete_method == 'ycm' "{{{
+		if s:settings.autocomplete_plugin == 'ycm' "{{{
 			NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
 				"let g:ycm_path_to_python_interpreter='~/local/bin/python'
 				let g:ycm_complete_in_comments_and_strings = 1
@@ -632,20 +632,20 @@
 				smap <expr><S-Tab> pumvisible() ? "\<C-p>" : ""
 			"}}}
 		endif "}}}
-		if s:settings.autocomplete_method == 'neocomplete' "{{{
+		if s:settings.autocomplete_plugin == 'neocomplete' "{{{
 			NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1},'vim_version':'7.3.885'} "{{{
 				let g:neocomplete#enable_at_startup = 1
 				let g:neocomplete#data_directory = s:get_cache_dir('neocomplete')
 			"}}}
 		endif "}}}
-		if s:settings.autocomplete_method == 'neocomplcache' "{{{
+		if s:settings.autocomplete_plugin == 'neocomplcache' "{{{
 			NeoBundleLazy 'Shougo/neocomplcache.vim', {'autoload':{'insert':1}} "{{{
 				let g:neocomplcache_enable_at_startup = 1
 				let g:neocomplcache_temporary_dir = s:get_cache_dir('neocomplcache')
 				let g:neocomplcache_enable_fuzzy_completion = 1
 			"}}}
 		endif "}}}
-		if s:settings.autocomplete_method == 'neocomplete' || s:settings.autocomplete_method == 'neocomplcache' "{{{
+		if s:settings.autocomplete_plugin == 'neocomplete' || s:settings.autocomplete_plugin == 'neocomplcache' "{{{
 			NeoBundleLazy 'osyo-manga/vim-marching', {'autoload':{'insert':1}} "{{{
 				" path to clang command
 				let g:marching_clang_command = "/usr/bin/clang"
@@ -726,7 +726,7 @@
 			nnoremap [ctrlp]o :CtrlPFunky<CR>
 			nnoremap [ctrlp]b :CtrlPBuffer<CR>
 		"}}}
-		if s:settings.explorer_method == 'nerdtree' "{{{
+		if s:settings.explorer_plugin == 'nerdtree' "{{{
 			"if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
 			"			\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
 			"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
@@ -749,7 +749,7 @@
 			"}}}
 			"endif "}}}
 		endif "}}}
-		if s:settings.explorer_method == 'vimfiler' "{{{
+		if s:settings.explorer_plugin == 'vimfiler' "{{{
 			NeoBundle 'Shougo/vimfiler.vim' "{{{
 				let g:vimfiler_as_default_explorer = 1
 				let g:vimfiler_ignore_pattern = '^\%(\.git\|\.hg\|\.svn\|\.DS_Store\)$'
@@ -1069,7 +1069,7 @@
 		"	let g:junkfile#directory=s:get_cache_dir('junk')
 		"	nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<CR>
 		""}}}
-	elseif s:settings.explorer_method == 'vimfiler'
+	elseif s:settings.explorer_plugin == 'vimfiler'
 		" vimfiler require unite
 		NeoBundle 'Shougo/unite.vim'
 	endif "}}}
@@ -1079,14 +1079,14 @@
 			let g:indent_guides_guide_size=1
 			let g:indent_guides_enable_on_vim_startup=0
 			let g:indent_guides_color_change_percent=3
-			if !has('gui_running')
-				let g:indent_guides_auto_colors=0
-				function! s:indent_set_console_colors()
-					hi IndentGuidesOdd ctermbg=235
-					hi IndentGuidesEven ctermbg=236
-				endfunction
-				autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
-			endif
+			"if !has('gui_running')
+				"let g:indent_guides_auto_colors=0
+				"function! s:indent_set_console_colors()
+				"	hi IndentGuidesOdd ctermbg=235
+				"	hi IndentGuidesEven ctermbg=236
+				"endfunction
+				"autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
+			"endif
 		"}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'textobj') "{{{
