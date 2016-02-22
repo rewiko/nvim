@@ -35,8 +35,8 @@
 
 	" plugins
 	let g:nvim_settings.autocomplete_plugin = 'neocomplcache'
-	let g:nvim_settings.explorer_plugin = 'nerdtree'
-	"let g:nvim_settings.explorer_plugin = 'vimfiler'
+	"let g:nvim_settings.explorer_plugin = 'nerdtree'
+	let g:nvim_settings.explorer_plugin = 'vimfiler'
 	"let g:nvim_settings.statusline_plugin = 'airline'	" utf-8 only
 	let g:nvim_settings.statusline_plugin = 'lightline'
 
