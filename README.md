@@ -29,12 +29,17 @@ A full-blown IDE based on Neovim (or Vim) with gdb and ctags support.
 
 ## Basic Installation
 
+Basic installation is simple:
+
 ```sh
-mkdir ~/.config/
-cd ~/.config/
-git clone https://github.com/taohex/nvim
+git clone https://github.com/taohex/nvim ~/.config/nvim
 cd ~/.config/nvim/
 git submodule init && git submodule update
+```
+
+Make links if you are using Vim:
+
+```sh
 mv ~/.vim ~/.vim.backup
 mv ~/.vimrc ~/.vimrc.backup
 ln -s ~/.config/nvim ~/.vim
@@ -323,14 +328,26 @@ this can be overridden with `g:nvim_settings.autocomplete_method`
 
 ### [unite.vim](https://github.com/Shougo/unite.vim)
 *	this is an extremely powerful plugin that lets you build up lists from arbitrary sources
-*	mappings
-	*	`<Space><Space>` go to anything (files, buffers, MRU, bookmarks)
-	*	`<Space>y` select from previous yanks
-	*	`<Space>l` select line from current buffer
-	*	`<Space>b` select from current buffers
-	*	`<Space>o` select from outline of current file
-	*	`<Space>s` quick switch buffer
-	*	`<Space>/` recursively search all files for matching text (uses `ag` or `ack` if found)
+*	`<Space><Space>` go to anything (files, buffers, MRU, bookmarks)
+*	`<Space>y` select from previous yanks
+*	`<Space>l` select line from current buffer
+*	`<Space>b` select from current buffers
+*	`<Space>o` select from outline of current file
+*	`<Space>s` quick switch buffer
+*	`<Space>/` recursively search all files for matching text (uses `ag` or `ack` if found)
+
+### [lightline.vim](https://github.com/itchyny/lightline.vim)
+*	a light and configurable statusline/tabline
+
+### [lightline-buffer](https://github.com/taohex/lightline-buffer)
+*	show tab info and buffer info in tabline
+
+### [vimfiler.vim](https://github.com/Shougo/vimfiler.vim)
+*	powerful file explorer
+*	`j` cursor down
+*	`k` cursor up
+*	`h` go to parent
+*	`l` go to child
 
 ### [bufkill.vim](http://www.vim.org/scripts/script.php?script_id=1147)
 *	`<Leader>bd` or `:BD` will kill a buffer without changing the window layout
