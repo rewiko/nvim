@@ -48,6 +48,8 @@ ln -s ~/.config/nvim/init.vim ~/.vimrc
 
 Startup vim and neobundle will detect and ask you install any missing plugins. You can also manually initiate this with `:NeoBundleInstall`.
 
+It is completely customisable using a `~/.config/nvim/vimrc.before` and `~/.config/nvim/vimrc.after` files.
+
 ## Keymap
 
 `<Leader>` default set to `,`

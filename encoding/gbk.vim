@@ -22,7 +22,15 @@
 	" airline
 	"if !empty(glob("vim-airline"))
 	let g:airline_left_sep = '>'
+	let g:airline_left_alt_sep = '>'
 	let g:airline_right_sep = '<'
+	let g:airline_right_alt_sep = '<'
+	let g:airline#extensions#tabline#left_sep = '>'
+	"let g:airline#extensions#tabline#left_alt_sep = '>'
+	let g:airline#extensions#tabline#left_alt_sep = ''
+	let g:airline#extensions#tabline#right_sep = '<'
+	"let g:airline#extensions#tabline#right_alt_sep = '<'
+	let g:airline#extensions#tabline#right_alt_sep = ''
 	"endif
 
 	" lightline
@@ -108,8 +116,8 @@
 		\ },
 		\ 'separator': { 'left': '>', 'right': '<' },
 		\ 'subseparator': { 'left': '>', 'right': '<' },
-		\ 'tabline_separator': { 'left': ">", 'right': "<" },
-		\ 'tabline_subseparator': { 'left': ">", 'right': "<" },
+		\ 'tabline_separator': { 'left': '>', 'right': '<' },
+		\ 'tabline_subseparator': { 'left': '>', 'right': '<' },
 	\ }
 			"\ 'left': [ [ 'bufferline' ] ],
 			"\ 'right': [ [ 'close' ] ],

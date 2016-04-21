@@ -110,13 +110,13 @@
 	endfunction "}}}
 	function! Preserve(command) "{{{
 		" preparation: save last search, and cursor position.
-		let _s=@/
+		let _s = @/
 		let l = line(".")
 		let c = col(".")
 		" do the business:
 		execute a:command
 		" clean up: restore previous search history, and cursor position
-		let @/=_s
+		let @/ = _s
 		call cursor(l, c)
 	endfunction "}}}
 	function! StripTrailingWhitespace() "{{{
@@ -129,7 +129,7 @@
 	endfunction "}}}
 	function! CloseWindowOrKillBuffer() "{{{
 		" never bdelete a nerd tree
-		if matchstr(expand("%"), 'NERD') == 'NERD'
+		if matchstr(expand("%"), 'NERD') ==# 'NERD'
 			wincmd c
 			return
 		endif
@@ -244,8 +244,8 @@
 		call EnsureExists(&directory)
 	"}}}
 
-	let mapleader = ","
-	let g:mapleader = ","
+	let mapleader = ','
+	let g:mapleader = ','
 "}}}
 
 " ui configuration {{{
@@ -293,10 +293,10 @@
 			set gfn=Ubuntu\ Mono\ 11
 		endif
 	else
-		if $COLORTERM == 'gnome-terminal'
+		if $COLORTERM ==# 'gnome-terminal'
 			set t_Co=256	"why you no tell me correct colors?!?!
 		endif
-		if $TERM_PROGRAM == 'iTerm.app'
+		if $TERM_PROGRAM ==# 'iTerm.app'
 			" different cursors for insert vs normal mode
 			if exists('$TMUX')
 				let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
@@ -312,17 +312,10 @@
 " plugin/mapping configuration {{{
 	if count(s:settings.plugin_groups, 'core') "{{{
 		NeoBundle 'matchit.zip'
-		if s:settings.statusline_plugin == 'airline' "{{{
-			if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
-			\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
-				NeoBundle 'bling/vim-airline' "{{{
-					let g:airline#extensions#bufferline#enabled = 0
-					let g:airline#extensions#bufferline#overwrite_variables = 1
-					let g:airline#extensions#tabline#enabled = 1
-					let g:airline#extensions#tabline#buffer_nr_show = 1
-					let g:airline#extensions#tabline#left_sep = ''
-					let g:airline#extensions#tabline#left_alt_sep = '¦'
-					let g:airline#extensions#syntastic#enabled = 1
+		if s:settings.statusline_plugin ==# 'airline' "{{{
+			"if s:settings.encoding ==# 'utf-8' && has('multi_byte') && has('unix') && &encoding ==# 'utf-8' &&
+			"\ (empty(&termencoding) || &termencoding ==# 'utf-8') "{{{
+				NeoBundle 'vim-airline/vim-airline' "{{{
 					let g:airline_section_b = ''
 					let g:airline_section_warning = ''
 					let g:airline_mode_map = {
@@ -338,10 +331,22 @@
 						\ 'S'  : 'S',
 						\ '^S' : 'S',
 						\ }
+					let g:airline#extensions#bufferline#enabled = 0
+					let g:airline#extensions#bufferline#overwrite_variables = 1
+					let g:airline#extensions#tabline#enabled = 1
+					let g:airline#extensions#tabline#buffers_label = 'b'
+					let g:airline#extensions#tabline#tabs_label = 't'
+					let g:airline#extensions#tabline#buffer_nr_show = 1
+					let g:airline#extensions#tabline#buffer_nr_format = '%s '
+					let g:airline#extensions#tabline#fnamecollapse = 1
+					let g:airline#extensions#tabline#fnametruncate = 12
+					let g:airline#extensions#syntastic#enabled = 1
 				"}}}
-			endif "}}}
+				NeoBundle 'vim-airline/vim-airline-themes' "{{{
+				"}}}
+			"endif "}}}
 		"}}}
-		elseif s:settings.statusline_plugin == 'lightline' "{{{
+		elseif s:settings.statusline_plugin ==# 'lightline' "{{{
 			"NeoBundle 'zefei/vim-wintabs' "{{{
 			"}}}
 			"NeoBundle 'bling/vim-bufferline' "{{{
@@ -370,7 +375,7 @@
 				endfunction
 
 				function! LightlineModified()
-					return &ft =~ 'help' ? '' : &modified ? g:lightline_buffer_modified_icon : &modifiable ? '' : '-'
+					return &ft =~? 'help' ? '' : &modified ? g:lightline_buffer_modified_icon : &modifiable ? '' : '-'
 				endfunction
 
 				function! LightlineReadonly()
@@ -391,15 +396,15 @@
 
 				function! LightlineFilename()
 					let fname = expand('%:.')
-					return fname == 'ControlP' ? g:lightline.ctrlp_item :
-								\ fname == '__Tagbar__' ? g:lightline.fname :
-								\ fname =~ '__Gundo\|NERD_tree' ? '' :
-								\ &ft == 'vimfiler' ? vimfiler#get_status_string() :
-								\ &ft == 'unite' ? unite#get_status_string() :
-								\ &ft == 'vimshell' ? vimshell#get_status_string() :
-								\ ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
-								\ ('' != fname ? fname : '[No Name]') .
-								\ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+					return fname ==# 'ControlP' ? g:lightline.ctrlp_item :
+								\ fname ==# '__Tagbar__' ? g:lightline.fname :
+								\ fname =~# '__Gundo\|NERD_tree' ? '' :
+								\ &ft ==# 'vimfiler' ? vimfiler#get_status_string() :
+								\ &ft ==# 'unite' ? unite#get_status_string() :
+								\ &ft ==# 'vimshell' ? vimshell#get_status_string() :
+								\ ('' !=# LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+								\ ('' !=# fname ? fname : '[No Name]') .
+								\ ('' !=# LightlineModified() ? ' ' . LightlineModified() : '')
 				endfunction
 
 				function! LightlineFileformat()
@@ -416,19 +421,19 @@
 
 				function! LightlineMode()
 					let fname = expand('%:t')
-					return fname == '__Tagbar__' ? 'Tagbar' :
-								\ fname == 'ControlP' ? 'CtrlP' :
-								\ fname == '__Gundo__' ? 'Gundo' :
-								\ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
-								\ fname =~ 'NERD_tree' ? 'NERDTree' :
-								\ &ft == 'unite' ? 'Unite' :
-								\ &ft == 'vimfiler' ? 'VimFiler' :
-								\ &ft == 'vimshell' ? 'VimShell' :
+					return fname ==# '__Tagbar__' ? 'Tagbar' :
+								\ fname ==# 'ControlP' ? 'CtrlP' :
+								\ fname ==# '__Gundo__' ? 'Gundo' :
+								\ fname ==# '__Gundo_Preview__' ? 'Gundo Preview' :
+								\ fname =~# 'NERD_tree' ? 'NERDTree' :
+								\ &ft ==# 'unite' ? 'Unite' :
+								\ &ft ==# 'vimfiler' ? 'VimFiler' :
+								\ &ft ==# 'vimshell' ? 'VimShell' :
 								\ winwidth(0) > 60 ? lightline#mode() : ''
 				endfunction
 
 				function! CtrlPMark()
-					if expand('%:t') =~ 'ControlP'
+					if expand('%:t') =~# 'ControlP'
 						call lightline#link('iR'[g:lightline.ctrlp_regex])
 						return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
 							\ , g:lightline.ctrlp_next], 0)
@@ -564,10 +569,10 @@
 	endif "}}}
 	if count(s:settings.plugin_groups, 'python') "{{{
 		NeoBundleLazy 'klen/python-mode', {'autoload':{'filetypes':['python']}} "{{{
-			let g:pymode_rope=0
+			let g:pymode_rope = 0
 		"}}}
 		NeoBundleLazy 'davidhalter/jedi-vim', {'autoload':{'filetypes':['python']}} "{{{
-			let g:jedi#popup_on_dot=0
+			let g:jedi#popup_on_dot = 0
 		"}}}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'scala') "{{{
@@ -579,8 +584,8 @@
 		NeoBundleLazy 'nsf/gocode', {'autoload':{'filetypes':['go']},'rtp': 'vim'}
 	endif "}}}
 	if count(s:settings.plugin_groups, 'scm') "{{{
-		if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
-		\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
+		if s:settings.encoding ==# 'utf-8' && has('multi_byte') && has('unix') && &encoding ==# 'utf-8' &&
+		\ (empty(&termencoding) || &termencoding ==# 'utf-8') "{{{
 			NeoBundle 'mhinz/vim-signify' "{{{
 				let g:signify_update_on_bufenter = 0
 			"}}}
@@ -606,7 +611,7 @@
 	endif "}}}
 	if count(s:settings.plugin_groups, 'autocomplete') "{{{
 		NeoBundle 'honza/vim-snippets'
-		if s:settings.autocomplete_plugin == 'ycm' "{{{
+		if s:settings.autocomplete_plugin ==# 'ycm' "{{{
 			NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
 				"let g:ycm_path_to_python_interpreter='~/local/bin/python'
 				let g:ycm_complete_in_comments_and_strings = 1
@@ -632,20 +637,20 @@
 				smap <expr><S-Tab> pumvisible() ? "\<C-p>" : ""
 			"}}}
 		endif "}}}
-		if s:settings.autocomplete_plugin == 'neocomplete' "{{{
+		if s:settings.autocomplete_plugin ==# 'neocomplete' "{{{
 			NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1},'vim_version':'7.3.885'} "{{{
 				let g:neocomplete#enable_at_startup = 1
 				let g:neocomplete#data_directory = s:get_cache_dir('neocomplete')
 			"}}}
 		endif "}}}
-		if s:settings.autocomplete_plugin == 'neocomplcache' "{{{
+		if s:settings.autocomplete_plugin ==# 'neocomplcache' "{{{
 			NeoBundleLazy 'Shougo/neocomplcache.vim', {'autoload':{'insert':1}} "{{{
 				let g:neocomplcache_enable_at_startup = 1
 				let g:neocomplcache_temporary_dir = s:get_cache_dir('neocomplcache')
 				let g:neocomplcache_enable_fuzzy_completion = 1
 			"}}}
 		endif "}}}
-		if s:settings.autocomplete_plugin == 'neocomplete' || s:settings.autocomplete_plugin == 'neocomplcache' "{{{
+		if s:settings.autocomplete_plugin ==# 'neocomplete' || s:settings.autocomplete_plugin ==# 'neocomplcache' "{{{
 			NeoBundleLazy 'osyo-manga/vim-marching', {'autoload':{'insert':1}} "{{{
 				" path to clang command
 				let g:marching_clang_command = "/usr/bin/clang"
@@ -726,7 +731,7 @@
 			nnoremap [ctrlp]o :CtrlPFunky<CR>
 			nnoremap [ctrlp]b :CtrlPBuffer<CR>
 		"}}}
-		if s:settings.explorer_plugin == 'nerdtree' "{{{
+		if s:settings.explorer_plugin ==# 'nerdtree' "{{{
 			"if s:settings.encoding == 'utf-8' && has('multi_byte') && has('unix') && &encoding == 'utf-8' &&
 			"			\ (empty(&termencoding) || &termencoding == 'utf-8') "{{{
 			"NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
@@ -743,21 +748,24 @@
 				nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
 				nnoremap <silent> <Leader>nf :NERDTreeFind<CR>
 				" close vim if the only window left open is a nerdtree
-				autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+				autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType ==# "primary") | q | endif
 			"}}}
 			NeoBundle 'Xuyuanp/nerdtree-git-plugin' "{{{
 			"}}}
 			"endif "}}}
 		endif "}}}
-		if s:settings.explorer_plugin == 'vimfiler' "{{{
+		if s:settings.explorer_plugin ==# 'vimfiler' "{{{
 			NeoBundle 'Shougo/vimfiler.vim' "{{{
 				let g:vimfiler_as_default_explorer = 1
 				let g:vimfiler_ignore_pattern = '^\%(\.git\|\.hg\|\.svn\|\.DS_Store\)$'
 				let g:vimfiler_no_default_key_mappings = 1
+				let g:vimfiler_expand_jump_to_first_child = 0
 				let g:vimfiler_data_directory = s:get_cache_dir('vimfiler')
 
-				nnoremap <silent> <Leader>n :VimFilerExplorer -direction=botright<CR>
-				nnoremap <silent> <Leader>nf :VimFilerExplorer -find -direction=botright<CR>
+				nnoremap <silent> <Leader>n :VimFilerExplorer -toggle -winwidth=40 -direction=botright<CR>
+				nnoremap <silent> <Leader>nf :VimFilerExplorer -find -winwidth=40 -direction=botright<CR>
+				"nnoremap <silent> <Leader>n :VimFiler -toggle -split -buffer-name=explorer -winwidth=40 -no-quit -direction=botright<CR>
+				"nnoremap <silent> <Leader>nf :VimFiler -find -toggle -split -buffer-name=explorer -winwidth=40 -no-quit -direction=botright<CR>
 
 				function! s:vimfiler_settings() "{{{
 					set nonumber
@@ -1069,16 +1077,16 @@
 		"	let g:junkfile#directory=s:get_cache_dir('junk')
 		"	nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<CR>
 		""}}}
-	elseif s:settings.explorer_plugin == 'vimfiler'
+	elseif s:settings.explorer_plugin ==# 'vimfiler'
 		" vimfiler require unite
 		NeoBundle 'Shougo/unite.vim'
 	endif "}}}
 	if count(s:settings.plugin_groups, 'indents') "{{{
 		NeoBundle 'nathanaelkane/vim-indent-guides' "{{{
-			let g:indent_guides_start_level=1
-			let g:indent_guides_guide_size=1
-			let g:indent_guides_enable_on_vim_startup=0
-			let g:indent_guides_color_change_percent=3
+			let g:indent_guides_start_level = 1
+			let g:indent_guides_guide_size = 1
+			let g:indent_guides_enable_on_vim_startup = 0
+			let g:indent_guides_color_change_percent = 3
 			"if !has('gui_running')
 				"let g:indent_guides_auto_colors=0
 				"function! s:indent_set_console_colors()
@@ -1096,6 +1104,10 @@
 		NeoBundle 'lucapette/vim-textobj-underscore'
 	endif "}}}
 	if count(s:settings.plugin_groups, 'misc') "{{{
+		if s:settings.encoding ==# 'utf-8' && has('multi_byte') && has('unix') && &encoding ==# 'utf-8' &&
+		\ (empty(&termencoding) || &termencoding ==# 'utf-8') "{{{
+			NeoBundle 'ryanoasis/vim-devicons'
+		endif "}}}
 		NeoBundle 'xolox/vim-misc'
 		NeoBundle 'xolox/vim-session' "{{{
 			let g:session_directory = s:get_cache_dir('sessions')
@@ -1237,7 +1249,7 @@
 
 	inoremap <C-u> <C-g>u<C-u>
 
-	if mapcheck('<Space>/') == ''
+	if mapcheck('<Space>/') ==# ''
 		nnoremap <Space>/ :vimgrep //gj **/*<Left><Left><Left><Left><Left><Left><Left><Left>
 	endif
 

@@ -1,3 +1,13 @@
+" vimrc.before "{{{
+" ---------------------------------------------------------------------
+" vimrc.before
+
+	if filereadable('vimrc.before')
+		source vimrc.before
+	endif
+
+" }}}
+"
 " General "{{{
 " ---------------------------------------------------------------------
 " General settings
@@ -35,10 +45,10 @@
 
 	" plugins
 	let g:nvim_settings.autocomplete_plugin = 'neocomplcache'
-	"let g:nvim_settings.explorer_plugin = 'nerdtree'
-	let g:nvim_settings.explorer_plugin = 'vimfiler'
-	"let g:nvim_settings.statusline_plugin = 'airline'	" utf-8 only
-	let g:nvim_settings.statusline_plugin = 'lightline'
+	let g:nvim_settings.explorer_plugin = 'nerdtree'
+	"let g:nvim_settings.explorer_plugin = 'vimfiler'
+	let g:nvim_settings.statusline_plugin = 'airline'
+	"let g:nvim_settings.statusline_plugin = 'lightline'
 
 	" user interface
 	"let g:nvim_settings.colorscheme = 'molokai'
@@ -49,9 +59,9 @@
 
 	source ~/.config/nvim/vimrc
 
-	if g:nvim_settings.encoding == 'utf-8'
+	if g:nvim_settings.encoding ==# 'utf-8'
 		source ~/.config/nvim/encoding/utf-8.vim
-	elseif g:nvim_settings.encoding == 'gbk'
+	elseif g:nvim_settings.encoding ==# 'gbk'
 		source ~/.config/nvim/encoding/gbk.vim
 	else
 		source ~/.config/nvim/encoding/latin1.vim
@@ -75,7 +85,7 @@
 	set t_Co=256
 	try
 		" run `:syntax` to view highlight
-		if g:nvim_settings.colorscheme == 'molokai'
+		if g:nvim_settings.colorscheme ==# 'molokai'
 			let g:molokai_original = 1
 			colorscheme molokai
 			set background=dark
@@ -83,7 +93,7 @@
 			highlight SpecialKey ctermfg=235 guifg=#262626
 			"highlight PmenuSel ctermfg=231 guifg=#FFFFFF
 			highlight CTagsClass ctermfg=81 guifg=#66D9EF
-		elseif g:nvim_settings.colorscheme == 'solarized'
+		elseif g:nvim_settings.colorscheme ==# 'solarized'
 			" 16 color palette is recommended
 			" <https://github.com/altercation/vim-colors-solarized>
 			if g:nvim_settings.force256 == 1
@@ -119,7 +129,7 @@
 				"exe "highlight! SignifySignChange" . g:solarized_vars['fmt_none'] . g:solarized_vars['fg_yellow'] . g:solarized_vars['bg_base02']
 
 				" indent guides
-				let g:indent_guides_auto_colors=0
+				let g:indent_guides_auto_colors = 0
 				" bg_cyan
 				exe "autocmd VimEnter,Colorscheme * :highlight! IndentGuidesOdd" . g:solarized_vars['fmt_none'] . g:solarized_vars['fg_base03'] . g:solarized_vars['bg_base02']
 				exe "autocmd VimEnter,Colorscheme * :highlight! IndentGuidesEven" . g:solarized_vars['fmt_none'] . g:solarized_vars['fg_base03'] . g:solarized_vars['bg_base02']
@@ -145,7 +155,7 @@
 	endif
 
 	" don't use spaces instead of tabs
-	set noexpandtab
+	set expandtab
 	" number of spaces per tab for display
 	set tabstop=4
 	" number of spaces per tab in insert mode
@@ -161,15 +171,15 @@
 
 	" cscopeprg
 	if g:nvim_settings.use_local_bin != 0
-		if g:nvim_settings.cscopeprg == 'gtags-cscope'
+		if g:nvim_settings.cscopeprg ==# 'gtags-cscope'
 			set cscopeprg=~/local/bin/gtags-cscope
-		elseif g:nvim_settings.cscopeprg == 'cscope'
+		elseif g:nvim_settings.cscopeprg ==# 'cscope'
 			set cscopeprg=~/local/bin/cscope
 		endif
 	else
-		if g:nvim_settings.cscopeprg == 'gtags-cscope'
+		if g:nvim_settings.cscopeprg ==# 'gtags-cscope'
 			set cscopeprg=gtags-cscope
-		elseif g:nvim_settings.cscopeprg == 'cscope'
+		elseif g:nvim_settings.cscopeprg ==# 'cscope'
 			set cscopeprg=cscope
 		endif
 	endif
@@ -178,7 +188,7 @@
 	if has("cscope")
 		nmap ; [cscope]
 		nnoremap [cscope] <nop>
-		if g:nvim_settings.cscopeprg == 'gtags-cscope'
+		if g:nvim_settings.cscopeprg ==# 'gtags-cscope'
 			" global
 			" go to definition or reference
 			nnoremap [cscope]g :GtagsCursor
@@ -198,7 +208,7 @@
 			" get a list of tags in specified files
 			nnoremap [cscope]f :Gtags -f %
 			"vnoremap <C-\>f <Esc>:execute 'Gtags -f ' . GetVisualSelection()
-		elseif g:nvim_settings.cscopeprg == 'cscope'
+		elseif g:nvim_settings.cscopeprg ==# 'cscope'
 			" cscope
 			" 's' symbol: find all references to the token under cursor
 			nnoremap [cscope]s :cscope find s <C-r>=expand("<cword>")<CR>
@@ -391,13 +401,13 @@
 		let l:pattern = escape(@", '\\/.*$^~[]')
 		let l:pattern = substitute(l:pattern, "\n$", "", "")
 
-		if a:direction == 'b'
+		if a:direction ==# 'b'
 			execute "normal ?" . l:pattern . "^M"
-		elseif a:direction == 'f'
+		elseif a:direction ==# 'f'
 			execute "normal /" . l:pattern . "^M"
-		elseif a:direction == 'd'
+		elseif a:direction ==# 'd'
 			call CmdLine("vimgrep " . '/' . l:pattern . '/j' . ' **/*.')
-		elseif a:direction == 'r'
+		elseif a:direction ==# 'r'
 			call CmdLine("%s" . '/' . l:pattern . '/' . l:pattern)
 		endif
 
@@ -421,7 +431,7 @@
 				return
 			endif
 		endfor
-		if a:pfx == 'l' && len(getloclist(0)) == 0
+		if a:pfx ==# 'l' && len(getloclist(0)) == 0
 			echohl ErrorMsg
 			echo "Location List is Empty."
 			return
@@ -439,10 +449,10 @@
 		echo "bufnr('$')=" . bufnr('$') . "	// tail buffer number"
 		echo "bufnr('#')=" . bufnr('#') . "	// previous buffer number"
 		for i in range(1, bufnr('$'))
-			echo  "bufexists(" . i . ")=".bufexists(i)
-			echon " buflisted(" . i . ")=".buflisted(i)
-			echon " bufloaded(" . i . ")=".bufloaded(i)
-			echon " bufname(" . i . ")=".bufname(i)
+			echo "bufexists(" . i . ")=" . bufexists(i)
+			echon " buflisted(" . i . ")=" . buflisted(i)
+			echon " bufloaded(" . i . ")=" . bufloaded(i)
+			echon " bufname(" . i . ")=" . bufname(i)
 		endfor
 		echo "// bufexists(n)= buffer n exists"
 		echo "// buflisted(n)= buffer n listed"
@@ -454,7 +464,7 @@
 		echo "winnr('$')=" . winnr('$') . "	// tail window number"
 		echo "winnr('#')=" . winnr('#') . "	// previous window number"
 		for i in range(1, winnr('$'))
-			echo "winbufnr(" . i . ")=".winbufnr(i) . "	// window " . i . "'s buffer number"
+			echo "winbufnr(" . i . ")=" . winbufnr(i) . "	// window " . i . "'s buffer number"
 		endfor
 
 		echo "\n----- tab info -----"
@@ -466,7 +476,7 @@
 			echon "	// tab " . i . "'s buffer list"
 		endfor
 		for i in range(1, tabpagenr('$'))
-			echo  'tabpagewinnr(' . i . ')=' . tabpagewinnr(i)
+			echo "tabpagewinnr(" . i . ")=" . tabpagewinnr(i)
 			echon " tabpagewinnr(" . i . ", '$')=" . tabpagewinnr(i, '$')
 			echon " tabpagewinnr(" . i . ", '#')=" . tabpagewinnr(i, '#')
 		endfor
@@ -509,6 +519,16 @@
 	command! -nargs=0 Indent2Space call s:Indent2Space()
 	command! -nargs=0 Indent4Tab call s:Indent4Tab()
 	command! -nargs=0 Indent2Tab call s:Indent2Tab()
+
+" }}}
+
+" vimrc.after "{{{
+" ---------------------------------------------------------------------
+" vimrc.after
+
+	if filereadable('vimrc.after')
+		source vimrc.after
+	endif
 
 " }}}
 

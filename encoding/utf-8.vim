@@ -34,10 +34,24 @@
 	"if !empty(glob("vim-airline"))
 	if g:nvim_settings.powerline_fonts == 1
 		let g:airline_left_sep = ''
+		let g:airline_left_alt_sep = ''
 		let g:airline_right_sep = ''
+		let g:airline_right_alt_sep = ''
+		let g:airline#extensions#tabline#left_sep = ''
+		"let g:airline#extensions#tabline#left_alt_sep = ''
+		let g:airline#extensions#tabline#left_alt_sep = ''
+		let g:airline#extensions#tabline#right_sep = ''
+		"let g:airline#extensions#tabline#right_alt_sep = ''
+		let g:airline#extensions#tabline#right_alt_sep = ''
 	else
 		let g:airline_left_sep = '▶'
+		let g:airline_left_alt_sep = '>'
 		let g:airline_right_sep = '◀'
+		let g:airline_right_alt_sep = '<'
+		let g:airline#extensions#tabline#left_sep = '▶'
+		let g:airline#extensions#tabline#left_alt_sep = '>'
+		let g:airline#extensions#tabline#right_sep = '◀'
+		let g:airline#extensions#tabline#right_alt_sep = '<'
 	endif
 	"endif
 
@@ -54,7 +68,7 @@
 	" :help filename-modifiers
 	let g:lightline_buffer_fname_mod = ':t'	" ':.'
 	let g:lightline_buffer_rotate = 0
-	let g:lightline_buffer_excludes = ['\[vimfiler\]']
+	let g:lightline_buffer_excludes = ['vimfiler']
 	let g:lightline_buffer_status_info = {
 		\ 'count': 0,
 		\ 'before': '',
@@ -129,13 +143,37 @@
 				\ 'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
 				\ 'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())',
 			\ },
-			\ 'separator': { 'left': '', 'right': '' },
-			\ 'subseparator': { 'left': '', 'right': '' },
-			\ 'tabline_separator': { 'left': "", 'right': "" },
-			\ 'tabline_subseparator': { 'left': "", 'right': "" },
+			\ 'separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
+			\ 'subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
+			\ 'tabline_separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
+			\ 'tabline_subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
 		\ }
 				"\ 'left': [ [ 'bufferline' ] ],
 				"\ 'right': [ [ 'close' ] ],
+
+			" curvy
+			"\ 'separator': { 'left': "\uE0B4", 'right': "\uE0B6" },
+			"\ 'subseparator': { 'left': "\uE0B5", 'right': "\uE0B7" },
+			"\ 'tabline_separator': { 'left': "\uE0B4", 'right': "\uE0B6" },
+			"\ 'tabline_subseparator': { 'left': "\uE0B5", 'right': "\uE0B7" },
+
+			" pixelated blocks
+			"\ 'separator': { 'left': "\uE0C4", 'right': "\uE0C6" },
+			"\ 'subseparator': { 'left': "\uE0C5", 'right': "\uE0C7" },
+			"\ 'tabline_separator': { 'left': "\uE0C4", 'right': "\uE0C6" },
+			"\ 'tabline_subseparator': { 'left': "\uE0C5", 'right': "\uE0C7" },
+
+			" flames
+			"\ 'separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
+			"\ 'subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
+			"\ 'tabline_separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
+			"\ 'tabline_subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
+
+			" powerline
+			"\ 'separator': { 'left': '', 'right': '' },
+			"\ 'subseparator': { 'left': '', 'right': '' },
+			"\ 'tabline_separator': { 'left': '', 'right': '' },
+			"\ 'tabline_subseparator': { 'left': '', 'right': '' },
 	else
 		let g:lightline = {
 			\ 'colorscheme': 'lightline_solarized',
