@@ -316,6 +316,7 @@
 			"if s:settings.encoding ==# 'utf-8' && has('multi_byte') && has('unix') && &encoding ==# 'utf-8' &&
 			"\ (empty(&termencoding) || &termencoding ==# 'utf-8') "{{{
 				NeoBundle 'vim-airline/vim-airline' "{{{
+					let g:airline_powerline_fonts = g:nvim_settings.powerline_fonts
 					let g:airline_section_b = ''
 					let g:airline_section_warning = ''
 					let g:airline_mode_map = {

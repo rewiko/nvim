@@ -63,7 +63,6 @@
 	" '⫸ '
 	let g:lightline_buffer_active_buffer_right = ''
 	let g:lightline_buffer_separator = ' '	" ' ¦ '
-	let g:lightline_buffer_modified = ' ✭'
 	let g:lightline_buffer_show_bufnr = 1
 	" :help filename-modifiers
 	let g:lightline_buffer_fname_mod = ':t'	" ':.'
@@ -95,140 +94,102 @@
 	" use %X after the label, e.g. %3Xclose%X. use %999X for a "close current tab"
 	" mouse left-click between "%1T" and "%2T" go to tab 1, between "%2T" and "%3T" go to tab 2, etc.
 	" mouse double-click anywhere new a tab
+	let g:lightline = {
+		\ 'colorscheme': 'lightline_solarized',
+		\ 'active': {
+			\ 'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], [ 'buffertag' ], ],
+			\ 'right': [ [ 'lineinfo', 'syntastic' ], [ 'fileinfo' ], [ 'filetype' ], ],
+		\ },
+		\ 'inactive': {
+			\ 'left': [ [ 'filename' ], ],
+			\ 'right': [ [ 'lineinfo' ], ],
+		\ },
+		\ 'tabline': {
+			\ 'left': [ [ 'bufferinfo' ], [ 'bufferbefore', 'buffercurrent', 'bufferafter' ], ],
+			\ 'right': [ [ 'close' ], ],
+		\ },
+		\ 'component_expand': {
+			\ 'buffercurrent': 'lightline#buffer#buffercurrent2',
+			\ 'bufferall': 'lightline#buffer#bufferall',
+			\ 'syntastic': 'lightline#buffer#syntastic',
+		\ },
+		\ 'component_type': {
+			\ 'buffercurrent': 'tabsel',
+			\ 'bufferall': 'tabsel',
+		\ },
+		\ 'component_function': {
+			\ 'bufferbefore': 'lightline#buffer#bufferbefore',
+			\ 'bufferafter': 'lightline#buffer#bufferafter',
+			\ 'bufferinfo': 'lightline#buffer#bufferinfo',
+			\ 'buffertag': 'LightlineTag',
+			\ 'fugitive': 'LightlineFugitive',
+			\ 'fileinfo': 'LightlineFileinfo',
+			\ 'filename': 'LightlineFilename',
+			\ 'fileformat': 'LightlineFileformat',
+			\ 'filetype': 'LightlineFiletype',
+			\ 'fileencoding': 'LightlineFileencoding',
+			\ 'mode': 'LightlineMode',
+		\ },
+		\ 'component': {
+			\ 'lineinfo': '%3p%% %3l:%-2v',
+			\ 'readonly': '%{&readonly?"":""}',
+			\ 'modified': '%{&filetype=="help"?"":&modified?"✭":&modifiable?"":"-"}',
+			\ 'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}',
+		\ },
+		\ 'component_visible_condition': {
+			\ 'readonly': '(&filetype!="help"&& &readonly)',
+			\ 'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
+			\ 'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())',
+		\ },
+		\ 'separator': { 'left': '▶', 'right': '◀' },
+		\ 'subseparator': { 'left': '>', 'right': '<' },
+		\ 'tabline_separator': { 'left': '▶', 'right': '◀' },
+		\ 'tabline_subseparator': { 'left': '>', 'right': '<' },
+	\ }
+			"\ 'left': [ [ 'bufferline' ] ],
+			"\ 'right': [ [ 'close' ] ],
+
+		" curvy
+		"\ 'separator': { 'left': "\uE0B4", 'right': "\uE0B6" },
+		"\ 'subseparator': { 'left': "\uE0B5", 'right': "\uE0B7" },
+		"\ 'tabline_separator': { 'left': "\uE0B4", 'right': "\uE0B6" },
+		"\ 'tabline_subseparator': { 'left': "\uE0B5", 'right': "\uE0B7" },
+
+		" pixelated blocks
+		"\ 'separator': { 'left': "\uE0C4", 'right': "\uE0C6" },
+		"\ 'subseparator': { 'left': "\uE0C5", 'right': "\uE0C7" },
+		"\ 'tabline_separator': { 'left': "\uE0C4", 'right': "\uE0C6" },
+		"\ 'tabline_subseparator': { 'left': "\uE0C5", 'right': "\uE0C7" },
+
+		" flames
+		"\ 'separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
+		"\ 'subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
+		"\ 'tabline_separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
+		"\ 'tabline_subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
+
+		" powerline
+		"\ 'separator': { 'left': '', 'right': '' },
+		"\ 'subseparator': { 'left': '', 'right': '' },
+		"\ 'tabline_separator': { 'left': '', 'right': '' },
+		"\ 'tabline_subseparator': { 'left': '', 'right': '' },
 	if g:nvim_settings.powerline_fonts == 1
-		let g:lightline = {
-			\ 'colorscheme': 'lightline_solarized',
-			\ 'active': {
-				\ 'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], [ 'buffertag' ], ],
-				\ 'right': [ [ 'lineinfo', 'syntastic' ], [ 'fileinfo' ], [ 'filetype' ], ],
-			\ },
-			\ 'inactive': {
-				\ 'left': [ [ 'filename' ], ],
-				\ 'right': [ [ 'lineinfo' ], ],
-			\ },
-			\ 'tabline': {
-				\ 'left': [ [ 'bufferinfo' ], [ 'bufferbefore', 'buffercurrent', 'bufferafter' ], ],
-				\ 'right': [ [ 'close' ], ],
-			\ },
-			\ 'component_expand': {
-				\ 'buffercurrent': 'lightline#buffer#buffercurrent2',
-				\ 'bufferall': 'lightline#buffer#bufferall',
-				\ 'syntastic': 'lightline#buffer#syntastic',
-			\ },
-			\ 'component_type': {
-				\ 'buffercurrent': 'tabsel',
-				\ 'bufferall': 'tabsel',
-			\ },
-			\ 'component_function': {
-				\ 'bufferbefore': 'lightline#buffer#bufferbefore',
-				\ 'bufferafter': 'lightline#buffer#bufferafter',
-				\ 'bufferinfo': 'lightline#buffer#bufferinfo',
-				\ 'buffertag': 'LightlineTag',
-				\ 'fugitive': 'LightlineFugitive',
-				\ 'fileinfo': 'LightlineFileinfo',
-				\ 'filename': 'LightlineFilename',
-				\ 'fileformat': 'LightlineFileformat',
-				\ 'filetype': 'LightlineFiletype',
-				\ 'fileencoding': 'LightlineFileencoding',
-				\ 'mode': 'LightlineMode',
-			\ },
-			\ 'component': {
-				\ 'lineinfo': '%3p%% %3l:%-2v',
-				\ 'readonly': '%{&readonly?"":""}',
-				\ 'modified': '%{&filetype=="help"?"":&modified?"✭":&modifiable?"":"-"}',
-				\ 'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}',
-			\ },
-			\ 'component_visible_condition': {
-				\ 'readonly': '(&filetype!="help"&& &readonly)',
-				\ 'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
-				\ 'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())',
-			\ },
-			\ 'separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
-			\ 'subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
-			\ 'tabline_separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
-			\ 'tabline_subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
-		\ }
-				"\ 'left': [ [ 'bufferline' ] ],
-				"\ 'right': [ [ 'close' ] ],
-
-			" curvy
-			"\ 'separator': { 'left': "\uE0B4", 'right': "\uE0B6" },
-			"\ 'subseparator': { 'left': "\uE0B5", 'right': "\uE0B7" },
-			"\ 'tabline_separator': { 'left': "\uE0B4", 'right': "\uE0B6" },
-			"\ 'tabline_subseparator': { 'left': "\uE0B5", 'right': "\uE0B7" },
-
-			" pixelated blocks
-			"\ 'separator': { 'left': "\uE0C4", 'right': "\uE0C6" },
-			"\ 'subseparator': { 'left': "\uE0C5", 'right': "\uE0C7" },
-			"\ 'tabline_separator': { 'left': "\uE0C4", 'right': "\uE0C6" },
-			"\ 'tabline_subseparator': { 'left': "\uE0C5", 'right': "\uE0C7" },
-
-			" flames
-			"\ 'separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
-			"\ 'subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
-			"\ 'tabline_separator': { 'left': "\uE0C0", 'right': "\uE0C2" },
-			"\ 'tabline_subseparator': { 'left': "\uE0C1", 'right': "\uE0C3" },
-
-			" powerline
-			"\ 'separator': { 'left': '', 'right': '' },
-			"\ 'subseparator': { 'left': '', 'right': '' },
-			"\ 'tabline_separator': { 'left': '', 'right': '' },
-			"\ 'tabline_subseparator': { 'left': '', 'right': '' },
-	else
-		let g:lightline = {
-			\ 'colorscheme': 'lightline_solarized',
-			\ 'active': {
-				\ 'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], [ 'buffertag' ], ],
-				\ 'right': [ [ 'lineinfo', 'syntastic' ], [ 'fileinfo' ], [ 'filetype' ], ],
-			\ },
-			\ 'inactive': {
-				\ 'left': [ [ 'filename' ], ],
-				\ 'right': [ [ 'lineinfo' ], ],
-			\ },
-			\ 'tabline': {
-				\ 'left': [ [ 'bufferinfo' ], [ 'bufferbefore', 'buffercurrent', 'bufferafter' ], ],
-				\ 'right': [ [ 'close' ], ],
-			\ },
-			\ 'component_expand': {
-				\ 'buffercurrent': 'lightline#buffer#buffercurrent2',
-				\ 'bufferall': 'lightline#buffer#bufferall',
-				\ 'syntastic': 'lightline#buffer#syntastic',
-			\ },
-			\ 'component_type': {
-				\ 'buffercurrent': 'tabsel',
-				\ 'bufferall': 'tabsel',
-			\ },
-			\ 'component_function': {
-				\ 'bufferbefore': 'lightline#buffer#bufferbefore',
-				\ 'bufferafter': 'lightline#buffer#bufferafter',
-				\ 'bufferinfo': 'lightline#buffer#bufferinfo',
-				\ 'buffertag': 'LightlineTag',
-				\ 'fugitive': 'LightlineFugitive',
-				\ 'fileinfo': 'LightlineFileinfo',
-				\ 'filename': 'LightlineFilename',
-				\ 'fileformat': 'LightlineFileformat',
-				\ 'filetype': 'LightlineFiletype',
-				\ 'fileencoding': 'LightlineFileencoding',
-				\ 'mode': 'LightlineMode',
-			\ },
-			\ 'component': {
-				\ 'lineinfo': '%3p%% %3l:%-2v',
-				\ 'readonly': '%{&readonly?"":""}',
-				\ 'modified': '%{&filetype=="help"?"":&modified?"✭":&modifiable?"":"-"}',
-				\ 'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}',
-			\ },
-			\ 'component_visible_condition': {
-				\ 'readonly': '(&filetype!="help"&& &readonly)',
-				\ 'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
-				\ 'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())',
-			\ },
-			\ 'separator': { 'left': '▶', 'right': '◀' },
-			\ 'subseparator': { 'left': '>', 'right': '<' },
-			\ 'tabline_separator': { 'left': "▶", 'right': "◀" },
-			\ 'tabline_subseparator': { 'left': ">", 'right': "<" },
-		\ }
-				"\ 'left': [ [ 'bufferline' ] ],
-				"\ 'right': [ [ 'close' ] ],
+		let g:lightline.separator.left = "\uE0B0"
+		let g:lightline.subseparator.left = "\uE0B1"
+		let g:lightline.separator.right = "\uE0B2"
+		let g:lightline.subseparator.right = "\uE0B3"
+		let g:lightline.tabline_separator.left = "\uE0B0"
+		let g:lightline.tabline_subseparator.left = "\uE0B1"
+		let g:lightline.tabline_separator.right = "\uE0B2"
+		let g:lightline.tabline_subseparator.right = "\uE0B3"
+	"else
+	"	let g:lightline.separator.left = '▶'
+	"	let g:lightline.subseparator.left = '>'
+	"	let g:lightline.separator.right = '◀'
+	"	let g:lightline.subseparator.right = '<'
+	"	let g:lightline.tabline_separator.left = '▶'
+	"	let g:lightline.tabline_subseparator.left = '>'
+	"	let g:lightline.tabline_separator.right = '◀'
+	"	let g:lightline.tabline_subseparator.right = '<'
 	endif
 
 	"let g:lightline.enable = {
