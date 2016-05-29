@@ -34,25 +34,6 @@
 	"endif
 
 	" lightline
-	let g:lightline_buffer_active_buffer_left = ''
-	let g:lightline_buffer_active_buffer_right = ''
-	let g:lightline_buffer_separator = ' '	" ' | '
-	let g:lightline_buffer_show_bufnr = 1
-	" :help filename-modifiers
-	let g:lightline_buffer_fname_mod = ':t'	" ':.'
-	let g:lightline_buffer_rotate = 0
-	let g:lightline_buffer_excludes = ['\[vimfiler\]']
-	let g:lightline_buffer_status_info = {
-		\ 'count': 0,
-		\ 'before': '',
-		\ 'current': '',
-		\ 'after': '',
-	\ }
-	let g:lightline_buffer_maxflen = 30
-	let g:lightline_buffer_maxfextlen = 3
-	let g:lightline_buffer_minflen = 16
-	let g:lightline_buffer_minfextlen = 3
-	let g:lightline_buffer_reservelen = 20
 	let g:lightline_buffer_logo = ''
 	let g:lightline_buffer_readonly_icon = 'RO'
 	let g:lightline_buffer_modified_icon = '*'
