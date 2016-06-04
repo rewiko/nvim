@@ -46,7 +46,7 @@ ln -s ~/.config/nvim ~/.vim
 ln -s ~/.config/nvim/init.vim ~/.vimrc
 ```
 
-Startup vim and neobundle will detect and ask you install any missing plugins. You can also manually initiate this with `:NeoBundleInstall`.
+Startup vim and [dein](https://github.com/Shougo/dein.vim) will detect and ask you install any missing plugins.
 
 It is completely customisable using a `~/.config/nvim/vimrc.before` and `~/.config/nvim/vimrc.after` files.
 
@@ -233,9 +233,14 @@ YouComplete **only** support Neovim or MacVim.
 #### Install Neovim (Recommended)
 
 ```sh
-pip install neovim
+pip install --upgrade pip
+pip3 install --upgrade pip
+pip install --user --upgrade neovim
+pip3 install --user --upgrade neovim
+brew tap neovim/neovim
 brew update
 brew reinstall --HEAD neovim
+brew install global
 ```
 
 Make alias
@@ -252,6 +257,8 @@ If `<C-h>` does not work in neovim, add these line to `~/.zshrc`
 infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
 tic $TERM.ti
 ```
+
+Execute the `:UpdateRemotePlugins` and restart Neovim.
 
 #### Install MacVim
 
@@ -315,8 +322,9 @@ Download <https://raw.githubusercontent.com/Valloric/ycmd/master/cpp/ycm/.ycm_ex
 
 This distribution will pick one of three combinations, in the following priority:
 
-1.	[youcompleteme][ycm] + [ultisnips][us] if you have compiled YCM.
-1.	[neocomplete][nc] + [neosnippet][ns] if you have `lua` enabled.
+1.	[deoplete][deo] + [neosnippet][ns] if you have `nvim` and `python3` enabled (recommended)
+1.	[youcompleteme][ycm] + [ultisnips][us] if you have `python3` or `python` enabled and compiled YCM
+1.	[neocomplete][nc] + [neosnippet][ns] if you have `lua` enabled
 1.	[neocomplcache][ncl] + [neosnippet][ns] if you only have vimscript available
 
 this can be overridden with `g:nvim_settings.autocomplete_method`
@@ -423,14 +431,12 @@ this can be overridden with `g:nvim_settings.autocomplete_method`
 *	visualize the undo tree
 *	`<Leader>u` to toggle
 
+### [deoplete][deo]/[neosnippet][ns]
+*	provides an asynchronous keyword completion system in the current buffer
+
 ### [youcompleteme][ycm]/[ultisnips][us]
 *	amazingly fast fuzzy autocomplete engine combined with an excellent snippets library
 *	use `<C-n>` and `<C-p>` to go back/forward between selections, and `<tab>` to expand snippets
-
-### [neocomplcache][ncl]/[neosnippet][ns]
-*	autocomplete/snippet support as a fallback choice when YCM and/or python is unavailable
-*	`<Tab>` to select the next match, or expand if the keyword is a snippet
-*	if you have lua installed, it will use [neocomplete][nc] instead
 
 ### [vim-multiple-cursors](https://github.com/terryma/vim-multiple-cursors)
 *	mapped to `<C-N>`, this will select all matching words and lets you concurrently change all matches at the same time
@@ -486,6 +492,7 @@ I wanted to give special thanks to all of the people who worked on the following
 
 [WTFPL](http://sam.zoy.org/wtfpl/)
 
+[deo]: https://github.com/Shougo/deoplete.nvim
 [ycm]: https://github.com/Valloric/YouCompleteMe
 [us]: https://github.com/SirVer/ultisnips
 [nc]: https://github.com/Shougo/neocomplete.vim

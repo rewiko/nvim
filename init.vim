@@ -12,8 +12,8 @@
 " ---------------------------------------------------------------------
 " General settings
 
-	if (v:version < 702)
-		echoerr "nvim requires vim >= 7.2. INSTALL IT! You'll thank me later!"
+	if (v:version < 704)
+		echoerr "nvim requires vim >= 7.4. INSTALL IT! You'll thank me later!"
 		finish
 	endif
 
@@ -44,7 +44,7 @@
 	"let g:nvim_settings.cscopeprg = 'cscope'
 
 	" plugins
-	let g:nvim_settings.autocomplete_plugin = 'neocomplcache'
+	let g:nvim_settings.autocomplete = 1
 	let g:nvim_settings.explorer_plugin = 'nerdtree'
 	"let g:nvim_settings.explorer_plugin = 'vimfiler'
 	let g:nvim_settings.statusline_plugin = 'airline'

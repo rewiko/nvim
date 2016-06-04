@@ -1,5 +1,5 @@
 bundle/
-!bundle/neobundle.vim
+!bundle/repos/github.com/Shougo/dein.vim
 bundle_dev/blade/
 bundle_dev/qqmail/
 .cache/
