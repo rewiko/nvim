@@ -226,7 +226,7 @@ Keybinding       | Mode | Description
 
 ## Advanced Installation
 
-### OS X
+### macOS
 
 YouComplete **only** support Neovim or MacVim.
 
@@ -240,7 +240,6 @@ pip3 install --user --upgrade neovim
 brew tap neovim/neovim
 brew update
 brew reinstall --HEAD neovim
-brew install global
 ```
 
 Make alias
@@ -320,7 +319,7 @@ Download <https://raw.githubusercontent.com/Valloric/ycmd/master/cpp/ycm/.ycm_ex
 
 ## Autocomplete
 
-This distribution will pick one of three combinations, in the following priority:
+This distribution will pick 1 of 4 combinations, in the following priority:
 
 1.	[deoplete][deo] + [neosnippet][ns] if you have `nvim` and `python3` enabled (recommended)
 1.	[youcompleteme][ycm] + [ultisnips][us] if you have `python3` or `python` enabled and compiled YCM
