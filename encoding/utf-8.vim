@@ -25,11 +25,6 @@
   set showbreak&
   "let &showbreak='↪ '
 
-  if has('conceal')
-    set conceallevel=1
-    set listchars+=conceal:Δ
-  endif
-
   " airline
   "if !empty(glob("vim-airline"))
   if g:nvim_settings.powerline_fonts == 1

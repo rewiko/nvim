@@ -498,14 +498,7 @@
       vmap <C-Up> [egv
       vmap <C-Down> ]egv
     "}}}
-    call dein#add('Shougo/vimproc.vim', {
-        \ 'build': {
-        \ 'mac': 'make -f make_mac.mak',
-        \ 'unix': 'make -f make_unix.mak',
-        \ 'cygwin': 'make -f make_cygwin.mak',
-        \ 'windows': '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\nmake.exe" make_msvc32.mak',
-        \ },
-        \ })
+    call dein#add('Shougo/vimproc.vim', {'build': 'make'})
   endif "}}}
   if count(s:settings.plugin_groups, 'web') "{{{
     call dein#add('groenewege/vim-less', {'on_ft': 'less'})
@@ -543,14 +536,7 @@
     call dein#add('octol/vim-cpp-enhanced-highlight', {'on_ft': ['c','cpp']})
   endif "}}}
   if count(s:settings.plugin_groups, 'javascript') "{{{
-    call dein#add('marijnh/tern_for_vim', {'on_ft': 'javascript',
-        \ 'build': {
-        \ 'mac': 'npm install',
-        \ 'unix': 'npm install',
-        \ 'cygwin': 'npm install',
-        \ 'windows': 'npm install',
-        \ },
-        \ })
+    call dein#add('marijnh/tern_for_vim', {'on_ft': 'javascript', 'build': 'npm install'})
     call dein#add('pangloss/vim-javascript', {'on_ft': 'javascript'})
     call dein#add('mxw/vim-jsx', {'on_ft': 'javascript'}) "{{{
       let g:jsx_ext_required = 0
@@ -915,31 +901,34 @@
     ""}}}
   endif "}}}
   if count(s:settings.plugin_groups, 'unite') "{{{
+    function! s:on_unite_source() abort
+      call unite#filters#matcher_default#use(['matcher_fuzzy'])
+      call unite#filters#sorter_default#use(['sorter_rank'])
+      call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern',
+          \ '\.git/\|\.hg/\|\.svn/\|\.tags$\|cscope\.\|\.taghl$\|\.DS_Store$')
+      call unite#custom#profile('default', 'context', {
+          \ 'start_insert': 1
+          \ })
+    endfunction
     "call dein#add('Shougo/unite.vim', {'on_cmd': ['Unite','UniteWithCurrentDir','UniteWithBufferDir',
     "    \ 'UniteWithProjectDir','UniteWithInput','UniteWithInputDirectory','UniteWithCursorWord']}) "{{{
-    call dein#add('Shougo/unite.vim') "{{{
-      function! UniteSettings() abort
-        call unite#filters#matcher_default#use(['matcher_fuzzy'])
-        call unite#filters#sorter_default#use(['sorter_rank'])
-        call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern',
-            \ '\.git/\|\.hg/\|\.svn/\|\.tags$\|cscope\.\|\.taghl$\|\.DS_Store$')
-        call unite#custom#profile('default', 'context', {
-            \ 'start_insert': 1
-            \ })
-      endfunction
-      call dein#set_hook('unite.vim', 'hook_source', function('UniteSettings'))
-
-      let g:unite_data_directory = s:get_cache_dir('unite')
-      let g:unite_source_history_yank_enable = 1
-      let g:unite_source_rec_max_cache_files = 5000
-
-      if executable('ag')
+    call dein#add('Shougo/unite.vim', {'hook_post_source': function('s:on_unite_source')}) "{{{
+      if executable('sift')
+        let g:unite_source_grep_command = 'sift'
+        let g:unite_source_grep_default_opts = '-i --no-color'
+        let g:unite_source_grep_recursive_opt = ''
+      elseif executable('ag')
         let g:unite_source_grep_command = 'ag'
-        let g:unite_source_grep_default_opts = '--nocolor --line-numbers --nogroup -S -C4'
+        let g:unite_source_grep_default_opts =
+            \ '-i --vimgrep --hidden --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+        let g:unite_source_grep_recursive_opt = ''
+      elseif executable('pt')
+        let g:unite_source_grep_command = 'pt'
+        let g:unite_source_grep_default_opts = '--nogroup --nocolor'
         let g:unite_source_grep_recursive_opt = ''
       elseif executable('ack')
         let g:unite_source_grep_command = 'ack'
-        let g:unite_source_grep_default_opts = '--no-heading --no-color -C4'
+        let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
         let g:unite_source_grep_recursive_opt = ''
       endif
 
@@ -1062,13 +1051,13 @@
     call dein#add('kana/vim-vspec')
     call dein#add('tpope/vim-scriptease', {'on_ft': 'vim'})
     call dein#add('jtratner/vim-flavored-markdown', {'on_ft': ['markdown','ghmarkdown']})
-    if executable('redcarpet') && executable('instant-markdown-d')
+    if executable('instant-markdown-d')
       call dein#add('suan/vim-instant-markdown', {'on_ft': ['markdown','ghmarkdown']})
     endif
     call dein#add('guns/xterm-color-table.vim', {'on_cmd': 'XtermColorTable'})
     "call dein#add('chrisbra/vim_faq')
-    "call dein#add('vimwiki')
-    call dein#add('bufkill.vim')
+    "call dein#add('vimwiki/vimwiki')
+    call dein#add('vim-scripts/bufkill.vim')
     call dein#add('mhinz/vim-startify') "{{{
       let g:startify_session_dir = s:get_cache_dir('sessions')
       let g:startify_change_to_vcs_root = 1
@@ -1326,13 +1315,15 @@
   endif
 
   call dein#end()
-  filetype plugin indent on
-  syntax enable
-  execute 'colorscheme ' . s:settings.colorscheme
-
   if dein#check_install()
     call dein#install()
   endif
+
+  autocmd VimEnter * call dein#call_hook('post_source')
+
+  filetype plugin indent on
+  syntax enable
+  execute 'colorscheme ' . s:settings.colorscheme
   "echo exists("*sy#toggle")
 "}}}
 

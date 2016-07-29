@@ -14,11 +14,6 @@
 
   set showbreak&
 
-  if has('conceal')
-    set conceallevel=1
-    set listchars+=conceal:-
-  endif
-
   " airline
   "if !empty(glob("vim-airline"))
   let g:airline_left_sep = '>'
