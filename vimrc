@@ -679,7 +679,7 @@
     "}}}
   endif "}}}
   if count(s:settings.plugin_groups, 'navigation') "{{{
-    call dein#add('yonchu/accelerated-smooth-scroll')
+    "call dein#add('yonchu/accelerated-smooth-scroll')
     call dein#add('mileszs/ack.vim') "{{{
       if executable('ag')
         let g:ackprg = "ag --nogroup --column --smart-case --follow"

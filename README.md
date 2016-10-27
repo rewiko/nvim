@@ -471,6 +471,10 @@ this can be overridden with `g:nvim_settings.autocomplete_method`
 
 *	I think I've listed about half of the plugins contained in this distribution, so please have a look at the vimrc directly to see all plugins in use
 
+### Recommended Fonts
+
+*	[font](https://github.com/taohex/font)
+
 ## Credits
 
 I wanted to give special thanks to all of the people who worked on the following projects, or people simply posted their vim distributions, because I learned a lot and took many ideas and incorporated them into my configuration.
