@@ -499,6 +499,7 @@
       vmap <C-Down> ]egv
     "}}}
     call dein#add('Shougo/vimproc.vim', {'build': 'make'})
+    call dein#add('skywind3000/asyncrun.vim')
   endif "}}}
   if count(s:settings.plugin_groups, 'web') "{{{
     call dein#add('groenewege/vim-less', {'on_ft': 'less'})
