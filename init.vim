@@ -157,11 +157,11 @@
   " don't use spaces instead of tabs
   set expandtab
   " number of spaces per tab for display
-  set tabstop=4
+  set tabstop=2
   " number of spaces per tab in insert mode
-  set softtabstop=4
+  set softtabstop=2
   " number of spaces when indenting
-  set shiftwidth=4
+  set shiftwidth=2
 
 "}}}
 
