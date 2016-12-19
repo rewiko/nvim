@@ -486,7 +486,9 @@
 
       "}}}
       call dein#add('taohex/lightline-buffer', {'depends': 'itchyny/lightline.vim'})
-      call dein#add('taohex/lightline-solarized', {'depends': 'itchyny/lightline.vim'})
+      if s:settings.colorscheme ==# 'solarized' "{{{
+        call dein#add('taohex/lightline-solarized', {'depends': 'itchyny/lightline.vim'})
+      endif "}}}
     endif "}}}
     call dein#add('tpope/vim-surround')
     call dein#add('tpope/vim-repeat')
@@ -902,6 +904,10 @@
     ""}}}
   endif "}}}
   if count(s:settings.plugin_groups, 'unite') "{{{
+    "if has('nvim') || (v:version >= 800) "{{{
+      "call dein#add('Shougo/denite.nvim') "{{{
+      "}}}
+    "else
     function! s:on_unite_source() abort
       call unite#filters#matcher_default#use(['matcher_fuzzy'])
       call unite#filters#sorter_default#use(['sorter_rank'])
@@ -1002,6 +1008,7 @@
     "  let g:junkfile#directory=s:get_cache_dir('junk')
     "  nnoremap <silent> [unite]j :<C-u>Unite -auto-resize -buffer-name=junk junkfile junkfile/new<CR>
     ""}}}
+    "endif "}}}
   elseif s:settings.explorer_plugin ==# 'vimfiler'
     " vimfiler require unite
     call dein#add('Shougo/unite.vim')
@@ -1029,7 +1036,8 @@
     call dein#add('lucapette/vim-textobj-underscore')
   endif "}}}
   if count(s:settings.plugin_groups, 'misc') "{{{
-    if s:settings.encoding ==# 'utf-8' && has('multi_byte') && has('unix') && &encoding ==# 'utf-8' &&
+    if g:nvim_settings.nerd_fonts != 0 && s:settings.encoding ==# 'utf-8' &&
+        \ has('multi_byte') && has('unix') && &encoding ==# 'utf-8' &&
         \ (empty(&termencoding) || &termencoding ==# 'utf-8') "{{{
       call dein#add('ryanoasis/vim-devicons')
     endif "}}}

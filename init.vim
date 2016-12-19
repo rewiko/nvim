@@ -56,6 +56,7 @@
   let g:nvim_settings.force256 = 0
   let g:nvim_settings.termtrans = 0
   let g:nvim_settings.powerline_fonts = 0
+  let g:nvim_settings.nerd_fonts = 0
 
   source ~/.config/nvim/vimrc
 
