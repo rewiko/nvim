@@ -24,10 +24,8 @@
   let s:settings.default_indent = 2
   let s:settings.max_column = 120
   let s:settings.explorer_plugin = 'nerdtree'
-  "let s:settings.explorer_plugin = 'vimfiler'
   let s:settings.statusline_plugin = 'airline'
   let s:settings.enable_cursorcolumn = 0
-  "let s:settings.colorscheme = 'jellybeans'
   let s:settings.colorscheme = 'solarized'
   let s:settings.autocomplete_plugin = 'none'
   if g:nvim_settings.autocomplete != 0
@@ -43,6 +41,8 @@
       let s:settings.autocomplete_plugin = 'neocomplcache'
     endif
   endif
+  let s:settings.powerline_fonts = 0
+  let s:settings.nerd_fonts = 0
 
   if exists('g:nvim_settings.plugin_groups')
     let s:settings.plugin_groups = g:nvim_settings.plugin_groups
@@ -322,7 +322,7 @@
       "if s:settings.encoding ==# 'utf-8' && has('multi_byte') && has('unix') && &encoding ==# 'utf-8' &&
       "    \ (empty(&termencoding) || &termencoding ==# 'utf-8') "{{{
         call dein#add('vim-airline/vim-airline') "{{{
-          let g:airline_powerline_fonts = g:nvim_settings.powerline_fonts
+          let g:airline_powerline_fonts = s:settings.powerline_fonts
           let g:airline_section_b = ''
           let g:airline_section_warning = ''
           let g:airline_mode_map = {
@@ -1036,7 +1036,7 @@
     call dein#add('lucapette/vim-textobj-underscore')
   endif "}}}
   if count(s:settings.plugin_groups, 'misc') "{{{
-    if g:nvim_settings.nerd_fonts != 0 && s:settings.encoding ==# 'utf-8' &&
+    if s:settings.nerd_fonts != 0 && s:settings.encoding ==# 'utf-8' &&
         \ has('multi_byte') && has('unix') && &encoding ==# 'utf-8' &&
         \ (empty(&termencoding) || &termencoding ==# 'utf-8') "{{{
       call dein#add('ryanoasis/vim-devicons')
