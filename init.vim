@@ -25,6 +25,7 @@
   call add(g:nvim_settings.plugin_groups, 'core')
   call add(g:nvim_settings.plugin_groups, 'language')
   call add(g:nvim_settings.plugin_groups, 'c')
+  call add(g:nvim_settings.plugin_groups, 'ruby')
   call add(g:nvim_settings.plugin_groups, 'python')
   call add(g:nvim_settings.plugin_groups, 'go')
   call add(g:nvim_settings.plugin_groups, 'scm')
