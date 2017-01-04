@@ -34,6 +34,7 @@
   call add(g:nvim_settings.plugin_groups, 'unite')
   call add(g:nvim_settings.plugin_groups, 'autocomplete')
   call add(g:nvim_settings.plugin_groups, 'misc')
+  call add(g:nvim_settings.plugin_groups, 'yachi')
 
   " core
   let g:nvim_settings.encoding = 'utf-8'

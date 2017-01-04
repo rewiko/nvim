@@ -558,6 +558,12 @@
     call dein#add('tpope/vim-rails')
     call dein#add('tpope/vim-bundler')
   endif "}}}
+  if count(s:settings.plugin_groups, 'yachi') "{{{
+    call dein#add('tommcdo/vim-exchange')
+    call dein#add('rhysd/clever-f.vim')
+    call dein#add('ryanoasis/vim-devicons')
+    call dein#add('sheerun/vim-polyglot')
+  endif "}}}
   if count(s:settings.plugin_groups, 'python') "{{{
     call dein#add('klen/python-mode', {'on_ft': 'python'}) "{{{
       let g:pymode_rope = 0
@@ -655,10 +661,10 @@
   endif "}}}
   if count(s:settings.plugin_groups, 'editing') "{{{
     call dein#add('editorconfig/editorconfig-vim', {'on_i': 1})
-    "call dein#add('tpope/vim-endwise')
+    call dein#add('tpope/vim-endwise')
     call dein#add('tpope/vim-speeddating')
     call dein#add('thinca/vim-visualstar')
-    "call dein#add('tomtom/tcomment_vim')
+    call dein#add('tomtom/tcomment_vim')
     call dein#add('terryma/vim-expand-region')
     call dein#add('terryma/vim-multiple-cursors')
     "call dein#add('chrisbra/NrrwRgn')
@@ -676,7 +682,7 @@
     "  nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
     "  vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
     ""}}}
-    "call dein#add('jiangmiao/auto-pairs')
+    call dein#add('jiangmiao/auto-pairs')
     call dein#add('justinmk/vim-sneak') "{{{
       let g:sneak#streak = 1
     "}}}
