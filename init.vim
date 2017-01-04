@@ -53,7 +53,7 @@
 
   " user interface
   "let g:nvim_settings.colorscheme = 'molokai'
-  let g:nvim_settings.colorscheme = 'solarized'
+  let g:nvim_settings.colorscheme = 'gruvbox'
   let g:nvim_settings.force256 = 1
   let g:nvim_settings.termtrans = 1
   let g:nvim_settings.powerline_fonts = 1
@@ -95,6 +95,9 @@
       highlight SpecialKey ctermfg=235 guifg=#262626
       "highlight PmenuSel ctermfg=231 guifg=#FFFFFF
       highlight CTagsClass ctermfg=81 guifg=#66D9EF
+    elseif g:nvim_settings.colorscheme ==# 'gruvbox'
+      colorscheme gruvbox
+      set background=dark
     elseif g:nvim_settings.colorscheme ==# 'solarized'
       " 16 color palette is recommended
       " <https://github.com/altercation/vim-colors-solarized>

@@ -563,6 +563,7 @@
     call dein#add('rhysd/clever-f.vim')
     call dein#add('ryanoasis/vim-devicons')
     call dein#add('sheerun/vim-polyglot')
+    call dein#add('morhetz/gruvbox')
   endif "}}}
   if count(s:settings.plugin_groups, 'python') "{{{
     call dein#add('klen/python-mode', {'on_ft': 'python'}) "{{{
