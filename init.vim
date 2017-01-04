@@ -53,10 +53,10 @@
   " user interface
   "let g:nvim_settings.colorscheme = 'molokai'
   let g:nvim_settings.colorscheme = 'solarized'
-  let g:nvim_settings.force256 = 0
-  let g:nvim_settings.termtrans = 0
-  let g:nvim_settings.powerline_fonts = 0
-  let g:nvim_settings.nerd_fonts = 0
+  let g:nvim_settings.force256 = 1
+  let g:nvim_settings.termtrans = 1
+  let g:nvim_settings.powerline_fonts = 1
+  let g:nvim_settings.nerd_fonts = 1
 
   source ~/.config/nvim/vimrc
 
