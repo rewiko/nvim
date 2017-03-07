@@ -706,7 +706,7 @@
       let g:EasyGrepCommand = 1
       nnoremap <Leader>vo :GrepOptions<CR>
     "}}}
-    call dein#add('ctrlpvim/ctrlp.vim', {'depends': 'tacahiroy/ctrlp-funky', 'on_cmd': 'CtrlP'}) "{{{
+    call dein#add('ctrlpvim/ctrlp.vim', {'on_cmd': 'CtrlP'}) "{{{
       let g:ctrlp_clear_cache_on_exit = 1
       let g:ctrlp_max_height = 40
       let g:ctrlp_show_hidden = 0
@@ -714,23 +714,21 @@
       let g:ctrlp_max_files = 20000
       let g:ctrlp_cache_dir = s:get_cache_dir('ctrlp')
       let g:ctrlp_reuse_window = 'startify'
-      let g:ctrlp_extensions = ['funky']
       let g:ctrlp_custom_ignore = {
           \ 'dir': '\v[\/]\.(git|hg|svn|idea)$',
           \ 'file': '\v\.DS_Store$'
           \ }
 
-      if executable('ag')
-        let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+      if executable('rg')
+        let g:ctrlp_user_command = 'rg --files --no-messages %s ""'
       endif
 
       nmap \ [ctrlp]
-      nnoremap [ctrlp] <Nop>
+      nnoremap [ctrlp] :CtrlP<CR>
 
       nnoremap [ctrlp]t :CtrlPBufTag<CR>
       nnoremap [ctrlp]T :CtrlPTag<CR>
       nnoremap [ctrlp]l :CtrlPLine<CR>
-      nnoremap [ctrlp]o :CtrlPFunky<CR>
       nnoremap [ctrlp]b :CtrlPBuffer<CR>
     "}}}
     if s:settings.explorer_plugin ==# 'nerdtree' "{{{
