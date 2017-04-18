@@ -565,6 +565,7 @@
     call dein#add('sheerun/vim-polyglot')
     call dein#add('morhetz/gruvbox')
     call dein#add('roxma/vim-paste-easy')
+    call dein#add('kiteco/vim-plugin')
   endif "}}}
   if count(s:settings.plugin_groups, 'python') "{{{
     call dein#add('klen/python-mode', {'on_ft': 'python'}) "{{{
